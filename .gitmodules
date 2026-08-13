@@ -1,0 +1,3 @@
+[submodule "proteinmpnn"]
+	path = proteinmpnn
+	url = https://github.com/dauparas/ProteinMPNN.git
