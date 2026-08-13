@@ -61,7 +61,7 @@ def run(args) -> list[dict]:
     rows: list[dict] = []
 
     for model in args.models:
-        for seed in range(args.seeds):
+        for seed in range(args.seed_start, args.seed_start + args.seeds):
             t0 = time.time()
             clean = build_family(scorer, model, seed, args)
             sim_time = time.time() - t0
@@ -176,6 +176,7 @@ def main() -> None:
     ap.add_argument("--exp", choices=["detect", "null", "repair", "all"], default="all")
     ap.add_argument("--models", nargs="+", default=["selection"], choices=["f81", "selection"])
     ap.add_argument("--seeds", type=int, default=3)
+    ap.add_argument("--seed-start", type=int, default=0)
     ap.add_argument("--pdb", default=str(DEFAULT_PDB))
     ap.add_argument("--device", default="auto")
     ap.add_argument("--n-per-clade", type=int, default=6)

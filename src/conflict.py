@@ -153,6 +153,10 @@ class ConflictResult:
     logp_b: np.ndarray
     instability: np.ndarray
     segment: tuple[int, int] | None
+    #: Best-scoring window regardless of significance. `segment` is this window
+    #: once the permutation test passes, and None otherwise; the raw scan is kept
+    #: because it orients the per-site scores without consulting any labels.
+    best_segment: tuple[int, int] | None
     statistic: float
     p_value: float
     threshold: float
@@ -245,7 +249,8 @@ def detect_contamination(
     if len(diff_sites) < max(min_diagnostic, 2 * min_len):
         return ConflictResult(
             delta=delta, logp_a=logp_a, logp_b=logp_b, instability=instability,
-            segment=None, statistic=0.0, p_value=1.0, threshold=float("inf"),
+            segment=None, best_segment=None, statistic=0.0, p_value=1.0,
+            threshold=float("inf"),
             detected=False, ancestor=ancestor, context_a=context_a,
             context_b=context_b, diff_sites=diff_sites,
         )
@@ -264,6 +269,7 @@ def detect_contamination(
         logp_b=logp_b,
         instability=instability,
         segment=segment if p_value <= alpha else None,
+        best_segment=segment,
         statistic=statistic,
         p_value=p_value,
         threshold=threshold,

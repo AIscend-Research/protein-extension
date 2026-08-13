@@ -76,10 +76,13 @@ def analyze(
         # so site-level accuracy is measured there; including the rest would score
         # the detector on positions that are uninformative by construction.
         diag = con.diff_sites if len(con.diff_sites) else np.arange(L)
+        # Orient by the best-scoring window, significant or not: the sign of delta
+        # says which context a site prefers, not which one is the contaminant, and
+        # picking the orientation from the labels would score a coin flip as skill.
         oriented = con.delta
-        if con.segment is not None:
+        if con.best_segment is not None:
             inside = np.zeros(L, dtype=bool)
-            inside[con.segment[0] : con.segment[1]] = True
+            inside[con.best_segment[0] : con.best_segment[1]] = True
             if oriented[inside].mean() > oriented[~inside].mean():
                 oriented = -oriented
         metrics.update(
