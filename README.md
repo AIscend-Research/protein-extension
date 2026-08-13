@@ -12,7 +12,8 @@ code that knows it exists is [src/runner.py](src/runner.py).
 ## Layout
 
 ```
-proteinmpnn/     dauparas/ProteinMPNN (submodule) + MPS patch
+proteinmpnn/     dauparas/ProteinMPNN (submodule, kept pristine)
+patches/         Apple-silicon MPS runner
 src/witnesses.py    homolog family assembly     (stub)
 src/stemma.py       tree + FastML reconstruction (stub)
 src/conditioning.py posteriors -> bias/pssm jsonl (stub)
@@ -44,12 +45,15 @@ This should write `scratch/smoke_test/seqs/5L33.fa` and
 
 ### Apple silicon
 
-`proteinmpnn/protein_mpnn_run_mps_patch.py` is a drop-in replacement for
-`protein_mpnn_run.py` that selects the `mps` device. It comes from
+[patches/protein_mpnn_run_mps_patch.py](patches/protein_mpnn_run_mps_patch.py) is
+a drop-in replacement for `protein_mpnn_run.py` that selects the `mps` device. It
+comes from
 [AIscend-Research/protein-repro](https://github.com/AIscend-Research/protein-repro)
 — credit to AIscend-Research; it is the only file shared between the two
-projects. One local change: `bias_AAs_np` is allocated as `float32`, since MPS
-cannot convert float64 tensors.
+projects. Two local changes: `bias_AAs_np` is allocated as `float32` (MPS cannot
+convert float64 tensors), and it lives in `patches/` rather than inside the
+submodule so git tracks it here — `runner` supplies `PYTHONPATH` and
+`--path_to_model_weights` accordingly.
 
 `runner.run_mpnn(..., device="auto")` picks the patch when MPS is available and
 CUDA is not; pass `device="stock"` to force the unpatched script.

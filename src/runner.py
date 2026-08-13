@@ -14,6 +14,7 @@ Usage:
 
 from __future__ import annotations
 
+import os
 import subprocess
 import sys
 from dataclasses import dataclass, field
@@ -28,7 +29,9 @@ ALPHABET = "ACDEFGHIKLMNPQRSTVWYX"
 REPO_ROOT = Path(__file__).resolve().parents[1]
 MPNN_DIR = REPO_ROOT / "proteinmpnn"
 STOCK_SCRIPT = MPNN_DIR / "protein_mpnn_run.py"
-MPS_SCRIPT = MPNN_DIR / "protein_mpnn_run_mps_patch.py"
+# Kept outside the submodule so it stays tracked here; it imports
+# protein_mpnn_utils, so MPNN_DIR is put on PYTHONPATH when it runs.
+MPS_SCRIPT = REPO_ROOT / "patches" / "protein_mpnn_run_mps_patch.py"
 
 
 class MPNNError(RuntimeError):
@@ -166,6 +169,7 @@ def run_mpnn(
     tied_positions_jsonl: str | Path | None = None,
     chain_id_jsonl: str | Path | None = None,
     model_name: str = "v_48_020",
+    path_to_model_weights: str | Path | None = None,
     use_soluble_model: bool = False,
     ca_only: bool = False,
     backbone_noise: float = 0.0,
@@ -213,7 +217,16 @@ def run_mpnn(
         "--save_score", "1" if save_score else "0",
     ]
 
+    if path_to_model_weights is None and script != STOCK_SCRIPT:
+        # The runner scripts resolve weights relative to their own location, and
+        # the MPS patch lives outside the submodule — point it back at the weights.
+        folder = "ca_model_weights" if ca_only else (
+            "soluble_model_weights" if use_soluble_model else "vanilla_model_weights"
+        )
+        path_to_model_weights = MPNN_DIR / folder
+
     optional: list[tuple[str, Any]] = [
+        ("--path_to_model_weights", path_to_model_weights),
         ("--bias_by_res_jsonl", bias_by_res_jsonl),
         ("--pssm_jsonl", pssm_jsonl),
         ("--pssm_multi", pssm_multi),
@@ -241,7 +254,9 @@ def run_mpnn(
         cmd += ["--ca_only"]
     cmd += list(extra_args)
 
-    proc = subprocess.run(cmd, capture_output=True, text=True, cwd=str(MPNN_DIR))
+    env = dict(os.environ)
+    env["PYTHONPATH"] = os.pathsep.join(filter(None, [str(MPNN_DIR), env.get("PYTHONPATH", "")]))
+    proc = subprocess.run(cmd, capture_output=True, text=True, cwd=str(MPNN_DIR), env=env)
     if proc.returncode != 0:
         raise MPNNError(
             f"ProteinMPNN failed (exit {proc.returncode})\n"
