@@ -20,6 +20,7 @@ from typing import Sequence
 import numpy as np
 
 from mpnn_api import MPNNScorer
+from scoring import Scores, score_sequence
 from stemma import (
     Reconstruction,
     encode,
@@ -29,27 +30,6 @@ from stemma import (
     reconstruct,
     split_clades,
 )
-
-
-@dataclass
-class Scores:
-    """Two views of how comfortable a sequence is on the backbone."""
-
-    pseudo_log_likelihood: float
-    autoregressive: float
-
-    def as_dict(self) -> dict[str, float]:
-        return {
-            "pseudo_log_likelihood": round(self.pseudo_log_likelihood, 4),
-            "autoregressive": round(self.autoregressive, 4),
-        }
-
-
-def score_sequence(scorer: MPNNScorer, seq: str, *, n_orders: int = 16) -> Scores:
-    return Scores(
-        pseudo_log_likelihood=scorer.pseudo_log_likelihood(seq),
-        autoregressive=scorer.autoregressive_score(seq, n_orders=n_orders),
-    )
 
 
 @dataclass

@@ -67,18 +67,32 @@ coherent sub-ancestors and design from each separately.
 ## Layout
 
 ```
-src/mpnn_api.py    in-process ProteinMPNN with decoding-order control  ← the instrument
-src/evolve.py      simulate families on a fixed backbone; inject contamination
-src/stemma.py      NJ + midpoint rooting + F81 marginal ASR (deliberately standard)
-src/conflict.py    context-swap / order-instability probes, segment scan, permutation test
-src/repair.py      mosaic vs two coherent sub-ancestors, scored
-src/pipeline.py    one family, end to end
-src/apparatus.py   per-site certain / probable / conjectural labels
-src/runner.py      subprocess wrapper around stock ProteinMPNN (for design)
+src/mpnn_api.py     in-process ProteinMPNN with decoding-order control  ← the instrument
+src/evolve.py       simulate families on a fixed backbone; inject contamination
+src/stemma.py       NJ + midpoint rooting + F81 marginal ASR (deliberately standard)
+src/conflict.py     context-swap / order-instability probes, segment scan, permutation test
+src/repair.py       mosaic vs two coherent sub-ancestors, scored
+src/pipeline.py     one family, end to end
+src/apparatus.py    per-site certain / probable / conjectural labels, + sub-history
+src/scoring.py      pseudo-log-likelihood, recovery, perplexity, per-label breakdowns
+src/conditioning.py posteriors -> bias_by_res / pssm jsonl, for designing from an ancestor
+src/witnesses.py    fetch and filter real homolog families (UniProt / PDB / AlphaFold DB)
+src/runner.py       subprocess wrapper around stock ProteinMPNN (for design)
 experiments/run_experiments.py
-proteinmpnn/       dauparas/ProteinMPNN (submodule, kept pristine)
-patches/           Apple-silicon MPS runner
+proteinmpnn/        dauparas/ProteinMPNN (submodule, kept pristine)
+patches/            Apple-silicon MPS runner
 ```
+
+The apparatus is the paper's output format, and `annotate_contamination` folds
+the detector into it: a site inside a segment judged contaminated is demoted to
+`conjectural` no matter how sharp its marginal posterior, because per-site
+confidence is precisely the thing that fails to notice a chimera. Each row also
+records which sub-history the site leans toward, since a contaminated tradition
+has no single archetype to be confident *about*.
+
+The labels are calibrated rather than decorative — on a simulated family with a
+known root, sequence recovery by label runs 1.00 / 0.76 / 0.25 for certain /
+probable / conjectural (`scoring.recovery_by_label`).
 
 ## Ground truth, cheaply
 

@@ -23,7 +23,7 @@ from __future__ import annotations
 import csv
 import json
 import math
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 from pathlib import Path
 from typing import Iterable, Mapping, Sequence
 
@@ -67,6 +67,13 @@ class PositionCall:
     agreement: bool | None
     label: str
     note: str = ""
+    #: Which sub-history the site leans toward when a contamination analysis is
+    #: supplied: "A", "B", or None. A reconstruction of a contaminated tradition
+    #: has no single archetype, so the apparatus has to say which text a reading
+    #: belongs to, not only how sure of it we are.
+    sub_history: str | None = None
+    conflict: float | None = None
+    contaminated: bool | None = None
 
 
 def load_probs(path_or_array: str | Path | np.ndarray, *, key: str = "probs") -> np.ndarray:
@@ -307,7 +314,57 @@ def summarize(calls: Sequence[PositionCall]) -> dict[str, object]:
 FIELDS = [
     "position", "mpnn_aa", "mpnn_prob", "mpnn_entropy", "mpnn_norm_entropy",
     "fastml_aa", "fastml_prob", "agreement", "label", "note",
+    "sub_history", "conflict", "contaminated",
 ]
+
+
+def annotate_contamination(
+    calls: Sequence[PositionCall],
+    conflict,
+    *,
+    demote_contaminated: bool = True,
+) -> list[PositionCall]:
+    """Fold a [conflict] analysis into the apparatus.
+
+    A site inside a segment judged contaminated cannot honestly be called
+    `certain`, however sharp its marginal posterior: the whole point is that
+    per-site confidence is not evidence of joint coherence. With
+    `demote_contaminated`, such sites drop to `conjectural` and say why.
+
+    `conflict` is a `conflict.ConflictResult`; it is taken loosely so this module
+    keeps working on apparatus-only tasks without importing the detector.
+    """
+    delta = np.asarray(conflict.delta, dtype=float)
+    if len(delta) != len(calls):
+        raise ValueError(f"{len(calls)} positions but {len(delta)} conflict scores")
+    segment = getattr(conflict, "segment", None)
+    diagnostic = set(int(i) for i in getattr(conflict, "diff_sites", []))
+
+    out: list[PositionCall] = []
+    for index, call in enumerate(calls):
+        inside = segment is not None and segment[0] <= index < segment[1]
+        informative = index in diagnostic
+        leaning = None
+        if informative:
+            leaning = "A" if delta[index] >= 0 else "B"
+
+        label, note = call.label, call.note
+        if inside and demote_contaminated:
+            label = CONJECTURAL
+            reason = "inside a segment flagged as contaminated"
+            note = f"{note}; {reason}" if note else reason
+
+        out.append(
+            replace(
+                call,
+                label=label,
+                note=note,
+                sub_history=leaning,
+                conflict=float(delta[index]),
+                contaminated=bool(inside) if segment is not None else None,
+            )
+        )
+    return out
 
 
 def write_apparatus(calls: Iterable[PositionCall], path: str | Path) -> Path:
@@ -318,7 +375,7 @@ def write_apparatus(calls: Iterable[PositionCall], path: str | Path) -> Path:
         writer.writeheader()
         for call in calls:
             row = asdict(call)
-            for key in ("mpnn_prob", "mpnn_entropy", "mpnn_norm_entropy", "fastml_prob"):
+            for key in ("mpnn_prob", "mpnn_entropy", "mpnn_norm_entropy", "fastml_prob", "conflict"):
                 if row[key] is not None:
                     row[key] = round(row[key], 6)
             writer.writerow(row)

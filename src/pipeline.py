@@ -76,15 +76,18 @@ def analyze(
         # so site-level accuracy is measured there; including the rest would score
         # the detector on positions that are uninformative by construction.
         diag = con.diff_sites if len(con.diff_sites) else np.arange(L)
-        # Orient by the best-scoring window, significant or not: the sign of delta
-        # says which context a site prefers, not which one is the contaminant, and
-        # picking the orientation from the labels would score a coin flip as skill.
+        # The scan is symmetric: the intruding block and its complement both look
+        # like "the window whose mean differs most", so the sign of delta says
+        # which context a site prefers but not which side is the intrusion.
+        # Resolving that from the ground-truth labels would score a coin flip as
+        # skill, so the tie-break is label-free — contamination is the minority,
+        # and whichever side flags fewer diagnostic sites is taken to be the
+        # intrusion. It fails, by construction, once more than half the
+        # diagnostic sites are contaminated.
+        diagnostic_delta = con.delta[diag]
         oriented = con.delta
-        if con.best_segment is not None:
-            inside = np.zeros(L, dtype=bool)
-            inside[con.best_segment[0] : con.best_segment[1]] = True
-            if oriented[inside].mean() > oriented[~inside].mean():
-                oriented = -oriented
+        if np.sum(diagnostic_delta < 0) > np.sum(diagnostic_delta > 0):
+            oriented = -con.delta
         metrics.update(
             {
                 "true_breakpoint": list(true_bp) if true_bp else None,
