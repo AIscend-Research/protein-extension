@@ -90,9 +90,9 @@ confidence is precisely the thing that fails to notice a chimera. Each row also
 records which sub-history the site leans toward, since a contaminated tradition
 has no single archetype to be confident *about*.
 
-The labels are calibrated rather than decorative — on a simulated family with a
-known root, sequence recovery by label runs 1.00 / 0.76 / 0.25 for certain /
-probable / conjectural (`scoring.recovery_by_label`).
+The labels are calibrated rather than decorative — on the headline family,
+sequence recovery against the known true root runs 1.00 / 0.69 / 0.48 for
+certain / probable / conjectural (`scoring.recovery_by_label`).
 
 ## Ground truth, cheaply
 
@@ -140,6 +140,44 @@ run standalone:
 .venv/bin/python src/evolve.py --model selection --breakpoint 30,60 --out data/interim/sim
 .venv/bin/python src/stemma.py data/interim/sim/witnesses.fasta
 ```
+
+## Figures
+
+```bash
+.venv/bin/python experiments/make_figures.py --model selection --seed 0 --breakpoint 55,85
+.venv/bin/python experiments/build_gallery.py     # self-contained HTML plate gallery
+```
+
+[src/viz.py](src/viz.py) renders the whole set into `figures/`: the inferred
+stemma with contaminated witnesses marked, the per-site conflict profile against
+the true breakpoint, the permutation null, the apparatus, two views of the score
+painted onto the backbone, and the contact map showing which contacts bridge the
+flagged block. `make_figures.py` caches the simulated family, so re-rendering
+after a figure tweak skips the slow part.
+
+`viz.write_bfactor_pdb` also writes the conflict score into a PDB's B-factor
+column, so the same numbers can be rendered in PyMOL or ChimeraX (`spectrum b`)
+without this project depending on either.
+
+Colour follows the data's job rather than taste: the conflict score is polar, so
+it is diverging blue-red on a neutral midpoint; apparatus labels are ordinal, so
+they are a single neutral ink ramp (deliberately *not* blue — the sub-history
+strips are blue and orange, and two encodings sharing a hue is how a reader
+conflates "well attested" with "belongs to clade A"). Every palette was checked
+with a validator for colour-vision separation and surface contrast.
+
+## Headline figure run
+
+`--model selection --seed 0 --breakpoint 55,85`, 12 witnesses, 106 residues:
+
+| | |
+|---|---|
+| ASR accuracy vs the true root | 0.60 |
+| ASR mean max posterior | **0.95** — confident and wrong, which is the premise |
+| Detected | yes, p = 0.030 |
+| Segment recovered | (58, 83) against a true (55, 85) — Jaccard 0.83 |
+| Site AUC on diagnostic sites | 0.90 |
+| Diagnostic sites | 43 |
 
 ## Limitations
 

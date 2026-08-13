@@ -1,0 +1,42 @@
+{
+  "model": "selection",
+  "seed": 0,
+  "breakpoint": [
+    55,
+    85
+  ],
+  "detected": true,
+  "p_value": 0.029850746268656716,
+  "segment": [
+    58,
+    83
+  ],
+  "metrics": {
+    "n_taxa": 12,
+    "length": 106,
+    "mosaic_vs_sub_a_identity": 0.7358,
+    "mosaic_vs_sub_b_identity": 0.8585,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "contaminated_witnesses": [
+      "A3",
+      "A4",
+      "A5"
+    ],
+    "evolution_model": "selection",
+    "asr_accuracy_vs_true_root": 0.6038,
+    "asr_mean_max_posterior": 0.9465,
+    "segment_jaccard": 0.8333,
+    "n_diagnostic": 43,
+    "site_auc": 0.8976,
+    "instability_auc": 0.475,
+    "false_positive": false
+  },
+  "label_recovery": {
+    "certain": 1.0,
+    "conjectural": 0.4794520547945205,
+    "probable": 0.6923076923076923
+  }
+}
