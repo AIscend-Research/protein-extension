@@ -44,11 +44,14 @@ def main() -> None:
     ap.add_argument("--cache", default=str(REPO_ROOT / "scratch" / "figure_family.json"),
                     help="reuse a simulated family so figure tweaks skip the slow simulation")
     ap.add_argument("--no-cache", action="store_true")
+    ap.add_argument("--device", default="cpu",
+                    help="cpu is the default here: MPS has been observed returning "
+                         "corrupted tensors on long runs without raising")
     args = ap.parse_args()
 
     out = Path(args.out)
     start, stop = (int(x) for x in args.breakpoint.split(","))
-    scorer = MPNNScorer(args.pdb)
+    scorer = MPNNScorer(args.pdb, device=args.device)
     print(f"device={scorer.device} L={scorer.L}", flush=True)
 
     signature = {"model": args.model, "seed": args.seed, "n_per_clade": args.n_per_clade,

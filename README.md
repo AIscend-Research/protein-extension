@@ -197,6 +197,21 @@ with a validator for colour-vision separation and surface contrast.
 - **In silico throughout.** No wet-lab validation, and stability is a
   pseudo-log-likelihood proxy, not a measured ΔΔG.
 
+## A reproducibility hazard worth knowing
+
+On Apple silicon, PyTorch's MPS backend has been observed failing a Metal command
+buffer partway through a long run, printing `Error: command buffer exited with
+error status` to stderr, and then **continuing with corrupted tensors without
+raising**. The run completes and writes plausible-looking output: in one case the
+same seed and settings that gave p = 0.030 returned p = 1.000 with every score
+degraded to noise.
+
+`MPNNScorer.log_probs` now checks that the model's output is finite and raises if
+it is not, so this fails loudly instead of quietly. The figure pipeline defaults
+to `--device cpu` for the same reason — it is a few minutes slower and does not
+invent results. Anything intended for the paper should be produced on CPU or
+CUDA, not MPS.
+
 ## Credits
 
 `patches/protein_mpnn_run_mps_patch.py` selects the `mps` device on Apple

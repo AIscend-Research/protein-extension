@@ -217,7 +217,16 @@ class MPNNScorer:
                 X, S, mask, chain_M, residue_idx, chain_enc, randn,
                 use_input_decoding_order=True, decoding_order=order,
             )
-            out[start:stop] = lp.detach().cpu().numpy()
+            block = lp.detach().cpu().numpy()
+            if not np.isfinite(block).all():
+                # PyTorch's MPS backend can fail a Metal command buffer, print to
+                # stderr, and return corrupted tensors *without* raising — which
+                # silently poisons every downstream number. Fail loudly instead.
+                raise RuntimeError(
+                    f"non-finite log-probabilities from the model on {self.device}. "
+                    "If this is an MPS device, re-run with device='cpu'."
+                )
+            out[start:stop] = block
         return out
 
     # ------------------------------------------------- canonical order shapes
