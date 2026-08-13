@@ -23,6 +23,7 @@ from mpnn_api import MPNNScorer
 from stemma import (
     Reconstruction,
     encode,
+    midpoint_root,
     neighbour_joining,
     poisson_distance,
     reconstruct,
@@ -94,7 +95,7 @@ class RepairResult:
 def clade_split(seqs: dict[str, str]) -> tuple[list[str], list[str]]:
     """The two sub-histories implied by the stemma, without using any ground truth."""
     names = list(seqs)
-    tree = neighbour_joining(names, poisson_distance(encode([seqs[n] for n in names])))
+    tree = midpoint_root(neighbour_joining(names, poisson_distance(encode([seqs[n] for n in names]))))
     return split_clades(tree)
 
 

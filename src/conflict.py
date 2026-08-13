@@ -80,18 +80,37 @@ def scan_segment(
     return best
 
 
+def smooth(values: np.ndarray, window: int) -> np.ndarray:
+    """Moving average; contamination is contiguous, isolated sites are noise."""
+    if window <= 1:
+        return np.asarray(values, dtype=float)
+    kernel = np.ones(window) / window
+    padded = np.pad(np.asarray(values, dtype=float), (window // 2, window // 2), mode="edge")
+    return np.convolve(padded, kernel, mode="valid")[: len(values)]
+
+
 def permutation_test(
-    values: np.ndarray, *, n_perm: int = 200, alpha: float = 0.05, seed: int = 0, min_len: int = 5
+    values: np.ndarray,
+    *,
+    n_perm: int = 200,
+    alpha: float = 0.05,
+    seed: int = 0,
+    min_len: int = 5,
+    window: int = 1,
 ) -> tuple[float, float, np.ndarray]:
     """Null: the same per-site scores in random spatial arrangement.
+
+    Smoothing is re-applied *after* each permutation, so the null carries the
+    same autocorrelation the smoother induces and the test measures genuine
+    contiguity rather than the width of the window.
 
     Returns (p_value, threshold_at_alpha, null_statistics).
     """
     rng = np.random.default_rng(seed)
-    observed = scan_segment(values, min_len=min_len)[1]
+    observed = scan_segment(smooth(values, window), min_len=min_len)[1]
     null = np.empty(n_perm)
     for k in range(n_perm):
-        null[k] = scan_segment(rng.permutation(values), min_len=min_len)[1]
+        null[k] = scan_segment(smooth(rng.permutation(values), window), min_len=min_len)[1]
     p = float((1 + np.sum(null >= observed)) / (1 + n_perm))
     threshold = float(np.quantile(null, 1 - alpha))
     return p, threshold, null
@@ -199,33 +218,45 @@ def detect_contamination(
     *,
     n_perm: int = 200,
     alpha: float = 0.05,
-    min_len: int = 5,
+    min_len: int = 3,
     n_orders: int = 64,
     seed: int = 0,
-    restrict_to_diff: bool = True,
+    window: int = 5,
+    min_diagnostic: int = 12,
 ) -> ConflictResult:
     """Run both probes and test whether the conflict is segmentally structured.
 
-    `restrict_to_diff` zeroes delta at sites where the two candidate ancestors
-    agree: those sites carry no information about which sub-history they came
-    from, and leaving them in dilutes the segment statistic.
+    The scan runs in *diagnostic-site space*: only positions where the two
+    candidate sub-ancestors actually differ carry information about which
+    sub-history a site came from, and positions where they agree contribute pure
+    noise. Scoring the sign of delta rather than its magnitude keeps a handful of
+    structurally extreme sites from dominating, and a moving average over
+    neighbouring diagnostic sites exploits the fact that contamination arrives in
+    contiguous blocks.
+
+    Detection needs enough diagnostic sites to be possible at all; below
+    `min_diagnostic` the result is reported as undetected rather than guessed.
     """
     logp_a, logp_b = context_swap(scorer, ancestor, context_a, context_b)
     delta = logp_a - logp_b
+    instability = order_instability(scorer, ancestor, n_orders=n_orders, seed=seed)
 
     diff_sites = np.flatnonzero(np.array(list(context_a)) != np.array(list(context_b)))
-    if restrict_to_diff and len(diff_sites) >= 2 * min_len:
-        masked = np.zeros_like(delta)
-        masked[diff_sites] = delta[diff_sites]
-        scan_input = masked
-    else:
-        scan_input = delta
+    if len(diff_sites) < max(min_diagnostic, 2 * min_len):
+        return ConflictResult(
+            delta=delta, logp_a=logp_a, logp_b=logp_b, instability=instability,
+            segment=None, statistic=0.0, p_value=1.0, threshold=float("inf"),
+            detected=False, ancestor=ancestor, context_a=context_a,
+            context_b=context_b, diff_sites=diff_sites,
+        )
 
-    segment, statistic = scan_segment(scan_input, min_len=min_len)
+    signs = np.sign(delta[diff_sites])
+    scanned = smooth(signs, window)
+    (start, stop), statistic = scan_segment(scanned, min_len=min_len)
+    segment = (int(diff_sites[start]), int(diff_sites[stop - 1]) + 1)
     p_value, threshold, _ = permutation_test(
-        scan_input, n_perm=n_perm, alpha=alpha, seed=seed, min_len=min_len
+        signs, n_perm=n_perm, alpha=alpha, seed=seed, min_len=min_len, window=window
     )
-    instability = order_instability(scorer, ancestor, n_orders=n_orders, seed=seed)
 
     return ConflictResult(
         delta=delta,

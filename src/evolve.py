@@ -76,18 +76,21 @@ class Node:
 def two_clade_tree(
     n_per_clade: int = 6,
     *,
-    stem: float = 1.0,
-    clade_depth: float = 0.5,
-    leaf_depth: float = 0.5,
+    stem: float = 2.0,
+    leaf_depth: float = 0.4,
 ) -> Node:
     """Root splits into clades A and B; each clade fans out into `n_per_clade` leaves.
 
     Branch "lengths" are in units the evolvers interpret as substitution
-    opportunity (F81 time, or number of Gibbs sweeps).
+    opportunity (F81 time, or number of Gibbs sweeps). `stem` must exceed
+    `leaf_depth` by a good margin: the two lineages can only be told apart at
+    sites where they actually differ, so a family whose between-clade divergence
+    is no larger than its within-clade divergence has almost no diagnostic sites
+    and nothing to detect.
     """
     root = Node("ROOT")
     for clade in ("A", "B"):
-        stem_node = root.add(Node(f"{clade}anc", length=stem * clade_depth))
+        stem_node = root.add(Node(f"{clade}anc", length=stem))
         for i in range(n_per_clade):
             stem_node.add(Node(f"{clade}{i}", length=leaf_depth))
     return root
@@ -218,9 +221,8 @@ def simulate_family(
     root_seq: str,
     *,
     n_per_clade: int = 6,
-    stem: float = 1.0,
-    clade_depth: float = 0.5,
-    leaf_depth: float = 0.5,
+    stem: float = 2.0,
+    leaf_depth: float = 0.4,
     n_contaminated: int = 3,
     breakpoint: tuple[int, int] | None = None,
     donor_clade: str = "B",
@@ -234,7 +236,7 @@ def simulate_family(
     scribe copying part of the text from a second exemplar.
     """
     rng = np.random.default_rng(seed)
-    tree = two_clade_tree(n_per_clade, stem=stem, clade_depth=clade_depth, leaf_depth=leaf_depth)
+    tree = two_clade_tree(n_per_clade, stem=stem, leaf_depth=leaf_depth)
     tree.seq = root_seq
 
     for node in tree.walk():
@@ -268,6 +270,50 @@ def simulate_family(
         breakpoint=breakpoint,
         model=evolver.name,
         donor_clade=donor_clade if breakpoint is not None else None,
+    )
+
+
+def contaminate(
+    family: SimulatedFamily,
+    breakpoint: tuple[int, int],
+    *,
+    n_contaminated: int = 3,
+    donor_clade: str = "B",
+    seed: int = 0,
+) -> SimulatedFamily:
+    """Copy one segment into some witnesses from a donor in the other clade.
+
+    Splitting simulation from contamination lets every experiment reuse the same
+    evolved lineages: the history is held fixed and only the contamination varies,
+    which is both cheaper and a cleaner comparison than re-evolving each time.
+    """
+    rng = np.random.default_rng(seed)
+    recipient_clade = "A" if donor_clade == "B" else "B"
+    donors = [n for n in family.leaf_seqs if n.startswith(donor_clade)]
+    recipients = [n for n in family.leaf_seqs if n.startswith(recipient_clade)]
+    if not donors or not recipients:
+        raise ValueError("need witnesses in both clades to contaminate")
+
+    leaf_seqs = dict(family.leaf_seqs)
+    contaminated: list[str] = []
+    start, stop = breakpoint
+    if n_contaminated > 0:
+        chosen = rng.choice(recipients, size=min(n_contaminated, len(recipients)), replace=False)
+        for name in chosen:
+            donor = leaf_seqs[str(rng.choice(donors))]
+            seq = leaf_seqs[name]
+            leaf_seqs[name] = seq[:start] + donor[start:stop] + seq[stop:]
+            contaminated.append(str(name))
+
+    return SimulatedFamily(
+        tree=family.tree,
+        leaf_seqs=leaf_seqs,
+        true_root=family.true_root,
+        true_clade_ancestors=family.true_clade_ancestors,
+        contaminated=sorted(contaminated),
+        breakpoint=breakpoint if contaminated else None,
+        model=family.model,
+        donor_clade=donor_clade if contaminated else None,
     )
 
 

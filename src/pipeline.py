@@ -36,7 +36,7 @@ def analyze(
     n_perm: int = 200,
     alpha: float = 0.05,
     n_orders: int = 64,
-    min_len: int = 5,
+    min_len: int = 3,
     seed: int = 0,
 ) -> FamilyAnalysis:
     """Reconstruct, probe for contamination, and repair — no ground truth required.
@@ -72,6 +72,10 @@ def analyze(
         if true_bp:
             labels[true_bp[0] : true_bp[1]] = True
 
+        # Only sites where the two sub-ancestors differ carry ancestry information,
+        # so site-level accuracy is measured there; including the rest would score
+        # the detector on positions that are uninformative by construction.
+        diag = con.diff_sites if len(con.diff_sites) else np.arange(L)
         oriented = con.delta
         if con.segment is not None:
             inside = np.zeros(L, dtype=bool)
@@ -86,8 +90,11 @@ def analyze(
                 "asr_accuracy_vs_true_root": round(identity(rep.mosaic.sequence, root), 4),
                 "asr_mean_max_posterior": round(float(rep.mosaic.max_posterior.mean()), 4),
                 "segment_jaccard": round(jaccard(con.segment, true_bp), 4),
-                "site_auc": (round(auc(-oriented, labels), 4) if true_bp else None),
-                "instability_auc": (round(auc(con.instability, labels), 4) if true_bp else None),
+                "n_diagnostic": int(len(con.diff_sites)),
+                "site_auc": (round(auc(-oriented[diag], labels[diag]), 4) if true_bp else None),
+                "instability_auc": (
+                    round(auc(con.instability[diag], labels[diag]), 4) if true_bp else None
+                ),
                 "false_positive": bool(con.detected and true_bp is None),
             }
         )

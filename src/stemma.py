@@ -88,7 +88,7 @@ def poisson_distance(matrix: np.ndarray) -> np.ndarray:
 # ---------------------------------------------------------------------- tree
 
 
-@dataclass
+@dataclass(eq=False)  # identity-based equality/hash: nodes are graph vertices
 class TreeNode:
     name: str = ""
     length: float = 0.0
@@ -117,6 +117,84 @@ class TreeNode:
         if self.is_leaf:
             return f"{self.name}:{self.length:.6f}"
         return f"({','.join(c.newick() for c in self.children)}){self.name}:{self.length:.6f}"
+
+
+def _adjacency(tree: TreeNode) -> dict[TreeNode, list[tuple[TreeNode, float]]]:
+    """Undirected view of the tree: NJ topologies carry no meaningful root."""
+    adj: dict[TreeNode, list[tuple[TreeNode, float]]] = {}
+    for node in tree.walk():
+        adj.setdefault(node, [])
+        for child in node.children:
+            adj.setdefault(child, [])
+            adj[node].append((child, child.length))
+            adj[child].append((node, child.length))
+    return adj
+
+
+def _distances_from(start: TreeNode, adj) -> dict[TreeNode, tuple[float, TreeNode | None]]:
+    """Path length and predecessor for every node, walking the undirected tree."""
+    seen = {start: (0.0, None)}
+    stack = [start]
+    while stack:
+        current = stack.pop()
+        base = seen[current][0]
+        for neighbour, length in adj[current]:
+            if neighbour not in seen:
+                seen[neighbour] = (base + length, current)
+                stack.append(neighbour)
+    return seen
+
+
+def midpoint_root(tree: TreeNode) -> TreeNode:
+    """Re-root at the midpoint of the longest leaf-to-leaf path.
+
+    Neighbour-joining produces an unrooted tree; taking its last join as the root
+    puts the "ancestor" at an arbitrary point inside one clade, which silently
+    turns the reconstruction into that clade's ancestor and makes the two-way
+    clade split meaningless. Midpoint rooting is the standard fix.
+    """
+    adj = _adjacency(tree)
+    leaves = [n for n in adj if n.is_leaf or len(adj[n]) == 1]
+    if len(leaves) < 2:
+        return tree
+
+    # Double sweep: the farthest leaf from any leaf is an endpoint of the diameter.
+    first = _distances_from(leaves[0], adj)
+    far_a = max(leaves, key=lambda n: first[n][0])
+    dist_a = _distances_from(far_a, adj)
+    far_b = max((n for n in leaves), key=lambda n: dist_a[n][0])
+    diameter = dist_a[far_b][0]
+    if diameter <= 0:
+        return tree
+
+    # Walk back from far_b toward far_a until half the diameter is covered.
+    target = diameter / 2.0
+    node = far_b
+    while True:
+        parent = dist_a[node][1]
+        if parent is None:
+            return tree
+        remaining = dist_a[node][0] - target
+        edge = dist_a[node][0] - dist_a[parent][0]
+        if remaining <= edge:
+            below, above = node, parent
+            below_len = max(remaining, 0.0)
+            above_len = max(edge - remaining, 0.0)
+            break
+        node = parent
+
+    def build(current: TreeNode, came_from: TreeNode) -> TreeNode:
+        clone = TreeNode(current.name)
+        for neighbour, length in adj[current]:
+            if neighbour is came_from:
+                continue
+            clone.add(build(neighbour, current), length)
+        return clone
+
+    root = TreeNode("ROOT")
+    root.add(build(below, above), below_len)
+    root.add(build(above, below), above_len)
+    return root
 
 
 def neighbour_joining(names: Sequence[str], dist: np.ndarray) -> TreeNode:
@@ -271,7 +349,7 @@ def reconstruct(
     data = {n: matrix[i] for i, n in enumerate(names)}
 
     if tree is None:
-        tree = neighbour_joining(names, poisson_distance(matrix))
+        tree = midpoint_root(neighbour_joining(names, poisson_distance(matrix)))
 
     target = tree
     if node is not None:
