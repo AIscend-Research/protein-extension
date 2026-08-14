@@ -575,57 +575,245 @@ def plot_detection_summary(
     rows: Sequence[Mapping],
     *,
     path: str | Path = "figures/detection_summary.png",
-    title: str = "Detection against the control",
+    title: str = "Firing rate says nothing; where it points says everything",
 ) -> Path:
-    """Detection rate and site-level AUC, epistatic data versus the null model."""
-    models = sorted({row["model"] for row in rows})
-    fig = _figure(8.4, 3.4)
+    """The central comparison: epistatic data versus the no-epistasis control.
+
+    Deliberately *not* a plot of detection rate alone. On matched conditions the
+    detector fires as often on `f81` as on `selection`, so a rate-only panel
+    invites exactly the wrong conclusion. What separates the two is whether the
+    flagged window is the true breakpoint, so the rate is shown beside the
+    Jaccard of the windows each model actually flagged.
+    """
+    models = sorted({row["model"] for row in rows}, reverse=True)  # selection first
+    colours = {m: (THEME.clade_a if m == "selection" else THEME.clade_b) for m in models}
+
+    fig = _figure(8.8, 3.8)
     axes = fig.subplots(1, 2)
 
-    detect_rate, aucs = {}, {}
-    for model in models:
-        detect = [r for r in rows if r["model"] == model and r["experiment"] == "detect"]
-        detect_rate[model] = float(np.mean([r["detected"] for r in detect])) if detect else 0.0
-        values = [r["site_auc"] for r in detect if r.get("site_auc") is not None
-                  and not np.isnan(r["site_auc"])]
-        aucs[model] = values
-
-    colours = {m: (THEME.clade_a if m == "selection" else THEME.ink_muted) for m in models}
-
     ax = axes[0]
-    ax.bar(range(len(models)), [detect_rate[m] for m in models], width=0.55,
+    rates = []
+    for model in models:
+        sub = [r for r in rows if r["model"] == model]
+        rates.append(float(np.mean([r["detected"] for r in sub])) if sub else 0.0)
+    ax.bar(range(len(models)), rates, width=0.5,
            color=[colours[m] for m in models], zorder=3)
     for index, model in enumerate(models):
-        ax.text(index, detect_rate[model] + 0.03, f"{detect_rate[model]:.0%}",
+        sub = [r for r in rows if r["model"] == model]
+        ax.text(index, rates[index] + 0.02,
+                f"{rates[index]:.0%}   ({sum(r['detected'] for r in sub)}/{len(sub)})",
                 ha="center", fontsize=9, color=THEME.ink, fontweight="bold")
     ax.set_xticks(range(len(models)))
     ax.set_xticklabels(models, fontsize=9)
-    ax.set_ylim(0, 1.08)
+    ax.set_ylim(0, 0.45)
     ax.set_ylabel("detection rate", color=THEME.ink_secondary, fontsize=9)
     _style(ax)
-    _title(ax, "Detection rate")
+    _title(ax, "Detection rate", "indistinguishable — this panel is the trap")
 
     ax = axes[1]
-    ax.axhline(0.5, color=THEME.axis, linewidth=1.0, linestyle=(0, (4, 3)), zorder=2)
-    ax.text(len(models) - 0.5, 0.51, "chance", fontsize=8, color=THEME.ink_muted, ha="right")
     for index, model in enumerate(models):
-        values = aucs[model]
+        fired = [r for r in rows if r["model"] == model and r["detected"]]
+        values = [r["segment_jaccard"] for r in fired
+                  if r.get("segment_jaccard") is not None]
         if not values:
             continue
-        jitter = (np.random.default_rng(0).random(len(values)) - 0.5) * 0.18
-        ax.scatter(np.full(len(values), index) + jitter, values, s=34,
-                   color=colours[model], edgecolor=THEME.surface, linewidth=1.0, zorder=4)
-        ax.plot([index - 0.22, index + 0.22], [np.mean(values)] * 2,
+        jitter = (np.random.default_rng(0).random(len(values)) - 0.5) * 0.16
+        ax.scatter(np.full(len(values), index) + jitter, values, s=64,
+                   color=colours[model], edgecolor=THEME.surface, linewidth=1.2, zorder=4)
+        ax.plot([index - 0.2, index + 0.2], [np.mean(values)] * 2,
                 color=THEME.ink, linewidth=2.0, zorder=5)
+        # Beside the mean rule, not above it: the jittered points sit above.
+        ax.text(index + 0.25, np.mean(values), f"mean {np.mean(values):.2f}",
+                ha="left", va="center", fontsize=8.5, color=THEME.ink, fontweight="bold")
     ax.set_xticks(range(len(models)))
     ax.set_xticklabels(models, fontsize=9)
     ax.set_xlim(-0.6, len(models) - 0.4)
+    ax.set_ylim(0, 1.05)
+    ax.set_ylabel("Jaccard vs the true breakpoint", color=THEME.ink_secondary, fontsize=9)
+    _style(ax)
+    _title(ax, "Accuracy of the flagged window", "only the runs that fired")
+
+    fig.suptitle(title, color=THEME.ink, fontsize=12, fontweight="bold", x=0.02, ha="left",
+                 y=1.07)
+    fig.subplots_adjust(wspace=0.3)
+    return _save(fig, path)
+
+
+ABLATION_COLORS = {
+    "mpnn": THEME.clade_a,
+    "identity": THEME.clade_b,
+    "scrambled": THEME.accent,
+}
+
+ABLATION_LABELS = {
+    "mpnn": "ProteinMPNN",
+    "identity": "sequence\nidentity",
+    "scrambled": "scrambled\nbackbone",
+}
+
+
+def plot_ablation(
+    rows: Sequence[Mapping],
+    *,
+    path: str | Path = "figures/ablation.png",
+    title: str = "The structural model does not beat string comparison",
+) -> Path:
+    """Does the joint structural model earn its place against two controls?
+
+    Arm identity is carried by x position and the tick labels, so hue here is
+    redundant encoding rather than the only channel — which is what lets three
+    categorical colours sit this close together safely.
+    """
+    arms = [a for a in ("mpnn", "identity", "scrambled")
+            if any(a in r.get("arms", {}) for r in rows)]
+
+    fig = _figure(9.0, 4.2)
+    axes = fig.subplots(1, 2)
+
+    ax = axes[0]
+    for index, arm in enumerate(arms):
+        values = [r["arms"][arm]["segment_jaccard"] for r in rows
+                  if r["arms"][arm].get("segment_jaccard") is not None]
+        if not values:
+            continue
+        jitter = (np.random.default_rng(1).random(len(values)) - 0.5) * 0.22
+        ax.scatter(np.full(len(values), index) + jitter, values, s=52,
+                   color=ABLATION_COLORS[arm], alpha=0.75,
+                   edgecolor=THEME.surface, linewidth=1.1, zorder=4)
+        ax.plot([index - 0.25, index + 0.25], [np.mean(values)] * 2,
+                color=THEME.ink, linewidth=2.2, zorder=5)
+        ax.text(index + 0.3, np.mean(values), f"{np.mean(values):.2f}",
+                ha="left", va="center", fontsize=9, color=THEME.ink, fontweight="bold")
+    ax.set_xticks(range(len(arms)))
+    ax.set_xticklabels([ABLATION_LABELS[a] for a in arms], fontsize=8)
+    ax.set_xlim(-0.6, len(arms) - 0.25)
+    ax.set_ylim(-0.03, 1.08)
+    ax.set_ylabel("Jaccard vs the true breakpoint", color=THEME.ink_secondary, fontsize=9)
+    _style(ax)
+    _title(ax, "Recovery of the contaminated block",
+           "one point per run; rule is the mean")
+
+    ax = axes[1]
+    rates, counts = [], []
+    for arm in arms:
+        fired = [r for r in rows if r["arms"][arm]["detected"]]
+        rates.append(len(fired) / max(len(rows), 1))
+        counts.append((len(fired), len(rows)))
+    ax.bar(range(len(arms)), rates, width=0.5,
+           color=[ABLATION_COLORS[a] for a in arms], zorder=3)
+    for index, (fired, total) in enumerate(counts):
+        ax.text(index, rates[index] + 0.025, f"{fired}/{total}", ha="center",
+                fontsize=9.5, color=THEME.ink, fontweight="bold")
+    ax.set_xticks(range(len(arms)))
+    ax.set_xticklabels([ABLATION_LABELS[a] for a in arms], fontsize=8)
+    ax.set_ylim(0, 0.85)
+    ax.set_ylabel("detection rate", color=THEME.ink_secondary, fontsize=9)
+    _style(ax)
+    _title(ax, "How often each arm fired",
+           "sequence identity uses no structure and no network")
+
+    fig.suptitle(title, color=THEME.ink, fontsize=12, fontweight="bold", x=0.02, ha="left",
+                 y=1.06)
+    fig.subplots_adjust(wspace=0.32)
+    return _save(fig, path)
+
+
+def plot_sensitivity_curve(
+    rows: Sequence[Mapping],
+    *,
+    path: str | Path = "figures/sensitivity_curve.png",
+    metric: str = "site_auc_segment",
+    title: str = "Where detection dies",
+) -> Path:
+    """Site AUC and detection rate against the length of the contaminated block.
+
+    The honest figure in the set: it shows the regime where the method stops
+    working rather than the single condition where it does. The `f81` control is
+    plotted on the same axes because that — not the 0.5 line — is what chance
+    actually looks like for this estimator on this data, inflation included.
+    """
+    models = sorted({r["model"] for r in rows}, reverse=True)  # selection first
+    widths = sorted({r["width"] for r in rows})
+    # The design system's categorical order, used in order. No sub-history is
+    # encoded in this figure, so the clade hues are free here.
+    colours = {m: (THEME.clade_a if m == "selection" else THEME.clade_b) for m in models}
+
+    def clean(sub):
+        return [r[metric] for r in sub
+                if r.get(metric) is not None and not np.isnan(r[metric])]
+
+    fig = _figure(9.2, 4.0)
+    axes = fig.subplots(1, 2)
+
+    # -- left: the requested curve, AUC against block length -----------------
+    ax = axes[0]
+    # Deliberately NOT labelled "chance": the orientation rule pulls a null AUC
+    # above 0.5, so the f81 series is the empirical null and 0.5 is only a ruler.
+    ax.axhline(0.5, color=THEME.axis, linewidth=1.0, linestyle=(0, (4, 3)), zorder=2)
+    for model in models:
+        means, seen = [], []
+        for width in widths:
+            values = clean([r for r in rows if r["model"] == model and r["width"] == width])
+            if not values:
+                continue
+            seen.append(width)
+            means.append(float(np.mean(values)))
+            ax.scatter(np.full(len(values), width), values, s=26, color=colours[model],
+                       alpha=0.4, edgecolor=THEME.surface, linewidth=0.8, zorder=3)
+        if not seen:
+            continue
+        ax.plot(seen, means, color=colours[model], linewidth=2.0, zorder=4,
+                marker="o", markersize=5, markeredgecolor=THEME.surface, markeredgewidth=1.2)
+        note = "  (empirical null)" if model != "selection" else ""
+        # Keep the direct label off the 0.5 rule line when the series ends on it.
+        offset = -0.062 if abs(means[-1] - 0.5) < 0.05 else 0.0
+        ax.text(seen[-1] + 1.5, means[-1] + offset, model + note, color=THEME.ink_secondary,
+                fontsize=8.5, va="center", ha="left")
+    ax.set_xticks(widths)
+    ax.set_xlim(widths[0] - 4, widths[-1] + 26)
     ax.set_ylim(0, 1.02)
+    ax.set_xlabel("contaminated block length (residues)", color=THEME.ink_secondary, fontsize=9)
     ax.set_ylabel("site AUC", color=THEME.ink_secondary, fontsize=9)
     _style(ax)
-    _title(ax, "Site-level accuracy")
+    _title(ax, "AUC against block length", "one point per seed; line is the mean")
 
-    fig.suptitle(title, color=THEME.ink, fontsize=11.5, fontweight="bold", x=0.02, ha="left")
+    # -- right: the variable that actually governs it ------------------------
+    ax = axes[1]
+    ax.axhline(0.5, color=THEME.axis, linewidth=1.0, linestyle=(0, (4, 3)), zorder=2)
+    for model in models:
+        sub = [r for r in rows if r["model"] == model
+               and r.get(metric) is not None and not np.isnan(r[metric])
+               and r.get("n_diagnostic_in_segment") is not None]
+        if not sub:
+            continue
+        quiet = [r for r in sub if not r["detected"]]
+        fired = [r for r in sub if r["detected"]]
+        ax.scatter([r["n_diagnostic_in_segment"] for r in quiet], [r[metric] for r in quiet],
+                   s=34, color=colours[model], alpha=0.45,
+                   edgecolor=THEME.surface, linewidth=0.9, zorder=3, label=model)
+        if fired:
+            ax.scatter([r["n_diagnostic_in_segment"] for r in fired], [r[metric] for r in fired],
+                       s=86, facecolor=colours[model], edgecolor=THEME.ink, linewidth=1.6,
+                       zorder=5, marker="o")
+    ax.set_ylim(0, 1.02)
+    ax.set_xlabel("diagnostic sites inside the contaminated block",
+                  color=THEME.ink_secondary, fontsize=9)
+    ax.set_ylabel("site AUC", color=THEME.ink_secondary, fontsize=9)
+    _style(ax)
+    _title(ax, "AUC against diagnostic sites", "ringed = the permutation test fired")
+    handles = [Line2D([], [], marker="o", linestyle="none", markersize=7,
+                      markerfacecolor=colours[m], markeredgecolor=THEME.surface, label=m)
+               for m in models]
+    handles.append(Line2D([], [], marker="o", linestyle="none", markersize=9,
+                          markerfacecolor=THEME.neutral, markeredgecolor=THEME.ink,
+                          markeredgewidth=1.6, label="detected"))
+    legend = ax.legend(handles=handles, frameon=False, fontsize=8.5, loc="lower right")
+    for text in legend.get_texts():
+        text.set_color(THEME.ink_secondary)
+
+    fig.suptitle(title, color=THEME.ink, fontsize=12, fontweight="bold", x=0.02, ha="left",
+                 y=1.07)
+    fig.subplots_adjust(wspace=0.28)
     return _save(fig, path)
 
 

@@ -89,13 +89,39 @@ PLATES = [
     ),
     (
         "detection_summary.png",
-        "The honest part",
-        "Detection against the control",
+        "The control",
+        "Detection against the null model",
         "The control matters more than the result. Site-independent evolution (f81) has no "
         "epistasis for the detector to sense, so a detector firing there would be reading "
-        "amino-acid composition rather than structural incoherence. It does not fire. On "
-        "epistatic data the detector works when it works and misses when the family carries "
-        "too few diagnostic sites — the misses are reported here, not hidden.",
+        "amino-acid composition rather than structural incoherence. Across the three main "
+        "seeds it does not fire — but see the next plate, where a wider sweep shows it firing "
+        "at about its nominal rate. The 0/6 here is a small sample, not a property.",
+    ),
+    (
+        "ablation.png",
+        "The result that constrains the thesis",
+        "Does the structural model earn its place?",
+        "The cheap alternative, run through the identical scan and permutation test: at each "
+        "diagnostic site, just ask which sub-ancestor the mosaic matches. No structure, no "
+        "network, no backbone \u2014 string comparison. It fires 4 times in 6 against "
+        "ProteinMPNN's 2, and recovers the contaminated block more than twice as well "
+        "(Jaccard 0.62 against 0.27), once perfectly on a run where MPNN missed entirely. "
+        "The third arm keeps the network but permutes the backbone coordinates: that takes it "
+        "to 0 in 6, so what MPNN reports genuinely is structural. Structural, but not better "
+        "than string equality. The informative step is reconstructing the two sub-histories "
+        "separately and comparing them \u2014 not the joint model used to do the comparing.",
+    ),
+    (
+        "sensitivity_curve.png",
+        "The honest part",
+        "Where the method stops working",
+        "Firing rate does not separate the models: 2 of 12 on epistatic data, 2 of 12 on the "
+        "no-epistasis control. What separates them is where the flag lands — mean Jaccard "
+        "against the true breakpoint is 0.81 for selection and 0.08 for f81. The right panel "
+        "shows the variable that actually governs it: not how long the contaminated block is, "
+        "but how many diagnostic sites fall inside it. The two runs that fired had 13 and 22; "
+        "a 50-residue block holding only 16 failed. Note that the f81 series, not the 0.5 "
+        "line, is the empirical null — the orientation rule inflates a null AUC above chance.",
     ),
 ]
 

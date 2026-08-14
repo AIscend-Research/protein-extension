@@ -11,7 +11,7 @@ from typing import Sequence
 
 import numpy as np
 
-from conflict import ConflictResult, auc, detect_contamination, jaccard
+from conflict import ConflictResult, auc, detect_contamination, jaccard, oriented_delta
 from mpnn_api import MPNNScorer
 from repair import RepairResult, identity, repair_family
 
@@ -38,13 +38,18 @@ def analyze(
     n_orders: int = 64,
     min_len: int = 3,
     seed: int = 0,
+    ancestors: tuple[object, object, object] | None = None,
 ) -> FamilyAnalysis:
     """Reconstruct, probe for contamination, and repair — no ground truth required.
 
     `truth` (the `truth.json` written by [evolve]) only adds evaluation metrics;
     nothing in the detection path consults it.
+
+    `ancestors` passes an externally reconstructed (mosaic, sub_a, sub_b) through
+    to [repair] — how empirical families, reconstructed with IQ-TREE, reach this
+    same code path.
     """
-    rep = repair_family(scorer, seqs, clade_a=clade_a, clade_b=clade_b)
+    rep = repair_family(scorer, seqs, clade_a=clade_a, clade_b=clade_b, ancestors=ancestors)
     con = detect_contamination(
         scorer,
         rep.mosaic.sequence,
@@ -76,18 +81,15 @@ def analyze(
         # so site-level accuracy is measured there; including the rest would score
         # the detector on positions that are uninformative by construction.
         diag = con.diff_sites if len(con.diff_sites) else np.arange(L)
-        # The scan is symmetric: the intruding block and its complement both look
-        # like "the window whose mean differs most", so the sign of delta says
-        # which context a site prefers but not which side is the intrusion.
-        # Resolving that from the ground-truth labels would score a coin flip as
-        # skill, so the tie-break is label-free — contamination is the minority,
-        # and whichever side flags fewer diagnostic sites is taken to be the
-        # intrusion. It fails, by construction, once more than half the
-        # diagnostic sites are contaminated.
-        diagnostic_delta = con.delta[diag]
-        oriented = con.delta
-        if np.sum(diagnostic_delta < 0) > np.sum(diagnostic_delta > 0):
-            oriented = -con.delta
+        oriented = oriented_delta(con)
+        site_auc = round(auc(oriented[diag], labels[diag]), 4) if true_bp else None
+        # Orientation-free signal strength. `site_auc` still depends on getting
+        # the sign right, and a run with a strong but mis-oriented signal (AUC
+        # 0.05) is not the same failure as a run with no signal (AUC 0.50) —
+        # averaging them together hides exactly the distinction that separates
+        # `selection` from the `f81` control.
+        site_auc_abs = (round(0.5 + abs(site_auc - 0.5), 4)
+                        if site_auc is not None and not np.isnan(site_auc) else None)
         metrics.update(
             {
                 "true_breakpoint": list(true_bp) if true_bp else None,
@@ -97,7 +99,9 @@ def analyze(
                 "asr_mean_max_posterior": round(float(rep.mosaic.max_posterior.mean()), 4),
                 "segment_jaccard": round(jaccard(con.segment, true_bp), 4),
                 "n_diagnostic": int(len(con.diff_sites)),
-                "site_auc": (round(auc(-oriented[diag], labels[diag]), 4) if true_bp else None),
+                "n_diagnostic_in_segment": int(labels[diag].sum()) if true_bp else None,
+                "site_auc": site_auc,
+                "site_auc_unoriented": site_auc_abs,
                 "instability_auc": (
                     round(auc(con.instability[diag], labels[diag]), 4) if true_bp else None
                 ),

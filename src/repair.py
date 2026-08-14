@@ -86,17 +86,30 @@ def repair_family(
     clade_a: Sequence[str] | None = None,
     clade_b: Sequence[str] | None = None,
     n_orders: int = 16,
+    ancestors: tuple[Reconstruction, Reconstruction, Reconstruction] | None = None,
 ) -> RepairResult:
-    """Reconstruct the mosaic and both coherent sub-ancestors, and score all three."""
+    """Reconstruct the mosaic and both coherent sub-ancestors, and score all three.
+
+    `ancestors` substitutes an externally computed (mosaic, sub_a, sub_b) — the
+    hook for real families, where the reconstruction comes from IQ-TREE rather
+    than this module's F81 pruning (`stemma.iqtree_reconstruction`). The rest of
+    the pipeline is indifferent to which produced them, which is the point.
+    """
     if clade_a is None or clade_b is None:
         clade_a, clade_b = clade_split(seqs)
     clade_a, clade_b = list(clade_a), list(clade_b)
     if len(clade_a) < 2 or len(clade_b) < 2:
         raise ValueError(f"clades too small to reconstruct: {len(clade_a)} | {len(clade_b)}")
 
-    mosaic = reconstruct(seqs)
-    sub_a = reconstruct(seqs, taxa=clade_a)
-    sub_b = reconstruct(seqs, taxa=clade_b)
+    if ancestors is not None:
+        mosaic, sub_a, sub_b = ancestors
+        lengths = {len(mosaic.sequence), len(sub_a.sequence), len(sub_b.sequence)}
+        if len(lengths) != 1:
+            raise ValueError(f"supplied ancestors disagree on length: {sorted(lengths)}")
+    else:
+        mosaic = reconstruct(seqs)
+        sub_a = reconstruct(seqs, taxa=clade_a)
+        sub_b = reconstruct(seqs, taxa=clade_b)
 
     return RepairResult(
         mosaic=mosaic,
