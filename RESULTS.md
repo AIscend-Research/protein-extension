@@ -115,7 +115,48 @@ produces more similar clades, because structural constraint limits where the two
 lineages can drift apart. The regime the detector is designed for is also the
 regime that starves it of the sites it needs.
 
-## 5. The orientation rule was a real bug, now fixed
+## 5. Divergence and witness count: mapping the floor
+
+Between-clade divergence (`stem`, the branch separating the two lineages) and
+witnesses per clade were varied together, 2 seeds each. Divergence is the knob
+that manufactures diagnostic sites in the first place; witness count is what
+determines whether the two sub-ancestors can be reconstructed well enough to
+tell them apart.
+
+| stem | n/clade | detected | mean diagnostic sites | site AUC |
+|---|---|---|---|---|
+| 0.5 | 3 | 0 / 2 | 16.0 | 0.591 |
+| 0.5 | 6 | 0 / 2 | 17.5 | 0.540 |
+| 2.0 | 3 | 0 / 2 | 31.0 | 0.556 |
+| 2.0 | 6 | **1 / 2** | 30.0 | **0.952** |
+| 4.0 | 3 | 0 / 2 | 33.0 | 0.698 |
+| 4.0 | 6 | **1 / 2** | 39.5 | **0.951** |
+
+Divergence buys diagnostic sites, and it saturates: stem 0.5 → 16.8 on average,
+stem 2.0 → 30.5, stem 4.0 → 36.2. Doubling divergence again past 2.0 adds little,
+because the two lineages are already as different as the shared backbone will let
+them be.
+
+Two things are consistent across the grid and worth stating:
+
+- **Nothing fires below ~20 diagnostic sites.** Both `stem = 0.5` rows are 0 / 4
+  at 16–18 sites, which agrees with §4's finding that detection needs roughly 13
+  *inside the block* — a family with 17 in total cannot supply that.
+- **Both detections are at n = 6, never at n = 3** (0 / 6 across every divergence
+  level). Note that `stem = 2.0, n = 3` and `stem = 2.0, n = 6` have the *same*
+  mean diagnostic-site count (31.0 vs 30.0) and only the larger clade detects, so
+  this is not just the site count again. Reconstructing a sub-ancestor from three
+  witnesses is too noisy for the comparison to mean anything.
+
+**What this table does not support** is a dose-response claim. The overall rate is
+2 / 12, and **both detections are in seed 0 — seed 1 is 0 / 6 throughout**. Seed
+variance is larger than the effect of either variable, which is what two seeds per
+cell buys you. The two bullets above are the floor (a necessary condition, cheaply
+established); the shape of the curve above the floor is not measured here. The
+site AUC column shows the same split — 0.95 in both detecting cells, 0.54–0.70
+elsewhere — but it is 2 runs against 10, not a trend.
+
+## 6. The orientation rule was a real bug, now fixed
 
 The scan is sign-symmetric: the intruding block and its complement are both "the
 window whose mean differs most from the rest". Something label-free has to decide
@@ -144,7 +185,7 @@ control at matched block lengths returns 0.50–0.68 rather than 0.50. So 0.5 is
 *not* the right baseline for the oriented AUC — the `f81` column is, which is why
 the sensitivity figure plots both series on the same axes.
 
-## 6. The repair prediction is not supported
+## 7. The repair prediction is not supported
 
 The prediction: the mosaic archetype should score worse under ProteinMPNN's joint
 model than a coherent sub-ancestor, and the gap should widen with contamination.
@@ -175,7 +216,7 @@ either sub-ancestor.
 This is a negative result and is reported as one. No new compute was spent
 chasing a regime where it might hold.
 
-## 7. Ablating the instrument: the structural model does not earn its place
+## 8. Ablating the instrument: the structural model does not earn its place
 
 The project's own pre-registered test was: *swap MPNN for a sequence-only model;
 if the conflict signal survives, the structural claim is wrong.* Here is that
@@ -243,7 +284,84 @@ sub-ancestors this pipeline reconstructs, so it is a control on the instrument,
 not a head-to-head against published sequence-based recombination detectors.
 That comparison remains unrun.
 
-## 8. The empirical family: nothing fires
+## 9. Starving the sequence evidence: does the structural model ever win?
+
+The README's claim is specific: a structural detector is orthogonal signal *"in
+the regime where the sequence methods run out — deep divergence, saturated
+sites, short genes."* Nothing measured so far tests that regime — every
+condition had six well-behaved witnesses per clade, which is where sequence
+evidence is abundant and the `identity` control (§8) wins outright.
+
+`identity` depends entirely on how well the two sub-ancestor reconstructions
+turned out; MPNN additionally conditions on the backbone, which does not
+degrade. So thinning the witnesses per clade should hurt `identity` and leave
+MPNN comparatively less damaged — if the structural prior is worth anything,
+the two curves should cross as evidence gets scarce. (Below four witnesses per
+clade, NJ + midpoint rooting stops recovering the true clade split at all — it
+returned 5 | 1 on a 3 | 3 family — so the known split is supplied directly
+rather than inferred, isolating reconstruction quality from tree-inference
+failure.)
+
+| witnesses/clade | verbatim | mpnn Jaccard | mpnn AUC | mpnn fired | identity Jaccard | identity AUC | identity fired |
+|---|---|---|---|---|---|---|---|
+| 6 | 97% | 0.30 | 0.68 | 1/3 | **0.61** | **0.81** | **2/3** |
+| 4 | 99% | 0.27 | 0.73 | 1/3 | **0.94** | **0.94** | **3/3** |
+| 3 | 98% | 0.00 | 0.44 | 0/3 | 0.00 | 0.57 | 0/3 |
+| 2 | 95% | 0.25 | 0.59 | 1/3 | 0.27 | 0.44 | 2/3 |
+
+No crossing at any witness count. `identity` matches or beats `mpnn` all the
+way down to two witnesses per clade.
+
+The `verbatim` column says why the rescue was never possible: it stays
+**95–99% even at two witnesses per clade**. Marginal ML ASR takes an argmax
+over 20 residues, and in a two-clade family that argmax is essentially always
+one of the two clade consensus residues — a property of *how marginal ASR
+resolves ties*, not of how much data went in. Thinning the evidence does not
+touch it, so this route cannot rescue the structural claim.
+
+## 10. Contamination contiguous in space rather than in sequence
+
+Every condition up to this point swapped a contiguous *sequence* block and
+searched for it with a scan over *sequence* position — a game a string
+comparison wins by construction. Gene conversion of a folded structural element
+does not have to respect sequence order: a 30-residue patch compact on the
+backbone typically breaks into 2–4 separate runs spanning up to 90 positions
+when read off the chain. A scan over alignment position cannot represent that
+target at all, whatever score feeds it.
+
+A 2×2×2 keeps the attribution honest — both scores go through both scans:
+
+| contamination | score | scan | fired | mean Jaccard |
+|---|---|---|---|---|
+| block (sequence-contiguous) | mpnn | 1D | 1/9 | 0.10 |
+| block | mpnn | 3D | 0/9 | 0.06 |
+| block | identity | **1D** | **3/9** | 0.14 |
+| block | identity | 3D | 1/9 | 0.06 |
+| patch (structure-contiguous) | mpnn | 1D | 1/9 | 0.12 |
+| patch | mpnn | **3D** | **3/9** | 0.09 |
+| patch | identity | 1D | 0/9 | 0.09 |
+| patch | identity | **3D** | **4/9** | **0.15** |
+
+Pooling both scores, patch contamination is found far more often by the 3D scan
+than the 1D scan (7/18 vs 1/18, Fisher p = 0.041), and matching the scan to the
+contamination's geometry beats mismatching it overall (11/36 vs 2/36, Fisher
+p = 0.012). **This is a real, significant interaction**, and it is a capability
+no sequence-window method — GARD, RDP, or `identity`+1D — has by construction:
+none of them can search a coordinate they never look at.
+
+Two things temper it. Localisation is weak — best-cell mean Jaccard is 0.149
+against roughly 0.08 expected from a random found-set of that size, so this
+detects that something is off rather than saying precisely where. And within
+the 3D scan on patches, `identity` still edges `mpnn` (4/9, J 0.149 vs 3/9, J
+0.089) — so even here, what earns its place is the **structural scan**, not
+the **structural model**. The useful idea this experiment surfaces is *where
+you search*, not *what you search with*.
+
+**Statistical power here is thin (n = 9 per cell) and this has not been
+re-run at higher power** — see the note on the pending 20-seed rerun in
+Limitations.
+
+## 11. The empirical family: nothing fires
 
 67 structure-backed three-finger toxins from UniProt, aligned with MAFFT, trimmed
 to 58 core columns (≤ 20% gaps), 56 witnesses retained after alignment-space
@@ -276,6 +394,17 @@ answer, and that dependence belongs in the open.
 
 ## Limitations
 
+- **A 20-seed, higher-power rerun is prepared but not executed.** Sections 4,
+  8, 9 and 10 above are anecdote-scale (2–3 seeds, n = 6–9 per cell), and §4
+  showed that widths of 10/20/30 were unwinnable by construction — the block
+  did not reliably contain enough diagnostic sites regardless of what the
+  detector could do. `experiments/run_power_sweeps.sh` reruns the segment
+  sweep and the ablation at 20 seeds with blocks of 50/65/80 residues (above
+  the floor found in §4), writing to `*_power20.json` so it cannot collide
+  with the results already written up here. It has not been run in this pass;
+  running it does not require touching any other file, only
+  `experiments/summarize.py`'s "Firming up the statistics" section will fill
+  in once the output exists.
 - **In silico throughout.** No wet-lab validation. Stability is a
   pseudo-log-likelihood proxy, not a measured ΔΔG.
 - **One backbone.** Every simulated witness is evolved on 5L33. Nothing here
@@ -284,18 +413,20 @@ answer, and that dependence belongs in the open.
   samples from ProteinMPNN's own joint distribution, so it builds in the epistasis
   the probe then reports. The `f81` control is what keeps this honest, and the
   empirical family is the real test — which returned nothing.
+- **The divergence grid is underpowered.** 2 / 12 with both detections in one
+  seed. It establishes a floor, not a dose-response curve. Section 5.
 - **Underpowered.** Pooling the main experiment and the segment sweep and removing
   the three conditions they share: **2 detections across 15 distinct contaminated
   conditions — and the `f81` control also fires 2 times in its matching 15.**
   Three seeds per configuration is too few to put an interval on a detection rate.
-- **A sequence-identity control beats the structural probe.** Section 7. Fires
+- **A sequence-identity control beats the structural probe.** Section 8. Fires
   4/6 against MPNN's 2/6, mean Jaccard 0.62 against 0.27. Scrambling the backbone
   takes MPNN to 0/6, so the signal is structural — but structural is not the same
   as useful, and the ablation is the result that most constrains the thesis.
 - **No head-to-head against GARD or RDP.** The orthogonality claim in the
   introduction is still asserted rather than measured. The identity arm is a
   control on this pipeline's own instrument, not a published detector.
-- **The oriented AUC has an inflated null.** See section 5. Read it against the
+- **The oriented AUC has an inflated null.** See section 6. Read it against the
   `f81` series, never against 0.5.
 - **The empirical test was inconclusive, not negative.** The 3FTx family sits near
   the diagnostic-site floor, so its non-detection carries little information

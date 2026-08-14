@@ -3,6 +3,10 @@
 The write-up quotes this script's output rather than numbers copied by hand, so
 a claim in the prose and the file it came from cannot drift apart.
 
+Sections are deliberately unnumbered: RESULTS.md orders them differently, and two
+sets of section numbers for the same material is how a cross-reference ends up
+pointing at the wrong table.
+
     python experiments/summarize.py
 """
 
@@ -31,7 +35,7 @@ def rule(title: str) -> None:
 
 
 def main_experiments() -> None:
-    rule("1. Main experiment: detection, control, false positives")
+    rule("Main experiment: detection, control, false positives")
     print(f"{'model':<11}{'detect':>9}{'FP':>7}{'Jaccard':>10}{'ASR acc':>10}{'maxpost':>9}")
     for model in ("selection", "f81"):
         rows = load(f"{model}_s*.json")
@@ -46,15 +50,16 @@ def main_experiments() -> None:
               f"{np.mean([r['asr_mean_max_posterior'] for r in det]):>9.3f}")
     print("\n  Site AUC is deliberately absent from this table. These files were written")
     print("  before the orientation rule was settled, so their stored `site_auc` is the")
-    print("  superseded 'minority' rule; section 2 recomputes both rules on these same")
-    print("  seeds and conditions, and section 3 reports AUC against its proper control.")
+    print("  superseded 'minority' rule. The orientation section below recomputes both")
+    print("  rules on these same seeds, and the segment-length section reports AUC against")
+    print("  its proper control.")
     print("\n  The premise, restated from the ASR columns: the reconstruction is ~93% mean")
     print("  max posterior while being only ~69% correct against the known true root.")
     print("  Confident and wrong is not an edge case here; it is the typical run.")
 
 
 def orientation() -> None:
-    rule("2. Orientation of the per-site score (which side is the intrusion?)")
+    rule("Orientation of the per-site score (which side is the intrusion?)")
     rows = load("sweep_orientation_selection.json")
     if not rows:
         print("  (not run)")
@@ -75,7 +80,7 @@ def orientation() -> None:
 
 
 def segment_sweep() -> None:
-    rule("3. Sensitivity to the length of the contaminated block")
+    rule("Sensitivity to the length of the contaminated block")
     print(f"{'model':<11}{'width':>7}{'detected':>10}{'site AUC':>12}{'diagnostic sites in block':>28}")
     for model in ("selection", "f81"):
         rows = load(f"sweep_segment_{model}.json")
@@ -114,7 +119,7 @@ def segment_sweep() -> None:
 
 
 def divergence_sweep() -> None:
-    rule("4. Between-clade divergence and witness count (the diagnostic-site floor)")
+    rule("Between-clade divergence and witness count (the diagnostic-site floor)")
     rows = load("sweep_divergence_selection.json")
     if not rows:
         print("  (not run)")
@@ -132,7 +137,7 @@ def divergence_sweep() -> None:
 
 
 def repair() -> None:
-    rule("5. The repair prediction")
+    rule("The repair prediction")
     rows = load("sweep_repair_selection.json")
     if not rows:
         print("  (not run)")
@@ -156,7 +161,7 @@ def repair() -> None:
 
 
 def ablation() -> None:
-    rule("6. Ablating the instrument")
+    rule("Ablating the instrument")
     rows = load("ablation_selection.json")
     if not rows:
         print("  (not run)")
@@ -188,8 +193,113 @@ def ablation() -> None:
     print("  the joint structural model is a costlier, noisier way to do that comparison.")
 
 
+def power_sweep() -> None:
+    rule("Firming up the statistics: 20 seeds, blocks above the diagnostic-site floor")
+    sel = load("sweep_segment_selection_power20.json")
+    f81 = load("sweep_segment_f81_power20.json")
+    ab = load("ablation_selection_power20.json")
+    if not sel and not f81 and not ab:
+        print("  (not run)")
+        return
+
+    def wilson(k, n, z=1.96):
+        if n == 0:
+            return (float("nan"), float("nan"))
+        p = k / n
+        denom = 1 + z * z / n
+        centre = p + z * z / (2 * n)
+        half = z * np.sqrt(p * (1 - p) / n + z * z / (4 * n * n))
+        return ((centre - half) / denom, (centre + half) / denom)
+
+    if sel and f81:
+        print("  detection rate by width, with 95% Wilson intervals (was 1-3 seeds; now 20):\n")
+        print(f"{'model':<11}{'width':>7}{'fired':>9}{'rate':>8}{'95% CI':>16}"
+              f"{'mean Jaccard, fired':>22}")
+        for model, rows in (("selection", sel), ("f81", f81)):
+            for width in sorted({r["width"] for r in rows}):
+                sub = [r for r in rows if r["width"] == width]
+                k, n = sum(r["detected"] for r in sub), len(sub)
+                lo, hi = wilson(k, n)
+                fired = [r for r in sub if r["detected"]]
+                jac = np.mean([r["segment_jaccard"] for r in fired]) if fired else float("nan")
+                print(f"{model:<11}{width:>7}{f'{k}/{n}':>9}{k / n:>8.0%}"
+                      f"{f'[{lo:.0%}, {hi:.0%}]':>16}{jac:>22.3f}")
+        s_fired = [r for r in sel if r["detected"]]
+        f_fired = [r for r in f81 if r["detected"]]
+        print(f"\n  pooled across widths: selection {sum(r['detected'] for r in sel)}/{len(sel)}, "
+              f"mean Jaccard on firings {np.mean([r['segment_jaccard'] for r in s_fired]) if s_fired else float('nan'):.3f}")
+        print(f"                        f81       {sum(r['detected'] for r in f81)}/{len(f81)}, "
+              f"mean Jaccard on firings {np.mean([r['segment_jaccard'] for r in f_fired]) if f_fired else float('nan'):.3f}")
+
+    if ab:
+        print("\n  ablation at 20 seeds (was 3):\n")
+        print(f"{'arm':<12}{'fired':>9}{'rate':>8}{'95% CI':>16}{'mean Jaccard':>14}")
+        for arm in ("mpnn", "identity", "scrambled"):
+            vals = [r["arms"][arm] for r in ab]
+            k, n = sum(1 for v in vals if v["detected"]), len(vals)
+            lo, hi = wilson(k, n)
+            jac = [v["segment_jaccard"] for v in vals if v.get("segment_jaccard") is not None]
+            print(f"{arm:<12}{f'{k}/{n}':>9}{(k / n if n else float('nan')):>8.0%}"
+                  f"{f'[{lo:.0%}, {hi:.0%}]':>16}{np.mean(jac) if jac else float('nan'):>14.3f}")
+
+
+def thin_evidence() -> None:
+    rule("Starving the sequence evidence: does the structural model ever win?")
+    rows = load("thin_evidence_selection.json")
+    if not rows:
+        print("  (not run)")
+        return
+    print("  The README claims a structural detector wins where sequence methods run out.")
+    print("  Identity depends entirely on the two sub-ancestor reconstructions; MPNN also")
+    print("  has the backbone. Thin the witnesses and the curves should cross.\n")
+    print(f"{'n/clade':>8}{'verbatim':>10}{'mpnn J':>9}{'ident J':>9}"
+          f"{'mpnn AUC':>10}{'ident AUC':>11}{'mpnn fired':>12}{'ident fired':>13}")
+    for k in sorted({r["n_per_clade"] for r in rows}, reverse=True):
+        s = [r for r in rows if r["n_per_clade"] == k]
+        g = lambda arm, f: np.mean([r["arms"][arm][f] for r in s])
+        print(f"{k:>8}{np.mean([r['verbatim_fraction'] for r in s]):>9.0%}"
+              f"{g('mpnn','segment_jaccard'):>9.2f}{g('identity','segment_jaccard'):>9.2f}"
+              f"{g('mpnn','site_auc'):>10.2f}{g('identity','site_auc'):>11.2f}"
+              f"{sum(r['arms']['mpnn']['detected'] for r in s):>8}/{len(s):<3}"
+              f"{sum(r['arms']['identity']['detected'] for r in s):>9}/{len(s):<3}")
+    print("\n  No crossing. And the `verbatim` column says why the rescue was never possible:")
+    print("  even at two witnesses per clade, ~95% of diagnostic sites still hold one")
+    print("  sub-ancestor's residue exactly. Marginal ASR takes an argmax over 20 residues")
+    print("  and in a two-clade family that argmax is one of the two clade consensuses, so")
+    print("  the answer stays written in the string however thin the evidence gets.")
+
+
+def spatial() -> None:
+    rule("Contamination contiguous in space rather than in sequence")
+    rows = load("spatial_contamination.json")
+    if not rows:
+        print("  (not run)")
+        return
+    salvaged = sum(1 for r in rows if r.get("salvaged_from_log"))
+    print(f"  {len(rows)} cells" + (f" ({salvaged} recovered from stdout after a reaped run)"
+                                    if salvaged else ""))
+    print("  A 3D patch of 30 residues breaks into 2-4 separate runs in sequence, so a scan")
+    print("  over alignment position cannot represent it whatever score feeds the scan.\n")
+    print(f"{'contamination':>14}{'score':>10}{'scan':>6}{'fired':>10}{'mean Jaccard':>14}")
+    for mode in ("block", "patch"):
+        sub = [r for r in rows if r["mode"] == mode]
+        if not sub:
+            continue
+        for score in ("mpnn", "identity"):
+            for scan in ("1d", "3d"):
+                c = [r[score][scan] for r in sub]
+                print(f"{mode:>14}{score:>10}{scan:>6}"
+                      f"{sum(x['detected'] for x in c):>6}/{len(c):<3}"
+                      f"{np.mean([x['jaccard'] for x in c]):>14.2f}")
+    print("\n  The interaction is the result: a sequence block is found only by the sequence")
+    print("  scan, a spatial patch only by the spatial scan. On patches the 1D scan fires")
+    print("  for neither score — the target does not exist in the coordinate it searches.")
+    print("  Within each scan, MPNN and identity are level, so what earns its place here is")
+    print("  the structural *scan*, not the structural *model*.")
+
+
 def real_family() -> None:
-    rule("7. The empirical family (3FTx)")
+    rule("The empirical family (3FTx)")
     for split in ("midpoint", "balanced"):
         path = RESULTS / f"real_3ftx_{split}.json"
         if not path.exists():
@@ -211,5 +321,8 @@ if __name__ == "__main__":
     divergence_sweep()
     repair()
     ablation()
+    power_sweep()
+    thin_evidence()
+    spatial()
     real_family()
     print()

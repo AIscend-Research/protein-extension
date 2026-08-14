@@ -1,0 +1,278 @@
+[
+  {
+    "seed": 0,
+    "n_per_clade": 6,
+    "n_witnesses": 12,
+    "seconds": 60.5,
+    "n_diagnostic": 37,
+    "n_diagnostic_in_segment": 20,
+    "verbatim_fraction": 0.973,
+    "arms": {
+      "mpnn": {
+        "detected": true,
+        "p_value": 0.014925373134328358,
+        "segment_jaccard": 0.9090909090909091,
+        "site_auc": 0.8970588235294118
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.004975124378109453,
+        "segment_jaccard": 1.0,
+        "site_auc": 0.9191176470588235
+      }
+    }
+  },
+  {
+    "seed": 0,
+    "n_per_clade": 4,
+    "n_witnesses": 8,
+    "seconds": 64.0,
+    "n_diagnostic": 37,
+    "n_diagnostic_in_segment": 19,
+    "verbatim_fraction": 0.973,
+    "arms": {
+      "mpnn": {
+        "detected": false,
+        "p_value": 0.05970149253731343,
+        "segment_jaccard": 0.0,
+        "site_auc": 0.8567251461988304
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.004975124378109453,
+        "segment_jaccard": 1.0,
+        "site_auc": 0.9473684210526315
+      }
+    }
+  },
+  {
+    "seed": 0,
+    "n_per_clade": 3,
+    "n_witnesses": 6,
+    "seconds": 65.6,
+    "n_diagnostic": 22,
+    "n_diagnostic_in_segment": 4,
+    "verbatim_fraction": 1.0,
+    "arms": {
+      "mpnn": {
+        "detected": false,
+        "p_value": 0.1044776119402985,
+        "segment_jaccard": 0.0,
+        "site_auc": 0.20833333333333334
+      },
+      "identity": {
+        "detected": false,
+        "p_value": 1.0,
+        "segment_jaccard": 0.0,
+        "site_auc": 0.5
+      }
+    }
+  },
+  {
+    "seed": 0,
+    "n_per_clade": 2,
+    "n_witnesses": 4,
+    "seconds": 48.0,
+    "n_diagnostic": 36,
+    "n_diagnostic_in_segment": 18,
+    "verbatim_fraction": 0.9167,
+    "arms": {
+      "mpnn": {
+        "detected": false,
+        "p_value": 0.38308457711442784,
+        "segment_jaccard": 0.0,
+        "site_auc": 0.6080246913580247
+      },
+      "identity": {
+        "detected": false,
+        "p_value": 0.11442786069651742,
+        "segment_jaccard": 0.0,
+        "site_auc": 0.25925925925925924
+      }
+    }
+  },
+  {
+    "seed": 1,
+    "n_per_clade": 6,
+    "n_witnesses": 12,
+    "seconds": 35.4,
+    "n_diagnostic": 16,
+    "n_diagnostic_in_segment": 1,
+    "verbatim_fraction": 0.9375,
+    "arms": {
+      "mpnn": {
+        "detected": false,
+        "p_value": 0.945273631840796,
+        "segment_jaccard": 0.0,
+        "site_auc": 0.7333333333333333
+      },
+      "identity": {
+        "detected": false,
+        "p_value": 0.39303482587064675,
+        "segment_jaccard": 0.0,
+        "site_auc": 0.5333333333333333
+      }
+    }
+  },
+  {
+    "seed": 1,
+    "n_per_clade": 4,
+    "n_witnesses": 8,
+    "seconds": 33.6,
+    "n_diagnostic": 32,
+    "n_diagnostic_in_segment": 17,
+    "verbatim_fraction": 1.0,
+    "arms": {
+      "mpnn": {
+        "detected": true,
+        "p_value": 0.009950248756218905,
+        "segment_jaccard": 0.8,
+        "site_auc": 0.8431372549019608
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.004975124378109453,
+        "segment_jaccard": 0.84,
+        "site_auc": 0.9705882352941176
+      }
+    }
+  },
+  {
+    "seed": 1,
+    "n_per_clade": 3,
+    "n_witnesses": 6,
+    "seconds": 32.8,
+    "n_diagnostic": 19,
+    "n_diagnostic_in_segment": 4,
+    "verbatim_fraction": 0.9474,
+    "arms": {
+      "mpnn": {
+        "detected": false,
+        "p_value": 0.6019900497512438,
+        "segment_jaccard": 0.0,
+        "site_auc": 0.6666666666666666
+      },
+      "identity": {
+        "detected": false,
+        "p_value": 0.06467661691542288,
+        "segment_jaccard": 0.0,
+        "site_auc": 0.75
+      }
+    }
+  },
+  {
+    "seed": 1,
+    "n_per_clade": 2,
+    "n_witnesses": 4,
+    "seconds": 34.6,
+    "n_diagnostic": 34,
+    "n_diagnostic_in_segment": 16,
+    "verbatim_fraction": 0.9706,
+    "arms": {
+      "mpnn": {
+        "detected": true,
+        "p_value": 0.004975124378109453,
+        "segment_jaccard": 0.7647058823529411,
+        "site_auc": 0.8402777777777778
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.004975124378109453,
+        "segment_jaccard": 0.76,
+        "site_auc": 0.8802083333333334
+      }
+    }
+  },
+  {
+    "seed": 2,
+    "n_per_clade": 6,
+    "n_witnesses": 12,
+    "seconds": 32.6,
+    "n_diagnostic": 33,
+    "n_diagnostic_in_segment": 14,
+    "verbatim_fraction": 1.0,
+    "arms": {
+      "mpnn": {
+        "detected": false,
+        "p_value": 0.48756218905472637,
+        "segment_jaccard": 0.0,
+        "site_auc": 0.39849624060150374
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.004975124378109453,
+        "segment_jaccard": 0.84,
+        "site_auc": 0.9736842105263158
+      }
+    }
+  },
+  {
+    "seed": 2,
+    "n_per_clade": 4,
+    "n_witnesses": 8,
+    "seconds": 32.9,
+    "n_diagnostic": 34,
+    "n_diagnostic_in_segment": 15,
+    "verbatim_fraction": 1.0,
+    "arms": {
+      "mpnn": {
+        "detected": false,
+        "p_value": 0.15920398009950248,
+        "segment_jaccard": 0.0,
+        "site_auc": 0.4982456140350877
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.004975124378109453,
+        "segment_jaccard": 0.98,
+        "site_auc": 0.9070175438596492
+      }
+    }
+  },
+  {
+    "seed": 2,
+    "n_per_clade": 3,
+    "n_witnesses": 6,
+    "seconds": 32.6,
+    "n_diagnostic": 22,
+    "n_diagnostic_in_segment": 3,
+    "verbatim_fraction": 1.0,
+    "arms": {
+      "mpnn": {
+        "detected": false,
+        "p_value": 0.29850746268656714,
+        "segment_jaccard": 0.0,
+        "site_auc": 0.43859649122807015
+      },
+      "identity": {
+        "detected": false,
+        "p_value": 0.7860696517412935,
+        "segment_jaccard": 0.0,
+        "site_auc": 0.47368421052631576
+      }
+    }
+  },
+  {
+    "seed": 2,
+    "n_per_clade": 2,
+    "n_witnesses": 4,
+    "seconds": 33.3,
+    "n_diagnostic": 34,
+    "n_diagnostic_in_segment": 14,
+    "verbatim_fraction": 0.9706,
+    "arms": {
+      "mpnn": {
+        "detected": false,
+        "p_value": 0.2835820895522388,
+        "segment_jaccard": 0.0,
+        "site_auc": 0.33214285714285713
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.029850746268656716,
+        "segment_jaccard": 0.0380952380952381,
+        "site_auc": 0.16964285714285715
+      }
+    }
+  }
+]

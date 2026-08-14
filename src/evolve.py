@@ -30,6 +30,7 @@ from __future__ import annotations
 import json
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Sequence
 
 import numpy as np
 
@@ -315,6 +316,60 @@ def contaminate(
         model=family.model,
         donor_clade=donor_clade if contaminated else None,
     )
+
+
+def contaminate_positions(
+    family: SimulatedFamily,
+    positions: np.ndarray | Sequence[int],
+    *,
+    n_contaminated: int = 3,
+    donor_clade: str = "B",
+    seed: int = 0,
+) -> SimulatedFamily:
+    """Copy an arbitrary *set* of positions into some witnesses from a donor.
+
+    `contaminate` swaps a contiguous sequence interval, which is what ordinary
+    recombination does to a gene. This takes a position set instead, so the
+    swapped residues can be contiguous on the folded backbone while scattered
+    across the sequence — gene conversion of a structural element, an exchanged
+    binding face. The distinction matters because a scan that searches over
+    sequence position cannot represent the second case at all.
+
+    `breakpoint` is left None because there is no interval to record; the
+    positions are carried on `contaminated_positions` instead.
+    """
+    rng = np.random.default_rng(seed)
+    positions = np.asarray(sorted(int(p) for p in positions), dtype=int)
+    recipient_clade = "A" if donor_clade == "B" else "B"
+    donors = [n for n in family.leaf_seqs if n.startswith(donor_clade)]
+    recipients = [n for n in family.leaf_seqs if n.startswith(recipient_clade)]
+    if not donors or not recipients:
+        raise ValueError("need witnesses in both clades to contaminate")
+
+    leaf_seqs = dict(family.leaf_seqs)
+    contaminated: list[str] = []
+    if n_contaminated > 0:
+        chosen = rng.choice(recipients, size=min(n_contaminated, len(recipients)), replace=False)
+        for name in chosen:
+            donor = leaf_seqs[str(rng.choice(donors))]
+            seq = list(leaf_seqs[name])
+            for p in positions:
+                seq[p] = donor[p]
+            leaf_seqs[name] = "".join(seq)
+            contaminated.append(str(name))
+
+    out = SimulatedFamily(
+        tree=family.tree,
+        leaf_seqs=leaf_seqs,
+        true_root=family.true_root,
+        true_clade_ancestors=family.true_clade_ancestors,
+        contaminated=sorted(contaminated),
+        breakpoint=None,
+        model=family.model,
+        donor_clade=donor_clade if contaminated else None,
+    )
+    out.contaminated_positions = positions.tolist() if contaminated else []
+    return out
 
 
 def make_evolver(

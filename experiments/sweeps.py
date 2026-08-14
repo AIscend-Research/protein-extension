@@ -315,13 +315,17 @@ def main() -> None:
     ap.add_argument("--n-perm", type=int, default=200)
     ap.add_argument("--n-orders", type=int, default=32)
     ap.add_argument("--out", default=str(RESULTS))
+    ap.add_argument("--tag", default="",
+                    help="filename suffix, so a wider-seed rerun does not silently "
+                         "overwrite an earlier result at the same (sweep, model)")
     args = ap.parse_args()
 
     scorer = MPNNScorer(args.pdb, device=args.device)
     print(f"device={scorer.device} L={scorer.L} sweep={args.sweep}", flush=True)
     started = time.time()
     rows = SWEEPS[args.sweep](scorer, args)
-    out = Path(args.out) / f"sweep_{args.sweep}_{args.model}.json"
+    suffix = f"_{args.tag}" if args.tag else ""
+    out = Path(args.out) / f"sweep_{args.sweep}_{args.model}{suffix}.json"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(rows, indent=2, default=str))
     print(f"\nwrote {out}  ({time.time() - started:.0f}s)")

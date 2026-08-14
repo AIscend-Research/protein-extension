@@ -172,6 +172,9 @@ def main() -> None:
     ap.add_argument("--n-orders", type=int, default=32)
     ap.add_argument("--alpha", type=float, default=0.05)
     ap.add_argument("--out", default=str(RESULTS))
+    ap.add_argument("--tag", default="",
+                    help="filename suffix, so a wider-seed rerun does not silently "
+                         "overwrite an earlier result at the same model")
     args = ap.parse_args()
 
     scorer = MPNNScorer(args.pdb, device=args.device)
@@ -202,7 +205,8 @@ def main() -> None:
                          f"AUC={(a['site_auc'] if a['site_auc'] is not None else float('nan')):.2f}")
             print(line, flush=True)
 
-    out_path = Path(args.out) / f"ablation_{args.model}.json"
+    suffix = f"_{args.tag}" if args.tag else ""
+    out_path = Path(args.out) / f"ablation_{args.model}{suffix}.json"
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(rows, indent=2, default=str))
     print(f"\nwrote {out_path}")

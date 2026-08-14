@@ -56,8 +56,21 @@ summary belongs before the method rather than after it:
 >   MPNN to 0/6, so its signal is genuinely structural — it is simply not better
 >   than string comparison.
 > - The **repair prediction fails** once witness count is controlled.
+> - Starving the sequence evidence (down to 2 witnesses per clade) does **not**
+>   let the structural model catch up to identity — no crossing at any point,
+>   because marginal ASR bakes the shortcut in regardless of how little data it
+>   saw: 95–99% of diagnostic sites hold one sub-ancestor's residue exactly,
+>   at every witness count tested.
+> - One structural idea does earn its place: contamination contiguous in
+>   *space* rather than in *sequence* is found by a scan over structural
+>   neighbourhoods and missed by the ordinary sequence scan (7/18 vs 1/18,
+>   p = 0.041) — a case no sequence-window method can address by construction.
+>   But even there, `identity` matches the scan at least as well as MPNN does;
+>   what earns its place is *where the scan looks*, not the structural model.
 > - On a real 3FTx family the detector returns nothing, but that family sits near
 >   the diagnostic-site floor, so the result is inconclusive rather than negative.
+> - A 20-seed, higher-power rerun of the core sweeps is prepared
+>   (`experiments/run_power_sweeps.sh`) but has not been executed in this pass.
 >
 > Full numbers, with the reasoning: **[RESULTS.md](RESULTS.md)**.
 
@@ -90,7 +103,7 @@ the intruding block the mosaic ancestor is genuinely intermediate between the tw
 clades, so delta there is ≈ 0 with random sign and the "majority" is decided by
 noise. It inverted the site AUC to 0.05 on exactly the run where detection
 succeeded. `conflict.oriented_delta` instead orients by the window the scan
-itself flagged; see [RESULTS.md](RESULTS.md) §5 for the measurement, including
+itself flagged; see [RESULTS.md](RESULTS.md) §6 for the measurement, including
 the fact that this rule inflates the null AUC and so must be read against the
 `f81` control rather than against 0.5.
 
@@ -115,12 +128,17 @@ src/scoring.py      pseudo-log-likelihood, recovery, perplexity, per-label break
 src/conditioning.py posteriors -> bias_by_res / pssm jsonl, for designing from an ancestor
 src/witnesses.py    fetch and filter real homolog families (UniProt / PDB / AlphaFold DB)
 src/runner.py       subprocess wrapper around stock ProteinMPNN (for design)
+src/spatial.py       structural (3D) analogue of the sequence scan and its null
 
 experiments/run_experiments.py  detect / null / repair on simulated families
 experiments/sweeps.py           segment length, divergence, orientation, repair sweeps
 experiments/ablation.py         identity-only and scrambled-backbone controls
+experiments/thin_evidence.py    does MPNN catch up to identity as witnesses thin out?
+experiments/spatial_contamination.py  2x2x2: {block,patch} x {mpnn,identity} x {1D,3D}
 experiments/real_family.py      UniProt -> MAFFT -> IQ-TREE -> the same detector
 experiments/check_fold.py       disulfide topology of a folded ancestor
+experiments/warm_cache.py       pre-simulate + cache clean families, shardable by seed
+experiments/run_power_sweeps.sh 20-seed rerun of the segment sweep + ablation (prepared, not yet run)
 experiments/summarize.py        every headline number, recomputed from results/
 experiments/make_figures.py     the figure set
 experiments/build_gallery.py    self-contained HTML plate gallery
@@ -213,6 +231,34 @@ network with its backbone scrambled:
 .venv/bin/python experiments/ablation.py --model selection --seeds 3
 ```
 
+Two follow-ups push on where the structural model might still earn its place —
+neither rescues it, and the reasoning is in [RESULTS.md](RESULTS.md) §9-10:
+
+```bash
+# does MPNN catch up to identity as the sequence evidence thins out? (no)
+.venv/bin/python experiments/thin_evidence.py --seeds 3 --width 50
+
+# does a scan over structural neighbourhoods find contamination a sequence
+# scan cannot, for contamination that is contiguous in 3D but not in sequence?
+# (yes, but identity ties it within that scan — the scan is the contribution)
+.venv/bin/python experiments/spatial_contamination.py --seeds 3
+```
+
+Everything above ran at 2–3 seeds. `experiments/run_power_sweeps.sh` reruns the
+segment sweep and the ablation at 20 seeds with blocks sized above the
+diagnostic-site floor (50/65/80 residues, since §4 shows 10/20/30 are
+unwinnable by construction) — prepared but not executed in this pass, ~2h on
+CPU. `experiments/warm_cache.py` pre-simulates the 20 families it needs and can
+be sharded across processes by seed:
+
+```bash
+.venv/bin/python experiments/warm_cache.py --model selection --seeds 0 20 --stride 3 --offset 0 &
+.venv/bin/python experiments/warm_cache.py --model selection --seeds 0 20 --stride 3 --offset 1 &
+.venv/bin/python experiments/warm_cache.py --model selection --seeds 0 20 --stride 3 --offset 2 &
+wait
+bash experiments/run_power_sweeps.sh
+```
+
 The empirical path — fetch, MAFFT, IQ-TREE tree + per-clade ASR, then the same
 detector — is one command per rooting convention (needs `mafft` and `iqtree3`):
 
@@ -297,6 +343,13 @@ The short version:
   13 and 22 diagnostic sites inside the contaminated block; a 50-residue block
   with 16 of them failed. Some blocks contain zero, and are undetectable in
   principle.
+- **Divergence and witness count locate that floor but do not chart a curve.**
+  Nothing fires below ~20 diagnostic sites in total, and both detections in the
+  grid came from six witnesses per clade rather than three — at matched
+  diagnostic-site count, which makes it a reconstruction-quality effect, not a
+  site-count effect. But the grid is 2 / 12 overall with both hits in one seed, so
+  seed variance exceeds the effect of either variable. The floor is established;
+  the dose-response is not.
 - **The epistatic regime starves the detector.** `f81` families carry 67–78
   diagnostic sites; `selection` families carry 23–41. Structural constraint keeps
   the two lineages similar, so the regime the method is designed for is also the
@@ -307,6 +360,19 @@ The short version:
 - **A sequence-identity control beats the structural probe.** Fires 4/6 vs 2/6,
   mean Jaccard 0.62 vs 0.27. Scrambling the backbone takes MPNN to 0/6, so the
   signal is structural — but structural is not the same as useful.
+- **Thinning the sequence evidence doesn't change that.** Down to two witnesses
+  per clade, identity still matches or beats MPNN. 95–99% of diagnostic sites hold
+  one sub-ancestor's residue exactly regardless of witness count, because that is
+  how marginal ASR resolves ties, not a function of how much data went in — so
+  there is no regime along this axis where starving the input rescues the model.
+- **Spatially contiguous contamination is where structure earns something —
+  but it's the scan, not the model.** A patch compact on the folded backbone
+  breaks into several separate runs in sequence, so a scan over alignment
+  position cannot find it whatever score feeds it. A scan over structural
+  neighbourhoods does (7/18 vs 1/18, p = 0.041) — a real capability no
+  sequence-window method has. Within that scan, though, `identity` still edges
+  `mpnn` (4/9 vs 3/9), so the contribution is *where the scan looks*, not the
+  structural model computing the score.
 - **The repair prediction is not supported.** Controlled for the number of
   witnesses, the coherent-versus-incoherent gap is +0.007 ± 0.059 with the
   predicted sign in 4/12 runs. The apparent effect is a sample-size artifact — it
