@@ -181,11 +181,29 @@ def main() -> None:
     scrambled = scrambled_scorer(args.pdb, args.device, seed=1234)
     print(f"device={scorer.device} L={scorer.L}", flush=True)
 
-    rows = []
+    suffix = f"_{args.tag}" if args.tag else ""
+    out_path = Path(args.out) / f"ablation_{args.model}{suffix}.json"
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+
+    # Checkpointed: a 20-seed run is long enough that losing everything to one
+    # crash, rather than the few minutes since the last completed condition,
+    # would be a design flaw rather than bad luck.
+    rows: list[dict] = []
+    done: set[tuple[int, int]] = set()
+    if out_path.exists():
+        rows = json.loads(out_path.read_text())
+        done = {(r["seed"], r["width"]) for r in rows}
+        if done:
+            print(f"  resuming: {len(done)} (seed, width) pairs already on disk", flush=True)
+
     for seed in range(args.seeds):
+        if all((seed, w) in done for w in args.widths):
+            continue
         stored = clean_family(scorer, args.model, seed, n_per_clade=args.n_per_clade)
         fam = _rebuild(stored)
         for width in args.widths:
+            if (seed, width) in done:
+                continue
             stop = min(args.start + width, len(stored["true_root"]))
             cont = contaminate(fam, (args.start, stop),
                                n_contaminated=args.contaminated, seed=seed)
@@ -196,6 +214,7 @@ def main() -> None:
             row = {"model": args.model, "seed": seed, "width": width,
                    "seconds": round(time.time() - t0, 1), **out}
             rows.append(row)
+            out_path.write_text(json.dumps(rows, indent=2, default=str))
             line = f"  [{args.model} s{seed}] w={width:3} ndiag={out['n_diagnostic_in_segment']:3}"
             for arm in ("mpnn", "identity", "scrambled"):
                 a = out["arms"][arm]
@@ -205,10 +224,6 @@ def main() -> None:
                          f"AUC={(a['site_auc'] if a['site_auc'] is not None else float('nan')):.2f}")
             print(line, flush=True)
 
-    suffix = f"_{args.tag}" if args.tag else ""
-    out_path = Path(args.out) / f"ablation_{args.model}{suffix}.json"
-    out_path.parent.mkdir(parents=True, exist_ok=True)
-    out_path.write_text(json.dumps(rows, indent=2, default=str))
     print(f"\nwrote {out_path}")
 
     print("\n" + "=" * 70)

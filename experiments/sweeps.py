@@ -144,13 +144,31 @@ def evaluate(scorer, leaf_seqs, truth, *, n_perm=200, n_orders=32, seed=0) -> di
 # ------------------------------------------------------------------ sweeps
 
 
-def sweep_segment(scorer, args) -> list[dict]:
-    """AUC as a function of how long the contaminated block is."""
-    rows = []
+def sweep_segment(scorer, args, out_path: Path | None = None) -> list[dict]:
+    """AUC as a function of how long the contaminated block is.
+
+    Checkpointed when `out_path` is given: existing (seed, width) pairs already
+    on disk are skipped, and every new row is flushed to disk immediately. A
+    20-seed run is long enough that a crash partway through should cost minutes,
+    not the whole run — the same reasoning that motivated the checkpointing in
+    `spatial_contamination.py`.
+    """
+    rows: list[dict] = []
+    done: set[tuple[int, int]] = set()
+    if out_path is not None and out_path.exists():
+        rows = json.loads(out_path.read_text())
+        done = {(r["seed"], r["width"]) for r in rows}
+        if done:
+            print(f"  resuming: {len(done)} (seed, width) pairs already on disk", flush=True)
+
     for seed in range(args.seeds):
+        if all((seed, w) in done for w in args.widths):
+            continue
         stored = clean_family(scorer, args.model, seed, n_per_clade=args.n_per_clade)
         fam = _rebuild(stored)
         for width in args.widths:
+            if (seed, width) in done:
+                continue
             start = args.start
             stop = min(start + width, len(stored["true_root"]))
             cont = contaminate(fam, (start, stop), n_contaminated=args.contaminated, seed=seed)
@@ -160,6 +178,9 @@ def sweep_segment(scorer, args) -> list[dict]:
                                               n_perm=args.n_perm, n_orders=args.n_orders, seed=seed)}
             row["seconds"] = round(time.time() - t0, 1)
             rows.append(row)
+            if out_path is not None:
+                out_path.parent.mkdir(parents=True, exist_ok=True)
+                out_path.write_text(json.dumps(rows, indent=2, default=str))
             print(f"  [{args.model} s{seed}] width={width:3} det={row['detected']!s:5} "
                   f"p={row['p_value']:.3f} J={row.get('segment_jaccard')} "
                   f"AUC_seg={row.get('site_auc_segment')} AUC_min={row.get('site_auc_minority')} "
@@ -323,10 +344,13 @@ def main() -> None:
     scorer = MPNNScorer(args.pdb, device=args.device)
     print(f"device={scorer.device} L={scorer.L} sweep={args.sweep}", flush=True)
     started = time.time()
-    rows = SWEEPS[args.sweep](scorer, args)
     suffix = f"_{args.tag}" if args.tag else ""
     out = Path(args.out) / f"sweep_{args.sweep}_{args.model}{suffix}.json"
     out.parent.mkdir(parents=True, exist_ok=True)
+    if args.sweep == "segment":
+        rows = sweep_segment(scorer, args, out_path=out)
+    else:
+        rows = SWEEPS[args.sweep](scorer, args)
     out.write_text(json.dumps(rows, indent=2, default=str))
     print(f"\nwrote {out}  ({time.time() - started:.0f}s)")
 

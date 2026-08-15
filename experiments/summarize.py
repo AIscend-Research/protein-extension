@@ -193,6 +193,21 @@ def ablation() -> None:
     print("  the joint structural model is a costlier, noisier way to do that comparison.")
 
 
+def wilson(k, n, z=1.96):
+    """Wilson score interval for a binomial rate — shared with apply_power_results.py
+
+    so the two scripts can't quietly compute a confidence interval two different
+    ways.
+    """
+    if n == 0:
+        return (float("nan"), float("nan"))
+    p = k / n
+    denom = 1 + z * z / n
+    centre = p + z * z / (2 * n)
+    half = z * np.sqrt(p * (1 - p) / n + z * z / (4 * n * n))
+    return ((centre - half) / denom, (centre + half) / denom)
+
+
 def power_sweep() -> None:
     rule("Firming up the statistics: 20 seeds, blocks above the diagnostic-site floor")
     sel = load("sweep_segment_selection_power20.json")
@@ -201,15 +216,6 @@ def power_sweep() -> None:
     if not sel and not f81 and not ab:
         print("  (not run)")
         return
-
-    def wilson(k, n, z=1.96):
-        if n == 0:
-            return (float("nan"), float("nan"))
-        p = k / n
-        denom = 1 + z * z / n
-        centre = p + z * z / (2 * n)
-        half = z * np.sqrt(p * (1 - p) / n + z * z / (4 * n * n))
-        return ((centre - half) / denom, (centre + half) / denom)
 
     if sel and f81:
         print("  detection rate by width, with 95% Wilson intervals (was 1-3 seeds; now 20):\n")
