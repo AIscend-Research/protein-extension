@@ -1,0 +1,387 @@
+[
+  {
+    "experiment": "detect",
+    "condition": "detect_bp25-55",
+    "model": "selection",
+    "seed": 2,
+    "n_contaminated": 3,
+    "seconds": 65.0,
+    "segment": null,
+    "statistic": 7.0418,
+    "p_value": 0.20398,
+    "threshold": 9.1199,
+    "detected": false,
+    "mean_abs_delta": 0.3006,
+    "n_diff_sites": 27,
+    "clade_sizes": [
+      6,
+      6
+    ],
+    "mosaic": {
+      "pseudo_log_likelihood": -1.3368,
+      "autoregressive": -1.4337
+    },
+    "sub_a": {
+      "pseudo_log_likelihood": -1.2565,
+      "autoregressive": -1.4053
+    },
+    "sub_b": {
+      "pseudo_log_likelihood": -1.3003,
+      "autoregressive": -1.397
+    },
+    "gap_best": 0.0802,
+    "gap_mean": 0.0584,
+    "mosaic_mean_posterior": 0.9429,
+    "sub_a_mean_posterior": 0.996,
+    "sub_b_mean_posterior": 0.9565,
+    "n_taxa": 12,
+    "length": 106,
+    "mosaic_vs_sub_a_identity": 0.783,
+    "mosaic_vs_sub_b_identity": 0.9528,
+    "true_breakpoint": [
+      25,
+      55
+    ],
+    "contaminated_witnesses": [
+      "A0",
+      "A1",
+      "A3"
+    ],
+    "evolution_model": "selection",
+    "asr_accuracy_vs_true_root": 0.7075,
+    "asr_mean_max_posterior": 0.9429,
+    "segment_jaccard": 0.0,
+    "n_diagnostic": 27,
+    "site_auc": 0.3889,
+    "instability_auc": 0.5278,
+    "false_positive": false
+  },
+  {
+    "experiment": "detect",
+    "condition": "detect_bp55-85",
+    "model": "selection",
+    "seed": 2,
+    "n_contaminated": 3,
+    "seconds": 60.6,
+    "segment": null,
+    "statistic": 6.1541,
+    "p_value": 0.31841,
+    "threshold": 8.742,
+    "detected": false,
+    "mean_abs_delta": 0.2496,
+    "n_diff_sites": 25,
+    "clade_sizes": [
+      6,
+      6
+    ],
+    "mosaic": {
+      "pseudo_log_likelihood": -1.3357,
+      "autoregressive": -1.4033
+    },
+    "sub_a": {
+      "pseudo_log_likelihood": -1.2565,
+      "autoregressive": -1.4053
+    },
+    "sub_b": {
+      "pseudo_log_likelihood": -1.3574,
+      "autoregressive": -1.3999
+    },
+    "gap_best": 0.0791,
+    "gap_mean": 0.0287,
+    "mosaic_mean_posterior": 0.9513,
+    "sub_a_mean_posterior": 0.996,
+    "sub_b_mean_posterior": 0.9612,
+    "n_taxa": 12,
+    "length": 106,
+    "mosaic_vs_sub_a_identity": 0.7925,
+    "mosaic_vs_sub_b_identity": 0.9717,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "contaminated_witnesses": [
+      "A0",
+      "A1",
+      "A3"
+    ],
+    "evolution_model": "selection",
+    "asr_accuracy_vs_true_root": 0.783,
+    "asr_mean_max_posterior": 0.9513,
+    "segment_jaccard": 0.0,
+    "n_diagnostic": 25,
+    "site_auc": 0.2391,
+    "instability_auc": 0.25,
+    "false_positive": false
+  },
+  {
+    "experiment": "null",
+    "condition": "null_clean",
+    "model": "selection",
+    "seed": 2,
+    "n_contaminated": 0,
+    "seconds": 62.2,
+    "segment": null,
+    "statistic": 5.0823,
+    "p_value": 0.58706,
+    "threshold": 9.3534,
+    "detected": false,
+    "mean_abs_delta": 0.302,
+    "n_diff_sites": 36,
+    "clade_sizes": [
+      6,
+      6
+    ],
+    "mosaic": {
+      "pseudo_log_likelihood": -1.2479,
+      "autoregressive": -1.4016
+    },
+    "sub_a": {
+      "pseudo_log_likelihood": -1.3018,
+      "autoregressive": -1.4085
+    },
+    "sub_b": {
+      "pseudo_log_likelihood": -1.2565,
+      "autoregressive": -1.4053
+    },
+    "gap_best": -0.0087,
+    "gap_mean": -0.0313,
+    "mosaic_mean_posterior": 0.8537,
+    "sub_a_mean_posterior": 0.9986,
+    "sub_b_mean_posterior": 0.996,
+    "n_taxa": 12,
+    "length": 106,
+    "mosaic_vs_sub_a_identity": 0.6887,
+    "mosaic_vs_sub_b_identity": 0.9717,
+    "true_breakpoint": null,
+    "contaminated_witnesses": [],
+    "evolution_model": "selection",
+    "asr_accuracy_vs_true_root": 0.6981,
+    "asr_mean_max_posterior": 0.8537,
+    "segment_jaccard": 0.0,
+    "n_diagnostic": 36,
+    "site_auc": null,
+    "instability_auc": null,
+    "false_positive": false
+  },
+  {
+    "experiment": "repair",
+    "condition": "repair_n0",
+    "model": "selection",
+    "seed": 2,
+    "n_contaminated": 0,
+    "seconds": 63.6,
+    "segment": null,
+    "statistic": 5.0823,
+    "p_value": 0.58706,
+    "threshold": 9.3534,
+    "detected": false,
+    "mean_abs_delta": 0.302,
+    "n_diff_sites": 36,
+    "clade_sizes": [
+      6,
+      6
+    ],
+    "mosaic": {
+      "pseudo_log_likelihood": -1.2479,
+      "autoregressive": -1.4016
+    },
+    "sub_a": {
+      "pseudo_log_likelihood": -1.3018,
+      "autoregressive": -1.4085
+    },
+    "sub_b": {
+      "pseudo_log_likelihood": -1.2565,
+      "autoregressive": -1.4053
+    },
+    "gap_best": -0.0087,
+    "gap_mean": -0.0313,
+    "mosaic_mean_posterior": 0.8537,
+    "sub_a_mean_posterior": 0.9986,
+    "sub_b_mean_posterior": 0.996,
+    "n_taxa": 12,
+    "length": 106,
+    "mosaic_vs_sub_a_identity": 0.6887,
+    "mosaic_vs_sub_b_identity": 0.9717,
+    "true_breakpoint": null,
+    "contaminated_witnesses": [],
+    "evolution_model": "selection",
+    "asr_accuracy_vs_true_root": 0.6981,
+    "asr_mean_max_posterior": 0.8537,
+    "segment_jaccard": 0.0,
+    "n_diagnostic": 36,
+    "site_auc": null,
+    "instability_auc": null,
+    "false_positive": false
+  },
+  {
+    "experiment": "repair",
+    "condition": "repair_n1",
+    "model": "selection",
+    "seed": 2,
+    "n_contaminated": 1,
+    "seconds": 61.5,
+    "segment": null,
+    "statistic": 8.8968,
+    "p_value": 0.05473,
+    "threshold": 8.7917,
+    "detected": false,
+    "mean_abs_delta": 0.3304,
+    "n_diff_sites": 34,
+    "clade_sizes": [
+      6,
+      6
+    ],
+    "mosaic": {
+      "pseudo_log_likelihood": -1.2738,
+      "autoregressive": -1.4171
+    },
+    "sub_a": {
+      "pseudo_log_likelihood": -1.2565,
+      "autoregressive": -1.4053
+    },
+    "sub_b": {
+      "pseudo_log_likelihood": -1.2708,
+      "autoregressive": -1.3822
+    },
+    "gap_best": 0.0172,
+    "gap_mean": 0.0101,
+    "mosaic_mean_posterior": 0.9557,
+    "sub_a_mean_posterior": 0.996,
+    "sub_b_mean_posterior": 0.9482,
+    "n_taxa": 12,
+    "length": 106,
+    "mosaic_vs_sub_a_identity": 0.8019,
+    "mosaic_vs_sub_b_identity": 0.8491,
+    "true_breakpoint": [
+      26,
+      56
+    ],
+    "contaminated_witnesses": [
+      "A5"
+    ],
+    "evolution_model": "selection",
+    "asr_accuracy_vs_true_root": 0.717,
+    "asr_mean_max_posterior": 0.9557,
+    "segment_jaccard": 0.0,
+    "n_diagnostic": 34,
+    "site_auc": 0.4704,
+    "instability_auc": 0.4921,
+    "false_positive": false
+  },
+  {
+    "experiment": "repair",
+    "condition": "repair_n3",
+    "model": "selection",
+    "seed": 2,
+    "n_contaminated": 3,
+    "seconds": 61.6,
+    "segment": null,
+    "statistic": 7.4421,
+    "p_value": 0.1592,
+    "threshold": 8.751,
+    "detected": false,
+    "mean_abs_delta": 0.3225,
+    "n_diff_sites": 34,
+    "clade_sizes": [
+      6,
+      6
+    ],
+    "mosaic": {
+      "pseudo_log_likelihood": -1.3586,
+      "autoregressive": -1.4408
+    },
+    "sub_a": {
+      "pseudo_log_likelihood": -1.2565,
+      "autoregressive": -1.4053
+    },
+    "sub_b": {
+      "pseudo_log_likelihood": -1.2708,
+      "autoregressive": -1.3822
+    },
+    "gap_best": 0.1021,
+    "gap_mean": 0.0949,
+    "mosaic_mean_posterior": 0.9503,
+    "sub_a_mean_posterior": 0.996,
+    "sub_b_mean_posterior": 0.9524,
+    "n_taxa": 12,
+    "length": 106,
+    "mosaic_vs_sub_a_identity": 0.783,
+    "mosaic_vs_sub_b_identity": 0.8868,
+    "true_breakpoint": [
+      26,
+      56
+    ],
+    "contaminated_witnesses": [
+      "A0",
+      "A1",
+      "A3"
+    ],
+    "evolution_model": "selection",
+    "asr_accuracy_vs_true_root": 0.6981,
+    "asr_mean_max_posterior": 0.9503,
+    "segment_jaccard": 0.0,
+    "n_diagnostic": 34,
+    "site_auc": 0.4743,
+    "instability_auc": 0.4743,
+    "false_positive": false
+  },
+  {
+    "experiment": "repair",
+    "condition": "repair_n5",
+    "model": "selection",
+    "seed": 2,
+    "n_contaminated": 5,
+    "seconds": 54.7,
+    "segment": null,
+    "statistic": 3.8971,
+    "p_value": 0.86567,
+    "threshold": 8.6377,
+    "detected": false,
+    "mean_abs_delta": 0.235,
+    "n_diff_sites": 24,
+    "clade_sizes": [
+      6,
+      6
+    ],
+    "mosaic": {
+      "pseudo_log_likelihood": -1.3203,
+      "autoregressive": -1.4253
+    },
+    "sub_a": {
+      "pseudo_log_likelihood": -1.3291,
+      "autoregressive": -1.4356
+    },
+    "sub_b": {
+      "pseudo_log_likelihood": -1.2565,
+      "autoregressive": -1.4053
+    },
+    "gap_best": 0.0637,
+    "gap_mean": 0.0274,
+    "mosaic_mean_posterior": 0.9461,
+    "sub_a_mean_posterior": 0.9372,
+    "sub_b_mean_posterior": 0.996,
+    "n_taxa": 12,
+    "length": 106,
+    "mosaic_vs_sub_a_identity": 0.9528,
+    "mosaic_vs_sub_b_identity": 0.8113,
+    "true_breakpoint": [
+      26,
+      56
+    ],
+    "contaminated_witnesses": [
+      "A0",
+      "A1",
+      "A2",
+      "A3",
+      "A4"
+    ],
+    "evolution_model": "selection",
+    "asr_accuracy_vs_true_root": 0.6981,
+    "asr_mean_max_posterior": 0.9461,
+    "segment_jaccard": 0.0,
+    "n_diagnostic": 24,
+    "site_auc": 0.2609,
+    "instability_auc": 0.7391,
+    "false_positive": false
+  }
+]

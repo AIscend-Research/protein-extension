@@ -22,6 +22,7 @@ posteriors.)
 from __future__ import annotations
 
 import csv
+import re
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Iterable, Sequence
@@ -384,29 +385,129 @@ def split_clades(tree: TreeNode) -> tuple[list[str], list[str]]:
     return first, rest
 
 
+# ----------------------------------------------------------- IQ-TREE bridge
+
+
+def read_newick(text: str) -> TreeNode:
+    """Parse a Newick string, keeping internal node labels.
+
+    IQ-TREE's `--ancestral` run labels internal nodes (`Node1`, `Node2`, ...) in
+    the `.treefile`, and those labels are the keys of the `.state` file, so the
+    labels are the join between topology and posteriors and must survive parsing.
+    """
+    s = re.sub(r"\[[^\]]*\]", "", text).strip()  # NHX / support comments
+    s = s.rstrip(";").strip()
+    if not s:
+        raise ValueError("empty newick")
+    pos = 0
+
+    def parse_node() -> TreeNode:
+        nonlocal pos
+        node = TreeNode()
+        if pos < len(s) and s[pos] == "(":
+            pos += 1
+            while True:
+                child = parse_node()
+                node.add(child, child.length)
+                if pos >= len(s):
+                    raise ValueError("unbalanced parentheses in newick")
+                if s[pos] == ",":
+                    pos += 1
+                    continue
+                if s[pos] == ")":
+                    pos += 1
+                    break
+                raise ValueError(f"unexpected {s[pos]!r} at {pos} in newick")
+        start = pos
+        while pos < len(s) and s[pos] not in "(),:":
+            pos += 1
+        node.name = s[start:pos].strip().strip("'\"")
+        if pos < len(s) and s[pos] == ":":
+            pos += 1
+            start = pos
+            while pos < len(s) and s[pos] not in "(),":
+                pos += 1
+            node.length = max(float(s[start:pos]), 0.0)
+        return node
+
+    root = parse_node()
+    if pos != len(s):
+        raise ValueError(f"trailing text in newick at {pos}: {s[pos:pos + 20]!r}")
+    return root
+
+
 def parse_iqtree_state(path: str | Path, node: str | None = None) -> dict[str, np.ndarray]:
-    """Read IQ-TREE 2's `.state` file into {node_name: (L, 20) posteriors}."""
+    """Read IQ-TREE 2's `.state` file into {node_name: (L, 20) posteriors}.
+
+    The `p_X` columns come out in IQ-TREE's own amino-acid order
+    (`ARNDCQEGHILKMFPSTWYV`), not this module's `CANONICAL` order, so the header
+    is what says which column is which. Reading them positionally parses without
+    complaint and silently permutes the alphabet, which is the worst available
+    outcome — hence the header is required rather than assumed.
+    """
+    order: list[int] | None = None
     rows: dict[str, dict[int, np.ndarray]] = {}
-    header: list[str] | None = None
     for line in Path(path).read_text().splitlines():
-        if line.startswith("#") or not line.strip():
+        if not line.strip() or line.startswith("#"):
             continue
         parts = line.split()
-        if header is None and parts[0].lower() in {"node", "#node"}:
-            header = [p.strip() for p in parts]
-            continue
-        if header is None:
+        if order is None:
+            if parts[0].lstrip("#").lower() != "node":
+                raise ValueError(f"{path}: expected a header row, got {parts[0]!r}")
+            labelled = {p[2:].upper(): i for i, p in enumerate(parts) if p.startswith("p_")}
+            missing = [aa for aa in CANONICAL if aa not in labelled]
+            if missing:
+                raise ValueError(f"{path}: header lacks p_ columns for {''.join(missing)}")
+            order = [labelled[aa] for aa in CANONICAL]
             continue
         name, site = parts[0], int(parts[1])
         if node is not None and name != node:
             continue
-        probs = np.array([float(x) for x in parts[3:23]])
-        rows.setdefault(name, {})[site] = probs
-    out = {}
+        rows.setdefault(name, {})[site] = np.array([float(parts[k]) for k in order])
+    if order is None:
+        raise ValueError(f"{path}: no header row found")
+    out: dict[str, np.ndarray] = {}
     for name, sites in rows.items():
-        ordered = [sites[k] for k in sorted(sites)]
-        out[name] = np.array(ordered)
+        expected = list(range(1, max(sites) + 1))
+        if sorted(sites) != expected:
+            raise ValueError(f"{path}: node {name} has gaps in its site numbering")
+        out[name] = np.array([sites[k] for k in expected])
     return out
+
+
+def iqtree_reconstruction(
+    state: str | Path | dict[str, np.ndarray],
+    node: str,
+    *,
+    taxa: Sequence[str] | None = None,
+    tree_newick: str = "",
+) -> Reconstruction:
+    """Wrap one node of an IQ-TREE ASR run as a `Reconstruction`.
+
+    This is the seam that lets real posteriors run the same downstream code as
+    simulated ones: [repair] and [conflict] only ever touch `.sequence` and
+    `.posteriors`, so where those came from is not their business.
+
+    Note what IQ-TREE's marginal posteriors at an internal node actually are:
+    they condition on *every* taxon in the alignment, not only the node's
+    descendants. That is not the same object as `reconstruct(seqs, taxa=clade_a)`,
+    which sees clade A alone. For the two sub-histories, run IQ-TREE separately
+    per clade rather than pulling two nodes out of one whole-family run —
+    otherwise each "independent" sub-ancestor has already been told about the
+    other clade, which is exactly the contamination the probe is looking for.
+    """
+    table = parse_iqtree_state(state) if not isinstance(state, dict) else state
+    if node not in table:
+        raise KeyError(f"node {node!r} not in state file; have {sorted(table)[:8]}...")
+    post = np.asarray(table[node], dtype=float)
+    post = post / np.clip(post.sum(axis=1, keepdims=True), 1e-300, None)
+    return Reconstruction(
+        node=node,
+        sequence="".join(CANONICAL[k] for k in post.argmax(axis=1)),
+        posteriors=post,
+        taxa=list(taxa) if taxa is not None else [],
+        tree_newick=tree_newick,
+    )
 
 
 if __name__ == "__main__":

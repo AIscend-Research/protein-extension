@@ -133,6 +133,46 @@ def auc(scores: np.ndarray, labels: np.ndarray) -> float:
     return float((ranks[labels].sum() - n_pos * (n_pos + 1) / 2) / (n_pos * n_neg))
 
 
+def oriented_delta(con: "ConflictResult") -> np.ndarray:
+    """Per-site contamination score, with the sign ambiguity resolved label-free.
+
+    The scan is sign-symmetric. The intruding block and its complement are both
+    "the window whose mean differs most from the rest", so `delta` says which
+    context each site prefers but not which side is the intrusion. Something has
+    to resolve that before per-site scores can be ranked, and it must not be the
+    ground truth — orienting by the labels would score a coin flip as skill.
+
+    Two label-free rules were measured (`sweeps.py --sweep orientation`):
+
+      minority  the intrusion is the rarer sign among diagnostic sites. This
+                fails, because outside the intruding block the mosaic ancestor
+                is genuinely intermediate between the two clades: delta there is
+                ~0 with essentially random sign, so the "majority" is decided by
+                noise. Measured site AUC under this rule was 0.05 on the one run
+                where the segment was recovered with Jaccard 0.71.
+
+      segment   the intrusion is the window the scan already flagged. This is
+                the detector's own output, so it costs no extra information, and
+                it gave AUC 0.95 on that same run.
+
+    The `segment` rule is used. It is not circular: the window is the detector's
+    *estimate*, and when that estimate is wrong the AUC lands below 0.5 rather
+    than being rescued — which is what makes the number falsifiable.
+    """
+    diag = con.diff_sites if len(con.diff_sites) else np.arange(len(con.delta))
+    window = con.best_segment or con.segment
+    if window is None:
+        return -con.delta
+    inside = np.zeros(len(con.delta), dtype=bool)
+    inside[window[0]:window[1]] = True
+    inside_diag = inside[diag]
+    if inside_diag.all() or not inside_diag.any():
+        return -con.delta
+    if con.delta[diag][inside_diag].mean() > con.delta[diag][~inside_diag].mean():
+        return con.delta
+    return -con.delta
+
+
 def jaccard(a: tuple[int, int] | None, b: tuple[int, int] | None) -> float:
     if a is None or b is None:
         return 0.0

@@ -39,6 +39,11 @@ def main() -> None:
     ap.add_argument("--n-per-clade", type=int, default=6)
     ap.add_argument("--breakpoint", default="55,85")
     ap.add_argument("--contaminated", type=int, default=3)
+    ap.add_argument("--temperature", type=float, default=0.5,
+                    help="Gibbs temperature. Defaults to 0.5 to match run_experiments.py "
+                         "and sweeps.py — evolve.make_evolver's own default is 0.6, so "
+                         "leaving it implicit would illustrate the headline claim with a "
+                         "family drawn from a different regime than every reported table.")
     ap.add_argument("--n-perm", type=int, default=200)
     ap.add_argument("--out", default=str(REPO_ROOT / "figures"))
     ap.add_argument("--cache", default=str(REPO_ROOT / "scratch" / "figure_family.json"),
@@ -56,7 +61,7 @@ def main() -> None:
 
     signature = {"model": args.model, "seed": args.seed, "n_per_clade": args.n_per_clade,
                  "breakpoint": [start, stop], "contaminated": args.contaminated,
-                 "pdb": Path(args.pdb).name}
+                 "temperature": args.temperature, "pdb": Path(args.pdb).name}
     cache = Path(args.cache)
     truth = None
     if not args.no_cache and cache.exists():
@@ -68,7 +73,7 @@ def main() -> None:
 
     if truth is None:
         print("simulating...", flush=True)
-        evolver = make_evolver(args.model, scorer)
+        evolver = make_evolver(args.model, scorer, temperature=args.temperature)
         clean = simulate_family(evolver, scorer.native_seq, n_per_clade=args.n_per_clade,
                                 breakpoint=None, n_contaminated=0, seed=args.seed)
         family = contaminate(clean, (start, stop), n_contaminated=args.contaminated,
@@ -123,10 +128,25 @@ def main() -> None:
         result.repair.mosaic.sequence, truth["true_root"], [c.label for c in calls])
     paths.append(viz.plot_label_calibration(calibration, path=out / "label_calibration.png"))
 
-    rows = [row for f in sorted(glob.glob(str(REPO_ROOT / "experiments/results/*.json")))
-            for row in json.load(open(f))]
-    if rows:
-        paths.append(viz.plot_detection_summary(rows, path=out / "detection_summary.png"))
+    # Both summary plates are built from the segment sweep rather than from
+    # run_experiments' output: the sweep runs `selection` and `f81` over
+    # identical conditions, which is what makes test and control comparable, and
+    # it carries the corrected orientation (`site_auc_segment`).
+    sweep_rows = [row for f in sorted(glob.glob(
+        str(REPO_ROOT / "experiments/results/sweep_segment_*.json")))
+        for row in json.load(open(f))]
+    ablation_rows = [row for f in sorted(glob.glob(
+        str(REPO_ROOT / "experiments/results/ablation_*.json")))
+        for row in json.load(open(f))]
+    if ablation_rows:
+        paths.append(viz.plot_ablation(ablation_rows, path=out / "ablation.png"))
+
+    if sweep_rows:
+        paths.append(viz.plot_detection_summary(
+            sweep_rows, path=out / "detection_summary.png"))
+        paths.append(viz.plot_sensitivity_curve(
+            sweep_rows, path=out / "sensitivity_curve.png",
+            title="Detection is governed by diagnostic sites, not block length"))
 
     (out / "figure_context.json").write_text(json.dumps({
         "model": args.model, "seed": args.seed, "breakpoint": [start, stop],

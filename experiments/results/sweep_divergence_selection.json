@@ -1,0 +1,296 @@
+[
+  {
+    "sweep": "divergence",
+    "model": "selection",
+    "seed": 0,
+    "stem": 0.5,
+    "n_per_clade": 3,
+    "detected": false,
+    "p_value": 0.83582,
+    "segment": null,
+    "best_segment": [
+      53,
+      102
+    ],
+    "n_diagnostic": 19,
+    "n_diagnostic_in_segment": 0,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "segment_jaccard": 0.0,
+    "site_auc_minority": NaN,
+    "site_auc_segment": NaN,
+    "seconds": 34.3
+  },
+  {
+    "sweep": "divergence",
+    "model": "selection",
+    "seed": 0,
+    "stem": 0.5,
+    "n_per_clade": 6,
+    "detected": false,
+    "p_value": 0.29353,
+    "segment": null,
+    "best_segment": [
+      85,
+      89
+    ],
+    "n_diagnostic": 20,
+    "n_diagnostic_in_segment": 8,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "segment_jaccard": 0.0,
+    "site_auc_minority": 0.5417,
+    "site_auc_segment": 0.5417,
+    "seconds": 50.1
+  },
+  {
+    "sweep": "divergence",
+    "model": "selection",
+    "seed": 0,
+    "stem": 2.0,
+    "n_per_clade": 3,
+    "detected": false,
+    "p_value": 0.57711,
+    "segment": null,
+    "best_segment": [
+      41,
+      72
+    ],
+    "n_diagnostic": 31,
+    "n_diagnostic_in_segment": 4,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "segment_jaccard": 0.0,
+    "site_auc_minority": 0.6574,
+    "site_auc_segment": 0.6574,
+    "seconds": 53.9
+  },
+  {
+    "sweep": "divergence",
+    "model": "selection",
+    "seed": 0,
+    "stem": 2.0,
+    "n_per_clade": 6,
+    "detected": true,
+    "p_value": 0.0199,
+    "segment": [
+      50,
+      92
+    ],
+    "best_segment": [
+      50,
+      92
+    ],
+    "n_diagnostic": 37,
+    "n_diagnostic_in_segment": 13,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "segment_jaccard": 0.7143,
+    "site_auc_minority": 0.0481,
+    "site_auc_segment": 0.9519,
+    "seconds": 60.7
+  },
+  {
+    "sweep": "divergence",
+    "model": "selection",
+    "seed": 0,
+    "stem": 4.0,
+    "n_per_clade": 3,
+    "detected": false,
+    "p_value": 0.12438,
+    "segment": null,
+    "best_segment": [
+      50,
+      87
+    ],
+    "n_diagnostic": 35,
+    "n_diagnostic_in_segment": 3,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "segment_jaccard": 0.0,
+    "site_auc_minority": 0.6979,
+    "site_auc_segment": 0.6979,
+    "seconds": 55.7
+  },
+  {
+    "sweep": "divergence",
+    "model": "selection",
+    "seed": 0,
+    "stem": 4.0,
+    "n_per_clade": 6,
+    "detected": true,
+    "p_value": 0.00498,
+    "segment": [
+      51,
+      88
+    ],
+    "best_segment": [
+      51,
+      88
+    ],
+    "n_diagnostic": 44,
+    "n_diagnostic_in_segment": 14,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "segment_jaccard": 0.8108,
+    "site_auc_minority": 0.9024,
+    "site_auc_segment": 0.9024,
+    "seconds": 29.5
+  },
+  {
+    "sweep": "divergence",
+    "model": "selection",
+    "seed": 1,
+    "stem": 0.5,
+    "n_per_clade": 3,
+    "detected": false,
+    "p_value": 0.35821,
+    "segment": null,
+    "best_segment": [
+      39,
+      85
+    ],
+    "n_diagnostic": 13,
+    "n_diagnostic_in_segment": 2,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "segment_jaccard": 0.0,
+    "site_auc_minority": 0.5909,
+    "site_auc_segment": 0.5909,
+    "seconds": 40.3
+  },
+  {
+    "sweep": "divergence",
+    "model": "selection",
+    "seed": 1,
+    "stem": 0.5,
+    "n_per_clade": 6,
+    "detected": false,
+    "p_value": 0.90547,
+    "segment": null,
+    "best_segment": [
+      2,
+      7
+    ],
+    "n_diagnostic": 15,
+    "n_diagnostic_in_segment": 2,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "segment_jaccard": 0.0,
+    "site_auc_minority": 0.4615,
+    "site_auc_segment": 0.5385,
+    "seconds": 54.7
+  },
+  {
+    "sweep": "divergence",
+    "model": "selection",
+    "seed": 1,
+    "stem": 2.0,
+    "n_per_clade": 3,
+    "detected": false,
+    "p_value": 0.52736,
+    "segment": null,
+    "best_segment": [
+      28,
+      91
+    ],
+    "n_diagnostic": 31,
+    "n_diagnostic_in_segment": 5,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "segment_jaccard": 0.0,
+    "site_auc_minority": 0.5462,
+    "site_auc_segment": 0.4538,
+    "seconds": 38.1
+  },
+  {
+    "sweep": "divergence",
+    "model": "selection",
+    "seed": 1,
+    "stem": 2.0,
+    "n_per_clade": 6,
+    "detected": false,
+    "p_value": 0.91542,
+    "segment": null,
+    "best_segment": [
+      3,
+      54
+    ],
+    "n_diagnostic": 23,
+    "n_diagnostic_in_segment": 0,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "segment_jaccard": 0.0,
+    "site_auc_minority": NaN,
+    "site_auc_segment": NaN,
+    "seconds": 32.9
+  },
+  {
+    "sweep": "divergence",
+    "model": "selection",
+    "seed": 1,
+    "stem": 4.0,
+    "n_per_clade": 3,
+    "detected": false,
+    "p_value": 0.97512,
+    "segment": null,
+    "best_segment": [
+      51,
+      99
+    ],
+    "n_diagnostic": 31,
+    "n_diagnostic_in_segment": 0,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "segment_jaccard": 0.0,
+    "site_auc_minority": NaN,
+    "site_auc_segment": NaN,
+    "seconds": 29.7
+  },
+  {
+    "sweep": "divergence",
+    "model": "selection",
+    "seed": 1,
+    "stem": 4.0,
+    "n_per_clade": 6,
+    "detected": false,
+    "p_value": 0.58209,
+    "segment": null,
+    "best_segment": [
+      50,
+      87
+    ],
+    "n_diagnostic": 35,
+    "n_diagnostic_in_segment": 2,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "segment_jaccard": 0.0,
+    "site_auc_minority": 1.0,
+    "site_auc_segment": 1.0,
+    "seconds": 29.4
+  }
+]
