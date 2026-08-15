@@ -475,3 +475,15 @@ Pooled across widths: selection 13/60 (22%, 95% CI [13%, 34%]), f81 3/60 (5%, 95
 | scrambled | 80 | 1/20 | 5% | [1%, 24%] | 0.662 |
 
 Pooled: `mpnn` 11/40 (95% CI [16%, 43%]), `identity` 36/40 (95% CI [77%, 96%]).
+
+One nuance the per-width table above hides: **mean Jaccard among firings only,
+split by width**, is `mpnn` 0.678 vs `identity` 0.683 at width 50 — essentially
+tied — but `mpnn` 0.396 vs `identity` 0.160 at width 80, where 15 of
+`identity`'s 18 width-80 firings land at Jaccard < 0.1 (`mpnn`'s width-80
+firings are noisy too — 3 of 5 near-zero — just less so). So this is not "mpnn
+localizes better in general"; it is "at width 80, most of `identity`'s firings
+look like the permutation test tripping on a window that happens to pass
+significance rather than a real localization." It does not change the headline
+of this section: `identity` still detects far more often overall (90% vs 28%,
+non-overlapping CIs), which is the metric that determines whether a real
+contamination event gets flagged at all.

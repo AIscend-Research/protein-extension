@@ -226,10 +226,11 @@ def power_sweep() -> None:
                 sub = [r for r in rows if r["width"] == width]
                 k, n = sum(r["detected"] for r in sub), len(sub)
                 lo, hi = wilson(k, n)
+                lo, hi = max(lo, 0.0), min(hi, 1.0)  # Wilson bound rounds to +-eps at k=0 or k=n
                 fired = [r for r in sub if r["detected"]]
-                jac = np.mean([r["segment_jaccard"] for r in fired]) if fired else float("nan")
+                jac_txt = f"{np.mean([r['segment_jaccard'] for r in fired]):.3f}" if fired else "n/a"
                 print(f"{model:<11}{width:>7}{f'{k}/{n}':>9}{k / n:>8.0%}"
-                      f"{f'[{lo:.0%}, {hi:.0%}]':>16}{jac:>22.3f}")
+                      f"{f'[{lo:.0%}, {hi:.0%}]':>16}{jac_txt:>22}")
         s_fired = [r for r in sel if r["detected"]]
         f_fired = [r for r in f81 if r["detected"]]
         print(f"\n  pooled across widths: selection {sum(r['detected'] for r in sel)}/{len(sel)}, "
@@ -244,9 +245,12 @@ def power_sweep() -> None:
             vals = [r["arms"][arm] for r in ab]
             k, n = sum(1 for v in vals if v["detected"]), len(vals)
             lo, hi = wilson(k, n)
-            jac = [v["segment_jaccard"] for v in vals if v.get("segment_jaccard") is not None]
-            print(f"{arm:<12}{f'{k}/{n}':>9}{(k / n if n else float('nan')):>8.0%}"
-                  f"{f'[{lo:.0%}, {hi:.0%}]':>16}{np.mean(jac) if jac else float('nan'):>14.3f}")
+            lo, hi = max(lo, 0.0), min(hi, 1.0)
+            fired_jac = [v["segment_jaccard"] for v in vals
+                        if v["detected"] and v.get("segment_jaccard") is not None]
+            jac_txt = f"{np.mean(fired_jac):.3f}" if fired_jac else "n/a"
+            print(f"{arm:<12}{f'{k}/{n}':>9}{(k / n if n else 0):>8.0%}"
+                  f"{f'[{lo:.0%}, {hi:.0%}]':>16}{jac_txt:>14}")
 
 
 def thin_evidence() -> None:
