@@ -1,0 +1,1549 @@
+[
+  {
+    "model": "selection",
+    "seed": 0,
+    "width": 50,
+    "seconds": 43.9,
+    "n_diagnostic": 41,
+    "n_diagnostic_in_segment": 22,
+    "true_breakpoint": [
+      55,
+      105
+    ],
+    "arms": {
+      "mpnn": {
+        "detected": false,
+        "p_value": 0.05970149253731343,
+        "segment": null,
+        "site_auc": 0.8110047846889952,
+        "segment_jaccard": 0.0
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.004975124378109453,
+        "segment": [
+          55,
+          105
+        ],
+        "site_auc": 0.9246411483253588,
+        "segment_jaccard": 1.0
+      },
+      "scrambled": {
+        "detected": false,
+        "p_value": 0.4626865671641791,
+        "segment": null,
+        "site_auc": 0.47368421052631576,
+        "segment_jaccard": 0.0
+      }
+    }
+  },
+  {
+    "model": "selection",
+    "seed": 0,
+    "width": 80,
+    "seconds": 48.7,
+    "n_diagnostic": 41,
+    "n_diagnostic_in_segment": 23,
+    "true_breakpoint": [
+      55,
+      106
+    ],
+    "arms": {
+      "mpnn": {
+        "detected": false,
+        "p_value": 0.05970149253731343,
+        "segment": null,
+        "site_auc": 0.7705314009661836,
+        "segment_jaccard": 0.0
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.004975124378109453,
+        "segment": [
+          1,
+          54
+        ],
+        "site_auc": 0.05555555555555555,
+        "segment_jaccard": 0.0
+      },
+      "scrambled": {
+        "detected": false,
+        "p_value": 0.4079601990049751,
+        "segment": null,
+        "site_auc": 0.5048309178743962,
+        "segment_jaccard": 0.0
+      }
+    }
+  },
+  {
+    "model": "selection",
+    "seed": 1,
+    "width": 50,
+    "seconds": 48.5,
+    "n_diagnostic": 35,
+    "n_diagnostic_in_segment": 22,
+    "true_breakpoint": [
+      55,
+      105
+    ],
+    "arms": {
+      "mpnn": {
+        "detected": true,
+        "p_value": 0.004975124378109453,
+        "segment": [
+          53,
+          102
+        ],
+        "site_auc": 0.9020979020979021,
+        "segment_jaccard": 0.9038461538461539
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.004975124378109453,
+        "segment": [
+          55,
+          102
+        ],
+        "site_auc": 0.9545454545454546,
+        "segment_jaccard": 0.94
+      },
+      "scrambled": {
+        "detected": false,
+        "p_value": 0.5422885572139303,
+        "segment": null,
+        "site_auc": 0.46153846153846156,
+        "segment_jaccard": 0.0
+      }
+    }
+  },
+  {
+    "model": "selection",
+    "seed": 1,
+    "width": 80,
+    "seconds": 47.4,
+    "n_diagnostic": 36,
+    "n_diagnostic_in_segment": 23,
+    "true_breakpoint": [
+      55,
+      106
+    ],
+    "arms": {
+      "mpnn": {
+        "detected": true,
+        "p_value": 0.004975124378109453,
+        "segment": [
+          54,
+          102
+        ],
+        "site_auc": 0.8896321070234113,
+        "segment_jaccard": 0.9038461538461539
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.004975124378109453,
+        "segment": [
+          3,
+          55
+        ],
+        "site_auc": 0.043478260869565216,
+        "segment_jaccard": 0.0
+      },
+      "scrambled": {
+        "detected": false,
+        "p_value": 0.9701492537313433,
+        "segment": null,
+        "site_auc": 0.5785953177257525,
+        "segment_jaccard": 0.0
+      }
+    }
+  },
+  {
+    "model": "selection",
+    "seed": 2,
+    "width": 50,
+    "seconds": 47.4,
+    "n_diagnostic": 33,
+    "n_diagnostic_in_segment": 16,
+    "true_breakpoint": [
+      55,
+      105
+    ],
+    "arms": {
+      "mpnn": {
+        "detected": false,
+        "p_value": 0.3283582089552239,
+        "segment": null,
+        "site_auc": 0.7022058823529411,
+        "segment_jaccard": 0.0
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.009950248756218905,
+        "segment": [
+          56,
+          97
+        ],
+        "site_auc": 0.9099264705882353,
+        "segment_jaccard": 0.82
+      },
+      "scrambled": {
+        "detected": false,
+        "p_value": 0.8706467661691543,
+        "segment": null,
+        "site_auc": 0.5588235294117647,
+        "segment_jaccard": 0.0
+      }
+    }
+  },
+  {
+    "model": "selection",
+    "seed": 2,
+    "width": 80,
+    "seconds": 47.8,
+    "n_diagnostic": 31,
+    "n_diagnostic_in_segment": 15,
+    "true_breakpoint": [
+      55,
+      106
+    ],
+    "arms": {
+      "mpnn": {
+        "detected": false,
+        "p_value": 0.38308457711442784,
+        "segment": null,
+        "site_auc": 0.30416666666666664,
+        "segment_jaccard": 0.0
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.04975124378109453,
+        "segment": [
+          0,
+          56
+        ],
+        "site_auc": 0.1625,
+        "segment_jaccard": 0.009433962264150943
+      },
+      "scrambled": {
+        "detected": false,
+        "p_value": 0.8159203980099502,
+        "segment": null,
+        "site_auc": 0.5583333333333333,
+        "segment_jaccard": 0.0
+      }
+    }
+  },
+  {
+    "model": "selection",
+    "seed": 3,
+    "width": 50,
+    "seconds": 47.4,
+    "n_diagnostic": 30,
+    "n_diagnostic_in_segment": 25,
+    "true_breakpoint": [
+      55,
+      105
+    ],
+    "arms": {
+      "mpnn": {
+        "detected": false,
+        "p_value": 0.5771144278606966,
+        "segment": null,
+        "site_auc": 0.2,
+        "segment_jaccard": 0.0
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.009950248756218905,
+        "segment": [
+          0,
+          55
+        ],
+        "site_auc": 0.048,
+        "segment_jaccard": 0.0
+      },
+      "scrambled": {
+        "detected": false,
+        "p_value": 0.9601990049751243,
+        "segment": null,
+        "site_auc": 0.736,
+        "segment_jaccard": 0.0
+      }
+    }
+  },
+  {
+    "model": "selection",
+    "seed": 3,
+    "width": 80,
+    "seconds": 48.0,
+    "n_diagnostic": 30,
+    "n_diagnostic_in_segment": 25,
+    "true_breakpoint": [
+      55,
+      106
+    ],
+    "arms": {
+      "mpnn": {
+        "detected": false,
+        "p_value": 0.5771144278606966,
+        "segment": null,
+        "site_auc": 0.2,
+        "segment_jaccard": 0.0
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.009950248756218905,
+        "segment": [
+          0,
+          55
+        ],
+        "site_auc": 0.048,
+        "segment_jaccard": 0.0
+      },
+      "scrambled": {
+        "detected": false,
+        "p_value": 0.9601990049751243,
+        "segment": null,
+        "site_auc": 0.736,
+        "segment_jaccard": 0.0
+      }
+    }
+  },
+  {
+    "model": "selection",
+    "seed": 4,
+    "width": 50,
+    "seconds": 47.8,
+    "n_diagnostic": 36,
+    "n_diagnostic_in_segment": 23,
+    "true_breakpoint": [
+      55,
+      105
+    ],
+    "arms": {
+      "mpnn": {
+        "detected": false,
+        "p_value": 0.9850746268656716,
+        "segment": null,
+        "site_auc": 0.5351170568561873,
+        "segment_jaccard": 0.0
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.004975124378109453,
+        "segment": [
+          0,
+          42
+        ],
+        "site_auc": 0.02508361204013378,
+        "segment_jaccard": 0.0
+      },
+      "scrambled": {
+        "detected": false,
+        "p_value": 0.5223880597014925,
+        "segment": null,
+        "site_auc": 0.451505016722408,
+        "segment_jaccard": 0.0
+      }
+    }
+  },
+  {
+    "model": "selection",
+    "seed": 4,
+    "width": 80,
+    "seconds": 47.6,
+    "n_diagnostic": 37,
+    "n_diagnostic_in_segment": 24,
+    "true_breakpoint": [
+      55,
+      106
+    ],
+    "arms": {
+      "mpnn": {
+        "detected": false,
+        "p_value": 0.9651741293532339,
+        "segment": null,
+        "site_auc": 0.5384615384615384,
+        "segment_jaccard": 0.0
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.004975124378109453,
+        "segment": [
+          60,
+          102
+        ],
+        "site_auc": 0.9535256410256411,
+        "segment_jaccard": 0.8235294117647058
+      },
+      "scrambled": {
+        "detected": false,
+        "p_value": 0.6368159203980099,
+        "segment": null,
+        "site_auc": 0.46474358974358976,
+        "segment_jaccard": 0.0
+      }
+    }
+  },
+  {
+    "model": "selection",
+    "seed": 5,
+    "width": 50,
+    "seconds": 47.5,
+    "n_diagnostic": 42,
+    "n_diagnostic_in_segment": 24,
+    "true_breakpoint": [
+      55,
+      105
+    ],
+    "arms": {
+      "mpnn": {
+        "detected": true,
+        "p_value": 0.04975124378109453,
+        "segment": [
+          2,
+          61
+        ],
+        "site_auc": 0.2199074074074074,
+        "segment_jaccard": 0.05825242718446602
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.004975124378109453,
+        "segment": [
+          0,
+          55
+        ],
+        "site_auc": 0.027777777777777776,
+        "segment_jaccard": 0.0
+      },
+      "scrambled": {
+        "detected": false,
+        "p_value": 0.5870646766169154,
+        "segment": null,
+        "site_auc": 0.32175925925925924,
+        "segment_jaccard": 0.0
+      }
+    }
+  },
+  {
+    "model": "selection",
+    "seed": 5,
+    "width": 80,
+    "seconds": 48.1,
+    "n_diagnostic": 42,
+    "n_diagnostic_in_segment": 25,
+    "true_breakpoint": [
+      55,
+      106
+    ],
+    "arms": {
+      "mpnn": {
+        "detected": true,
+        "p_value": 0.04975124378109453,
+        "segment": [
+          2,
+          61
+        ],
+        "site_auc": 0.22823529411764706,
+        "segment_jaccard": 0.057692307692307696
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.004975124378109453,
+        "segment": [
+          0,
+          55
+        ],
+        "site_auc": 0.0,
+        "segment_jaccard": 0.0
+      },
+      "scrambled": {
+        "detected": false,
+        "p_value": 0.5870646766169154,
+        "segment": null,
+        "site_auc": 0.2847058823529412,
+        "segment_jaccard": 0.0
+      }
+    }
+  },
+  {
+    "model": "selection",
+    "seed": 6,
+    "width": 50,
+    "seconds": 47.6,
+    "n_diagnostic": 37,
+    "n_diagnostic_in_segment": 18,
+    "true_breakpoint": [
+      55,
+      105
+    ],
+    "arms": {
+      "mpnn": {
+        "detected": false,
+        "p_value": 0.4925373134328358,
+        "segment": null,
+        "site_auc": 0.8128654970760234,
+        "segment_jaccard": 0.0
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.004975124378109453,
+        "segment": [
+          58,
+          105
+        ],
+        "site_auc": 0.8874269005847953,
+        "segment_jaccard": 0.94
+      },
+      "scrambled": {
+        "detected": true,
+        "p_value": 0.01990049751243781,
+        "segment": [
+          1,
+          35
+        ],
+        "site_auc": 0.43567251461988304,
+        "segment_jaccard": 0.0
+      }
+    }
+  },
+  {
+    "model": "selection",
+    "seed": 6,
+    "width": 80,
+    "seconds": 47.9,
+    "n_diagnostic": 37,
+    "n_diagnostic_in_segment": 19,
+    "true_breakpoint": [
+      55,
+      106
+    ],
+    "arms": {
+      "mpnn": {
+        "detected": false,
+        "p_value": 0.1691542288557214,
+        "segment": null,
+        "site_auc": 0.18421052631578946,
+        "segment_jaccard": 0.0
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.004975124378109453,
+        "segment": [
+          1,
+          56
+        ],
+        "site_auc": 0.1111111111111111,
+        "segment_jaccard": 0.009523809523809525
+      },
+      "scrambled": {
+        "detected": true,
+        "p_value": 0.03482587064676617,
+        "segment": [
+          35,
+          102
+        ],
+        "site_auc": 0.5789473684210527,
+        "segment_jaccard": 0.6619718309859155
+      }
+    }
+  },
+  {
+    "model": "selection",
+    "seed": 7,
+    "width": 50,
+    "seconds": 47.4,
+    "n_diagnostic": 27,
+    "n_diagnostic_in_segment": 4,
+    "true_breakpoint": [
+      55,
+      105
+    ],
+    "arms": {
+      "mpnn": {
+        "detected": false,
+        "p_value": 0.5572139303482587,
+        "segment": null,
+        "site_auc": 0.5978260869565217,
+        "segment_jaccard": 0.0
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.01990049751243781,
+        "segment": [
+          62,
+          106
+        ],
+        "site_auc": 0.875,
+        "segment_jaccard": 0.8431372549019608
+      },
+      "scrambled": {
+        "detected": false,
+        "p_value": 0.16417910447761194,
+        "segment": null,
+        "site_auc": 0.6521739130434783,
+        "segment_jaccard": 0.0
+      }
+    }
+  },
+  {
+    "model": "selection",
+    "seed": 7,
+    "width": 80,
+    "seconds": 47.6,
+    "n_diagnostic": 47,
+    "n_diagnostic_in_segment": 26,
+    "true_breakpoint": [
+      55,
+      106
+    ],
+    "arms": {
+      "mpnn": {
+        "detected": false,
+        "p_value": 0.4427860696517413,
+        "segment": null,
+        "site_auc": 0.6996336996336996,
+        "segment_jaccard": 0.0
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.004975124378109453,
+        "segment": [
+          0,
+          55
+        ],
+        "site_auc": 0.07692307692307693,
+        "segment_jaccard": 0.0
+      },
+      "scrambled": {
+        "detected": false,
+        "p_value": 0.2885572139303483,
+        "segment": null,
+        "site_auc": 0.5146520146520146,
+        "segment_jaccard": 0.0
+      }
+    }
+  },
+  {
+    "model": "selection",
+    "seed": 8,
+    "width": 50,
+    "seconds": 47.7,
+    "n_diagnostic": 42,
+    "n_diagnostic_in_segment": 26,
+    "true_breakpoint": [
+      55,
+      105
+    ],
+    "arms": {
+      "mpnn": {
+        "detected": true,
+        "p_value": 0.004975124378109453,
+        "segment": [
+          57,
+          94
+        ],
+        "site_auc": 0.7764423076923077,
+        "segment_jaccard": 0.74
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.004975124378109453,
+        "segment": [
+          58,
+          105
+        ],
+        "site_auc": 0.9423076923076923,
+        "segment_jaccard": 0.94
+      },
+      "scrambled": {
+        "detected": false,
+        "p_value": 0.3283582089552239,
+        "segment": null,
+        "site_auc": 0.28125,
+        "segment_jaccard": 0.0
+      }
+    }
+  },
+  {
+    "model": "selection",
+    "seed": 8,
+    "width": 80,
+    "seconds": 47.6,
+    "n_diagnostic": 42,
+    "n_diagnostic_in_segment": 27,
+    "true_breakpoint": [
+      55,
+      106
+    ],
+    "arms": {
+      "mpnn": {
+        "detected": true,
+        "p_value": 0.01990049751243781,
+        "segment": [
+          1,
+          54
+        ],
+        "site_auc": 0.23703703703703705,
+        "segment_jaccard": 0.0
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.004975124378109453,
+        "segment": [
+          1,
+          58
+        ],
+        "site_auc": 0.05555555555555555,
+        "segment_jaccard": 0.02857142857142857
+      },
+      "scrambled": {
+        "detected": false,
+        "p_value": 0.3283582089552239,
+        "segment": null,
+        "site_auc": 0.3111111111111111,
+        "segment_jaccard": 0.0
+      }
+    }
+  },
+  {
+    "model": "selection",
+    "seed": 9,
+    "width": 50,
+    "seconds": 47.4,
+    "n_diagnostic": 45,
+    "n_diagnostic_in_segment": 25,
+    "true_breakpoint": [
+      55,
+      105
+    ],
+    "arms": {
+      "mpnn": {
+        "detected": false,
+        "p_value": 0.07960199004975124,
+        "segment": null,
+        "site_auc": 0.206,
+        "segment_jaccard": 0.0
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.004975124378109453,
+        "segment": [
+          55,
+          105
+        ],
+        "site_auc": 0.96,
+        "segment_jaccard": 1.0
+      },
+      "scrambled": {
+        "detected": false,
+        "p_value": 0.7064676616915423,
+        "segment": null,
+        "site_auc": 0.518,
+        "segment_jaccard": 0.0
+      }
+    }
+  },
+  {
+    "model": "selection",
+    "seed": 9,
+    "width": 80,
+    "seconds": 47.6,
+    "n_diagnostic": 45,
+    "n_diagnostic_in_segment": 27,
+    "true_breakpoint": [
+      55,
+      106
+    ],
+    "arms": {
+      "mpnn": {
+        "detected": false,
+        "p_value": 0.16417910447761194,
+        "segment": null,
+        "site_auc": 0.2222222222222222,
+        "segment_jaccard": 0.0
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.004975124378109453,
+        "segment": [
+          0,
+          55
+        ],
+        "site_auc": 0.05555555555555555,
+        "segment_jaccard": 0.0
+      },
+      "scrambled": {
+        "detected": false,
+        "p_value": 0.39303482587064675,
+        "segment": null,
+        "site_auc": 0.5041152263374485,
+        "segment_jaccard": 0.0
+      }
+    }
+  },
+  {
+    "model": "selection",
+    "seed": 10,
+    "width": 50,
+    "seconds": 48.2,
+    "n_diagnostic": 43,
+    "n_diagnostic_in_segment": 22,
+    "true_breakpoint": [
+      55,
+      105
+    ],
+    "arms": {
+      "mpnn": {
+        "detected": false,
+        "p_value": 0.1890547263681592,
+        "segment": null,
+        "site_auc": 0.31385281385281383,
+        "segment_jaccard": 0.0
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.004975124378109453,
+        "segment": [
+          57,
+          105
+        ],
+        "site_auc": 0.9523809523809523,
+        "segment_jaccard": 0.96
+      },
+      "scrambled": {
+        "detected": false,
+        "p_value": 0.7263681592039801,
+        "segment": null,
+        "site_auc": 0.564935064935065,
+        "segment_jaccard": 0.0
+      }
+    }
+  },
+  {
+    "model": "selection",
+    "seed": 10,
+    "width": 80,
+    "seconds": 47.7,
+    "n_diagnostic": 43,
+    "n_diagnostic_in_segment": 23,
+    "true_breakpoint": [
+      55,
+      106
+    ],
+    "arms": {
+      "mpnn": {
+        "detected": false,
+        "p_value": 0.09950248756218906,
+        "segment": null,
+        "site_auc": 0.3,
+        "segment_jaccard": 0.0
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.004975124378109453,
+        "segment": [
+          0,
+          55
+        ],
+        "site_auc": 0.09130434782608696,
+        "segment_jaccard": 0.0
+      },
+      "scrambled": {
+        "detected": false,
+        "p_value": 0.7263681592039801,
+        "segment": null,
+        "site_auc": 0.6,
+        "segment_jaccard": 0.0
+      }
+    }
+  },
+  {
+    "model": "selection",
+    "seed": 11,
+    "width": 50,
+    "seconds": 47.6,
+    "n_diagnostic": 29,
+    "n_diagnostic_in_segment": 26,
+    "true_breakpoint": [
+      55,
+      105
+    ],
+    "arms": {
+      "mpnn": {
+        "detected": true,
+        "p_value": 0.024875621890547265,
+        "segment": [
+          64,
+          86
+        ],
+        "site_auc": 0.7435897435897436,
+        "segment_jaccard": 0.44
+      },
+      "identity": {
+        "detected": false,
+        "p_value": 0.23880597014925373,
+        "segment": null,
+        "site_auc": 0.1858974358974359,
+        "segment_jaccard": 0.0
+      },
+      "scrambled": {
+        "detected": false,
+        "p_value": 0.9800995024875622,
+        "segment": null,
+        "site_auc": 0.41025641025641024,
+        "segment_jaccard": 0.0
+      }
+    }
+  },
+  {
+    "model": "selection",
+    "seed": 11,
+    "width": 80,
+    "seconds": 47.2,
+    "n_diagnostic": 30,
+    "n_diagnostic_in_segment": 27,
+    "true_breakpoint": [
+      55,
+      106
+    ],
+    "arms": {
+      "mpnn": {
+        "detected": false,
+        "p_value": 0.14427860696517414,
+        "segment": null,
+        "site_auc": 0.6296296296296297,
+        "segment_jaccard": 0.0
+      },
+      "identity": {
+        "detected": false,
+        "p_value": 0.48756218905472637,
+        "segment": null,
+        "site_auc": 0.345679012345679,
+        "segment_jaccard": 0.0
+      },
+      "scrambled": {
+        "detected": false,
+        "p_value": 0.900497512437811,
+        "segment": null,
+        "site_auc": 0.6296296296296297,
+        "segment_jaccard": 0.0
+      }
+    }
+  },
+  {
+    "model": "selection",
+    "seed": 12,
+    "width": 50,
+    "seconds": 47.7,
+    "n_diagnostic": 47,
+    "n_diagnostic_in_segment": 22,
+    "true_breakpoint": [
+      55,
+      105
+    ],
+    "arms": {
+      "mpnn": {
+        "detected": false,
+        "p_value": 0.09950248756218906,
+        "segment": null,
+        "site_auc": 0.7109090909090909,
+        "segment_jaccard": 0.0
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.004975124378109453,
+        "segment": [
+          2,
+          55
+        ],
+        "site_auc": 0.04454545454545455,
+        "segment_jaccard": 0.0
+      },
+      "scrambled": {
+        "detected": false,
+        "p_value": 0.22388059701492538,
+        "segment": null,
+        "site_auc": 0.49818181818181817,
+        "segment_jaccard": 0.0
+      }
+    }
+  },
+  {
+    "model": "selection",
+    "seed": 12,
+    "width": 80,
+    "seconds": 47.8,
+    "n_diagnostic": 47,
+    "n_diagnostic_in_segment": 22,
+    "true_breakpoint": [
+      55,
+      106
+    ],
+    "arms": {
+      "mpnn": {
+        "detected": false,
+        "p_value": 0.09950248756218906,
+        "segment": null,
+        "site_auc": 0.7109090909090909,
+        "segment_jaccard": 0.0
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.004975124378109453,
+        "segment": [
+          2,
+          55
+        ],
+        "site_auc": 0.04454545454545455,
+        "segment_jaccard": 0.0
+      },
+      "scrambled": {
+        "detected": false,
+        "p_value": 0.22388059701492538,
+        "segment": null,
+        "site_auc": 0.49818181818181817,
+        "segment_jaccard": 0.0
+      }
+    }
+  },
+  {
+    "model": "selection",
+    "seed": 13,
+    "width": 50,
+    "seconds": 47.4,
+    "n_diagnostic": 30,
+    "n_diagnostic_in_segment": 19,
+    "true_breakpoint": [
+      55,
+      105
+    ],
+    "arms": {
+      "mpnn": {
+        "detected": false,
+        "p_value": 0.35323383084577115,
+        "segment": null,
+        "site_auc": 0.2631578947368421,
+        "segment_jaccard": 0.0
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.004975124378109453,
+        "segment": [
+          0,
+          58
+        ],
+        "site_auc": 0.16267942583732056,
+        "segment_jaccard": 0.02857142857142857
+      },
+      "scrambled": {
+        "detected": false,
+        "p_value": 0.40298507462686567,
+        "segment": null,
+        "site_auc": 0.46411483253588515,
+        "segment_jaccard": 0.0
+      }
+    }
+  },
+  {
+    "model": "selection",
+    "seed": 13,
+    "width": 80,
+    "seconds": 47.1,
+    "n_diagnostic": 31,
+    "n_diagnostic_in_segment": 20,
+    "true_breakpoint": [
+      55,
+      106
+    ],
+    "arms": {
+      "mpnn": {
+        "detected": false,
+        "p_value": 0.17412935323383086,
+        "segment": null,
+        "site_auc": 0.25,
+        "segment_jaccard": 0.0
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.004975124378109453,
+        "segment": [
+          0,
+          58
+        ],
+        "site_auc": 0.16136363636363638,
+        "segment_jaccard": 0.02830188679245283
+      },
+      "scrambled": {
+        "detected": false,
+        "p_value": 0.8805970149253731,
+        "segment": null,
+        "site_auc": 0.4954545454545455,
+        "segment_jaccard": 0.0
+      }
+    }
+  },
+  {
+    "model": "selection",
+    "seed": 14,
+    "width": 50,
+    "seconds": 47.2,
+    "n_diagnostic": 36,
+    "n_diagnostic_in_segment": 23,
+    "true_breakpoint": [
+      55,
+      105
+    ],
+    "arms": {
+      "mpnn": {
+        "detected": false,
+        "p_value": 0.2935323383084577,
+        "segment": null,
+        "site_auc": 0.6421404682274248,
+        "segment_jaccard": 0.0
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.004975124378109453,
+        "segment": [
+          55,
+          105
+        ],
+        "site_auc": 0.8762541806020067,
+        "segment_jaccard": 1.0
+      },
+      "scrambled": {
+        "detected": false,
+        "p_value": 0.1791044776119403,
+        "segment": null,
+        "site_auc": 0.5919732441471572,
+        "segment_jaccard": 0.0
+      }
+    }
+  },
+  {
+    "model": "selection",
+    "seed": 14,
+    "width": 80,
+    "seconds": 47.3,
+    "n_diagnostic": 38,
+    "n_diagnostic_in_segment": 23,
+    "true_breakpoint": [
+      55,
+      106
+    ],
+    "arms": {
+      "mpnn": {
+        "detected": false,
+        "p_value": 0.08955223880597014,
+        "segment": null,
+        "site_auc": 0.6869565217391305,
+        "segment_jaccard": 0.0
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.004975124378109453,
+        "segment": [
+          55,
+          105
+        ],
+        "site_auc": 0.8869565217391304,
+        "segment_jaccard": 0.9803921568627451
+      },
+      "scrambled": {
+        "detected": false,
+        "p_value": 0.208955223880597,
+        "segment": null,
+        "site_auc": 0.591304347826087,
+        "segment_jaccard": 0.0
+      }
+    }
+  },
+  {
+    "model": "selection",
+    "seed": 15,
+    "width": 50,
+    "seconds": 47.5,
+    "n_diagnostic": 51,
+    "n_diagnostic_in_segment": 31,
+    "true_breakpoint": [
+      55,
+      105
+    ],
+    "arms": {
+      "mpnn": {
+        "detected": false,
+        "p_value": 0.18407960199004975,
+        "segment": null,
+        "site_auc": 0.482258064516129,
+        "segment_jaccard": 0.0
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.004975124378109453,
+        "segment": [
+          55,
+          104
+        ],
+        "site_auc": 0.9483870967741935,
+        "segment_jaccard": 0.98
+      },
+      "scrambled": {
+        "detected": false,
+        "p_value": 0.1890547263681592,
+        "segment": null,
+        "site_auc": 0.30806451612903224,
+        "segment_jaccard": 0.0
+      }
+    }
+  },
+  {
+    "model": "selection",
+    "seed": 15,
+    "width": 80,
+    "seconds": 47.6,
+    "n_diagnostic": 53,
+    "n_diagnostic_in_segment": 33,
+    "true_breakpoint": [
+      55,
+      106
+    ],
+    "arms": {
+      "mpnn": {
+        "detected": false,
+        "p_value": 0.572139303482587,
+        "segment": null,
+        "site_auc": 0.45606060606060606,
+        "segment_jaccard": 0.0
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.004975124378109453,
+        "segment": [
+          55,
+          106
+        ],
+        "site_auc": 0.9333333333333333,
+        "segment_jaccard": 1.0
+      },
+      "scrambled": {
+        "detected": false,
+        "p_value": 0.4079601990049751,
+        "segment": null,
+        "site_auc": 0.6984848484848485,
+        "segment_jaccard": 0.0
+      }
+    }
+  },
+  {
+    "model": "selection",
+    "seed": 16,
+    "width": 50,
+    "seconds": 47.2,
+    "n_diagnostic": 45,
+    "n_diagnostic_in_segment": 27,
+    "true_breakpoint": [
+      55,
+      105
+    ],
+    "arms": {
+      "mpnn": {
+        "detected": true,
+        "p_value": 0.014925373134328358,
+        "segment": [
+          54,
+          106
+        ],
+        "site_auc": 0.8292181069958847,
+        "segment_jaccard": 0.9615384615384616
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.004975124378109453,
+        "segment": [
+          55,
+          104
+        ],
+        "site_auc": 0.9444444444444444,
+        "segment_jaccard": 0.98
+      },
+      "scrambled": {
+        "detected": false,
+        "p_value": 0.10945273631840796,
+        "segment": null,
+        "site_auc": 0.42592592592592593,
+        "segment_jaccard": 0.0
+      }
+    }
+  },
+  {
+    "model": "selection",
+    "seed": 16,
+    "width": 80,
+    "seconds": 47.4,
+    "n_diagnostic": 45,
+    "n_diagnostic_in_segment": 28,
+    "true_breakpoint": [
+      55,
+      106
+    ],
+    "arms": {
+      "mpnn": {
+        "detected": true,
+        "p_value": 0.014925373134328358,
+        "segment": [
+          54,
+          106
+        ],
+        "site_auc": 0.8382352941176471,
+        "segment_jaccard": 0.9807692307692307
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.004975124378109453,
+        "segment": [
+          3,
+          55
+        ],
+        "site_auc": 0.05357142857142857,
+        "segment_jaccard": 0.0
+      },
+      "scrambled": {
+        "detected": false,
+        "p_value": 0.10945273631840796,
+        "segment": null,
+        "site_auc": 0.38865546218487396,
+        "segment_jaccard": 0.0
+      }
+    }
+  },
+  {
+    "model": "selection",
+    "seed": 17,
+    "width": 50,
+    "seconds": 47.4,
+    "n_diagnostic": 42,
+    "n_diagnostic_in_segment": 19,
+    "true_breakpoint": [
+      55,
+      105
+    ],
+    "arms": {
+      "mpnn": {
+        "detected": true,
+        "p_value": 0.009950248756218905,
+        "segment": [
+          53,
+          105
+        ],
+        "site_auc": 0.7803203661327232,
+        "segment_jaccard": 0.9615384615384616
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.004975124378109453,
+        "segment": [
+          58,
+          105
+        ],
+        "site_auc": 0.9519450800915332,
+        "segment_jaccard": 0.94
+      },
+      "scrambled": {
+        "detected": false,
+        "p_value": 0.8109452736318408,
+        "segment": null,
+        "site_auc": 0.4439359267734554,
+        "segment_jaccard": 0.0
+      }
+    }
+  },
+  {
+    "model": "selection",
+    "seed": 17,
+    "width": 80,
+    "seconds": 47.4,
+    "n_diagnostic": 40,
+    "n_diagnostic_in_segment": 18,
+    "true_breakpoint": [
+      55,
+      106
+    ],
+    "arms": {
+      "mpnn": {
+        "detected": true,
+        "p_value": 0.009950248756218905,
+        "segment": [
+          3,
+          59
+        ],
+        "site_auc": 0.21464646464646464,
+        "segment_jaccard": 0.038834951456310676
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.004975124378109453,
+        "segment": [
+          3,
+          55
+        ],
+        "site_auc": 0.050505050505050504,
+        "segment_jaccard": 0.0
+      },
+      "scrambled": {
+        "detected": false,
+        "p_value": 0.5373134328358209,
+        "segment": null,
+        "site_auc": 0.46464646464646464,
+        "segment_jaccard": 0.0
+      }
+    }
+  },
+  {
+    "model": "selection",
+    "seed": 18,
+    "width": 50,
+    "seconds": 47.5,
+    "n_diagnostic": 42,
+    "n_diagnostic_in_segment": 28,
+    "true_breakpoint": [
+      55,
+      105
+    ],
+    "arms": {
+      "mpnn": {
+        "detected": false,
+        "p_value": 0.208955223880597,
+        "segment": null,
+        "site_auc": 0.20918367346938777,
+        "segment_jaccard": 0.0
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.004975124378109453,
+        "segment": [
+          59,
+          105
+        ],
+        "site_auc": 0.9464285714285714,
+        "segment_jaccard": 0.92
+      },
+      "scrambled": {
+        "detected": false,
+        "p_value": 0.8855721393034826,
+        "segment": null,
+        "site_auc": 0.4030612244897959,
+        "segment_jaccard": 0.0
+      }
+    }
+  },
+  {
+    "model": "selection",
+    "seed": 18,
+    "width": 80,
+    "seconds": 47.2,
+    "n_diagnostic": 42,
+    "n_diagnostic_in_segment": 29,
+    "true_breakpoint": [
+      55,
+      106
+    ],
+    "arms": {
+      "mpnn": {
+        "detected": false,
+        "p_value": 0.21393034825870647,
+        "segment": null,
+        "site_auc": 0.22281167108753316,
+        "segment_jaccard": 0.0
+      },
+      "identity": {
+        "detected": true,
+        "p_value": 0.004975124378109453,
+        "segment": [
+          1,
+          55
+        ],
+        "site_auc": 0.05570291777188329,
+        "segment_jaccard": 0.0
+      },
+      "scrambled": {
+        "detected": false,
+        "p_value": 0.7711442786069652,
+        "segment": null,
+        "site_auc": 0.4217506631299735,
+        "segment_jaccard": 0.0
+      }
+    }
+  },
+  {
+    "model": "selection",
+    "seed": 19,
+    "width": 50,
+    "seconds": 46.7,
+    "n_diagnostic": 28,
+    "n_diagnostic_in_segment": 25,
+    "true_breakpoint": [
+      55,
+      105
+    ],
+    "arms": {
+      "mpnn": {
+        "detected": false,
+        "p_value": 0.3034825870646766,
+        "segment": null,
+        "site_auc": 0.4266666666666667,
+        "segment_jaccard": 0.0
+      },
+      "identity": {
+        "detected": false,
+        "p_value": 0.12935323383084577,
+        "segment": null,
+        "site_auc": 0.02,
+        "segment_jaccard": 0.0
+      },
+      "scrambled": {
+        "detected": false,
+        "p_value": 0.6368159203980099,
+        "segment": null,
+        "site_auc": 0.4,
+        "segment_jaccard": 0.0
+      }
+    }
+  },
+  {
+    "model": "selection",
+    "seed": 19,
+    "width": 80,
+    "seconds": 47.5,
+    "n_diagnostic": 28,
+    "n_diagnostic_in_segment": 25,
+    "true_breakpoint": [
+      55,
+      106
+    ],
+    "arms": {
+      "mpnn": {
+        "detected": false,
+        "p_value": 0.3034825870646766,
+        "segment": null,
+        "site_auc": 0.4266666666666667,
+        "segment_jaccard": 0.0
+      },
+      "identity": {
+        "detected": false,
+        "p_value": 0.12935323383084577,
+        "segment": null,
+        "site_auc": 0.02,
+        "segment_jaccard": 0.0
+      },
+      "scrambled": {
+        "detected": false,
+        "p_value": 0.6368159203980099,
+        "segment": null,
+        "site_auc": 0.4,
+        "segment_jaccard": 0.0
+      }
+    }
+  }
+]

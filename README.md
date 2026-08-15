@@ -69,8 +69,9 @@ summary belongs before the method rather than after it:
 >   what earns its place is *where the scan looks*, not the structural model.
 > - On a real 3FTx family the detector returns nothing, but that family sits near
 >   the diagnostic-site floor, so the result is inconclusive rather than negative.
-> - A 20-seed, higher-power rerun of the core sweeps is prepared
->   (`experiments/run_power_sweeps.sh`) but has not been executed in this pass.
+> - A 20-seed, higher-power rerun of the core sweeps is done — see
+>   [RESULTS.md](RESULTS.md) §12 for detection rates with 95% confidence
+>   intervals.
 >
 > Full numbers, with the reasoning: **[RESULTS.md](RESULTS.md)**.
 
@@ -138,7 +139,7 @@ experiments/spatial_contamination.py  2x2x2: {block,patch} x {mpnn,identity} x {
 experiments/real_family.py      UniProt -> MAFFT -> IQ-TREE -> the same detector
 experiments/check_fold.py       disulfide topology of a folded ancestor
 experiments/warm_cache.py       pre-simulate + cache clean families, shardable by seed
-experiments/run_power_sweeps.sh 20-seed rerun of the segment sweep + ablation (prepared, not yet run)
+experiments/run_power_sweeps.sh 20-seed rerun of the segment sweep + ablation (done, see RESULTS.md §12)
 experiments/summarize.py        every headline number, recomputed from results/
 experiments/make_figures.py     the figure set
 experiments/build_gallery.py    self-contained HTML plate gallery
@@ -244,12 +245,12 @@ neither rescues it, and the reasoning is in [RESULTS.md](RESULTS.md) §9-10:
 .venv/bin/python experiments/spatial_contamination.py --seeds 3
 ```
 
-Everything above ran at 2–3 seeds. `experiments/run_power_sweeps.sh` reruns the
+Everything above ran at 2–3 seeds. `experiments/run_power_sweeps.sh` reran the
 segment sweep and the ablation at 20 seeds with blocks sized above the
 diagnostic-site floor (50/65/80 residues, since §4 shows 10/20/30 are
-unwinnable by construction) — prepared but not executed in this pass, ~2h on
-CPU. `experiments/warm_cache.py` pre-simulates the 20 families it needs and can
-be sharded across processes by seed:
+unwinnable by construction) — see [RESULTS.md](RESULTS.md) §12 for the result.
+`experiments/warm_cache.py` pre-simulates the 20 families it needs and can be
+sharded across processes by seed:
 
 ```bash
 .venv/bin/python experiments/warm_cache.py --model selection --seeds 0 20 --stride 3 --offset 0 &

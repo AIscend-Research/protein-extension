@@ -394,17 +394,10 @@ answer, and that dependence belongs in the open.
 
 ## Limitations
 
-- **A 20-seed, higher-power rerun is prepared but not executed.** Sections 4,
-  8, 9 and 10 above are anecdote-scale (2–3 seeds, n = 6–9 per cell), and §4
-  showed that widths of 10/20/30 were unwinnable by construction — the block
-  did not reliably contain enough diagnostic sites regardless of what the
-  detector could do. `experiments/run_power_sweeps.sh` reruns the segment
-  sweep and the ablation at 20 seeds with blocks of 50/65/80 residues (above
-  the floor found in §4), writing to `*_power20.json` so it cannot collide
-  with the results already written up here. It has not been run in this pass;
-  running it does not require touching any other file, only
-  `experiments/summarize.py`'s "Firming up the statistics" section will fill
-  in once the output exists.
+- **The 20-seed rerun is done — see §12.** Sections 4, 8, 9 and 10 above are
+  still anecdote-scale (2–3 seeds); §12 repeats the segment sweep and the
+  ablation at 20 seeds with blocks above the diagnostic-site floor, with Wilson
+  95% confidence intervals on every detection rate.
 - **In silico throughout.** No wet-lab validation. Stability is a
   pseudo-log-likelihood proxy, not a measured ΔΔG.
 - **One backbone.** Every simulated witness is evolved on 5L33. Nothing here
@@ -447,3 +440,38 @@ the same seed and settings that had given p = 0.030 returned p = 1.000 with ever
 score degraded to noise. `MPNNScorer.log_probs` now checks
 that the model output is finite and raises if it is not. Everything in this
 document was produced with `--device cpu`.
+
+## 12. Firming up the statistics: 20-seed rerun, blocks above the floor
+
+The sections above ran at 2–3 seeds, with 10/20/30-residue blocks that §4
+showed were mostly below the diagnostic-site floor. This reruns the segment
+sweep and the ablation at 20 seeds with blocks of 50/65/80 residues, so the
+detection-rate numbers below carry a real confidence interval instead of
+standing on 2 or 3 observations. Produced by
+`experiments/run_power_sweeps.sh`; raw output in `*_power20.json`.
+
+### Detection rate by width, selection vs f81
+
+| model | width | fired | rate | 95% CI | mean Jaccard (fired) |
+|---|---|---|---|---|---|
+| selection | 50 | 0/20 | 0% | [0%, 16%] | n/a |
+| selection | 65 | 7/20 | 35% | [18%, 57%] | 0.754 |
+| selection | 80 | 6/20 | 30% | [15%, 52%] | 0.727 |
+| f81 | 50 | 1/20 | 5% | [1%, 24%] | 0.602 |
+| f81 | 65 | 0/20 | 0% | [0%, 16%] | n/a |
+| f81 | 80 | 2/20 | 10% | [3%, 30%] | 0.245 |
+
+Pooled across widths: selection 13/60 (22%, 95% CI [13%, 34%]), f81 3/60 (5%, 95% CI [2%, 14%]). The two intervals **overlap**.
+
+### Ablation at 20 seeds
+
+| arm | width | fired | rate | 95% CI | mean Jaccard (fired) |
+|---|---|---|---|---|---|
+| mpnn | 50 | 6/20 | 30% | [15%, 52%] | 0.678 |
+| mpnn | 80 | 5/20 | 25% | [11%, 47%] | 0.396 |
+| identity | 50 | 18/20 | 90% | [70%, 97%] | 0.683 |
+| identity | 80 | 18/20 | 90% | [70%, 97%] | 0.160 |
+| scrambled | 50 | 1/20 | 5% | [1%, 24%] | 0.000 |
+| scrambled | 80 | 1/20 | 5% | [1%, 24%] | 0.662 |
+
+Pooled: `mpnn` 11/40 (95% CI [16%, 43%]), `identity` 36/40 (95% CI [77%, 96%]).
