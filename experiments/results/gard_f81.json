@@ -1,0 +1,104 @@
+[
+  {
+    "model": "f81",
+    "seed": 0,
+    "width": 30,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "seconds": 55.6,
+    "baseline_aicc": 4407.667347093286,
+    "best_aicc": 4407.667347093286,
+    "delta_aicc": 0.0,
+    "n_breakpoints": 0,
+    "detected": false,
+    "found_segment": null,
+    "segment_jaccard": null
+  },
+  {
+    "model": "f81",
+    "seed": 0,
+    "width": 50,
+    "true_breakpoint": [
+      55,
+      105
+    ],
+    "seconds": 75.7,
+    "baseline_aicc": 4183.837536869116,
+    "best_aicc": 4143.713868540734,
+    "delta_aicc": 40.1237,
+    "n_breakpoints": 1,
+    "detected": true,
+    "found_segment": null,
+    "segment_jaccard": null
+  },
+  {
+    "model": "f81",
+    "seed": 1,
+    "width": 30,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "seconds": 67.1,
+    "baseline_aicc": 4574.087833642879,
+    "best_aicc": 4574.087833642879,
+    "delta_aicc": 0.0,
+    "n_breakpoints": 0,
+    "detected": false,
+    "found_segment": null,
+    "segment_jaccard": null
+  },
+  {
+    "model": "f81",
+    "seed": 1,
+    "width": 50,
+    "true_breakpoint": [
+      55,
+      105
+    ],
+    "seconds": 63.9,
+    "baseline_aicc": 4580.977628547261,
+    "best_aicc": 4254.858905678793,
+    "delta_aicc": 326.1187,
+    "n_breakpoints": 1,
+    "detected": true,
+    "found_segment": null,
+    "segment_jaccard": null
+  },
+  {
+    "model": "f81",
+    "seed": 2,
+    "width": 30,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "seconds": 64.9,
+    "baseline_aicc": 4285.861023037422,
+    "best_aicc": 4285.861023037422,
+    "delta_aicc": 0.0,
+    "n_breakpoints": 0,
+    "detected": false,
+    "found_segment": null,
+    "segment_jaccard": null
+  },
+  {
+    "model": "f81",
+    "seed": 2,
+    "width": 50,
+    "true_breakpoint": [
+      55,
+      105
+    ],
+    "seconds": 68.1,
+    "baseline_aicc": 4276.338792822336,
+    "best_aicc": 3943.878338987362,
+    "delta_aicc": 332.4605,
+    "n_breakpoints": 1,
+    "detected": true,
+    "found_segment": null,
+    "segment_jaccard": null
+  }
+]

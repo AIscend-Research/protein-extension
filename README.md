@@ -69,9 +69,33 @@ summary belongs before the method rather than after it:
 >   what earns its place is *where the scan looks*, not the structural model.
 > - On a real 3FTx family the detector returns nothing, but that family sits near
 >   the diagnostic-site floor, so the result is inconclusive rather than negative.
+>   Three more published families (ribonuclease A, lysozyme C, cytochrome c) go
+>   through the identical pipeline in [RESULTS.md](RESULTS.md) §16: **0/4 detected**
+>   across all four, p = 0.36-0.89, no clustering near significance — consistent
+>   with the 3FTx result rather than a coincidence, though still four families
+>   chosen for tractability, not a survey of the literature.
 > - A 20-seed, higher-power rerun of the core sweeps is done — see
 >   [RESULTS.md](RESULTS.md) §12 for detection rates with 95% confidence
 >   intervals.
+> - Every number above describes **one** breakpoint. Splitting the same
+>   50-residue contaminated budget into 2+ separate runs — multiple
+>   crossovers, multi-tract gene conversion — collapses detection to near
+>   zero for both MPNN and identity: the segment scan was built to find one
+>   contiguous window, and a target that is not one window is not found.
+>   See [RESULTS.md](RESULTS.md) §13.
+> - A 6-seed rerun of the divergence grid (donor distance) finds a real-
+>   looking step at deep divergence — 67% detected vs 33% at near-sibling
+>   or medium divergence — but the confidence intervals still overlap and
+>   detection does not track divergence monotonically. Suggestive, not a
+>   settled dose-response curve. See [RESULTS.md](RESULTS.md) §14.
+> - Head-to-head against a published detector, GARD, on the same six
+>   conditions as the ablation above: GARD fires **0/6** on `selection`
+>   data where MPNN fires 2/6 and identity 4/6, and **cannot run at all**
+>   on the real 3FTx family (needs 235 alignment sites for 56 taxa, has
+>   58) — this project's own detector runs on that exact alignment. GARD
+>   was run at a real disadvantage (amino-acid only, no codon layer), so
+>   read this as evidence for a narrower orthogonality claim than "always
+>   better," not a clean win. See [RESULTS.md](RESULTS.md) §15.
 >
 > Full numbers, with the reasoning: **[RESULTS.md](RESULTS.md)**.
 
@@ -136,8 +160,11 @@ experiments/sweeps.py           segment length, divergence, orientation, repair 
 experiments/ablation.py         identity-only and scrambled-backbone controls
 experiments/thin_evidence.py    does MPNN catch up to identity as witnesses thin out?
 experiments/spatial_contamination.py  2x2x2: {block,patch} x {mpnn,identity} x {1D,3D}
+experiments/multi_breakpoint.py       does detection survive splitting one swap into several?
+experiments/gard_baseline.py          head-to-head against GARD (HyPhy), same conditions as ablation.py
 experiments/real_family.py      UniProt -> MAFFT -> IQ-TREE -> the same detector
 experiments/check_fold.py       disulfide topology of a folded ancestor
+experiments/bedier_audit.py     the real-family pipeline across several published families
 experiments/warm_cache.py       pre-simulate + cache clean families, shardable by seed
 experiments/run_power_sweeps.sh 20-seed rerun of the segment sweep + ablation (done, see RESULTS.md §12)
 experiments/summarize.py        every headline number, recomputed from results/
@@ -190,6 +217,8 @@ uv venv --python 3.12 .venv        # torch has no 3.14 wheels yet
 VIRTUAL_ENV=.venv uv pip install torch numpy
 # without uv:  python3.12 -m venv .venv && .venv/bin/pip install torch numpy
 # empirical path also needs:  brew install mafft iqtree3
+# GARD head-to-head also needs:  brew install hyphy
+# Bedier audit also needs:  .venv/bin/pip install colabfold
 .venv/bin/python src/mpnn_api.py   # sanity-check the instrument
 ```
 
@@ -243,12 +272,28 @@ neither rescues it, and the reasoning is in [RESULTS.md](RESULTS.md) §9-10:
 # scan cannot, for contamination that is contiguous in 3D but not in sequence?
 # (yes, but identity ties it within that scan — the scan is the contribution)
 .venv/bin/python experiments/spatial_contamination.py --seeds 3
+
+# does detection survive more than one breakpoint? (no — see RESULTS.md §13)
+.venv/bin/python experiments/multi_breakpoint.py --seeds 3
+
+# head-to-head against a published detector, GARD (needs: brew install hyphy)
+.venv/bin/python experiments/gard_baseline.py --model selection --seeds 3
+.venv/bin/python experiments/gard_baseline.py --model f81 --seeds 3
 ```
 
 Everything above ran at 2–3 seeds. `experiments/run_power_sweeps.sh` reran the
 segment sweep and the ablation at 20 seeds with blocks sized above the
 diagnostic-site floor (50/65/80 residues, since §4 shows 10/20/30 are
 unwinnable by construction) — see [RESULTS.md](RESULTS.md) §12 for the result.
+The divergence grid (§14) was similarly rerun at higher power — 6 seeds
+rather than 2, `sweep_divergence` gained the same checkpointing `sweep_segment`
+already had:
+
+```bash
+.venv/bin/python experiments/sweeps.py --sweep divergence --model selection \
+    --seeds 6 --stems 0.5 2.0 4.0 --clade-sizes 6 --width 50 --tag power6
+```
+
 `experiments/warm_cache.py` pre-simulates the 20 families it needs and can be
 sharded across processes by seed:
 
@@ -271,6 +316,14 @@ detector — is one command per rooting convention (needs `mafft` and `iqtree3`)
 `check_fold.py` verifies a folded ancestor's disulfide topology before anything
 downstream trusts it, and is validated against 3EBX, where it reproduces the
 crystal structure's own `SSBOND` records to 0.01 Å.
+
+`bedier_audit.py` runs that same fetch -> align -> tree -> fold -> detect
+pipeline across a small list of published families (not just 3FTx), gating
+each on ColabFold's own pLDDT rather than a family-specific topology check:
+
+```bash
+.venv/bin/python experiments/bedier_audit.py --families rnase_a lysozyme_c cytochrome_c
+```
 
 Individual stages also run standalone:
 
@@ -344,13 +397,15 @@ The short version:
   13 and 22 diagnostic sites inside the contaminated block; a 50-residue block
   with 16 of them failed. Some blocks contain zero, and are undetectable in
   principle.
-- **Divergence and witness count locate that floor but do not chart a curve.**
-  Nothing fires below ~20 diagnostic sites in total, and both detections in the
-  grid came from six witnesses per clade rather than three — at matched
-  diagnostic-site count, which makes it a reconstruction-quality effect, not a
-  site-count effect. But the grid is 2 / 12 overall with both hits in one seed, so
-  seed variance exceeds the effect of either variable. The floor is established;
-  the dose-response is not.
+- **Divergence and witness count locate that floor; a 6-seed rerun of the
+  curve is suggestive but not settled.** Nothing fires below ~20 diagnostic
+  sites in total, and detection needs six witnesses per clade rather than
+  three at matched diagnostic-site count — a reconstruction-quality effect,
+  not a site-count effect. Tripling the seed count to 6/cell finds a
+  real-looking step at deep divergence (67% vs 33% at near-sibling or
+  medium divergence) but the 95% CIs still overlap and detection does not
+  track divergence monotonically between the two lower levels — see
+  RESULTS.md §14.
 - **The epistatic regime starves the detector.** `f81` families carry 67–78
   diagnostic sites; `selection` families carry 23–41. Structural constraint keeps
   the two lineages similar, so the regime the method is designed for is also the
@@ -378,13 +433,30 @@ The short version:
   witnesses, the coherent-versus-incoherent gap is +0.007 ± 0.059 with the
   predicted sign in 4/12 runs. The apparent effect is a sample-size artifact — it
   is just as large at zero contamination.
-- **The empirical test was inconclusive, not negative.** On 56 three-finger
-  toxins the detector returns p = 0.42 / 0.32 under two rootings, but the family
-  has only 32–38 diagnostic sites in total, near the floor where the method has no
-  power regardless of the truth.
+- **The empirical test was inconclusive, not negative — and extends to three
+  more families with the same conclusion.** On 56 three-finger toxins the
+  detector returns p = 0.42 / 0.32 under two rootings, near the diagnostic-site
+  floor. Ribonuclease A, lysozyme C, and cytochrome c go through the identical
+  pipeline (§16): 0/4 real families detected overall, p = 0.36-0.89, no
+  clustering near significance — but still four families chosen for
+  tractability, not a survey of the literature, and none has a known
+  contaminated block to test power against.
 - **Circularity.** The `selection` simulator samples from ProteinMPNN's own joint
   distribution, so it asserts the epistasis the detector then senses. The `f81`
   control is what keeps this honest; empirical families are the real test.
+- **The GARD head-to-head is measured, not run at full strength.** GARD
+  fires 0/6 on `selection` data against MPNN's 2/6 and identity's 4/6, and
+  cannot run at all on the real 3FTx family (needs 235 sites for 56 taxa,
+  has 58). Real evidence for orthogonality, but GARD ran in amino-acid mode
+  with no codon layer — a weaker deployment than usual — and `selection` is
+  independently the hardest case by diagnostic-site count. RDP remains
+  untested.
+- **The method only covers a single breakpoint.** Splitting the same
+  50-residue contaminated budget into 2+ separate runs collapses detection
+  to near zero for both MPNN and identity (1/9 and 0/9, against 2/3 and 3/3
+  at one contiguous block) — the segment scan finds one window and nothing
+  else. Every detection rate elsewhere in this document is a
+  single-breakpoint number.
 - **Locality.** MPNN conditions on a local structural neighbourhood, so a
   contiguous sequence swap is strained mainly near its structural junctions. The
   whole-sequence penalty for a mosaic is small; the signal lives in *where* the

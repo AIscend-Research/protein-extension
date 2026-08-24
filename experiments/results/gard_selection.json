@@ -1,0 +1,104 @@
+[
+  {
+    "model": "selection",
+    "seed": 0,
+    "width": 30,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "seconds": 25.8,
+    "baseline_aicc": 1972.249375096349,
+    "best_aicc": 1972.249375096349,
+    "delta_aicc": 0.0,
+    "n_breakpoints": 0,
+    "detected": false,
+    "found_segment": null,
+    "segment_jaccard": null
+  },
+  {
+    "model": "selection",
+    "seed": 0,
+    "width": 50,
+    "true_breakpoint": [
+      55,
+      105
+    ],
+    "seconds": 30.7,
+    "baseline_aicc": 1977.175346575817,
+    "best_aicc": 1977.175346575817,
+    "delta_aicc": 0.0,
+    "n_breakpoints": 0,
+    "detected": false,
+    "found_segment": null,
+    "segment_jaccard": null
+  },
+  {
+    "model": "selection",
+    "seed": 1,
+    "width": 30,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "seconds": 23.4,
+    "baseline_aicc": 1978.902755598416,
+    "best_aicc": 1978.902755598416,
+    "delta_aicc": 0.0,
+    "n_breakpoints": 0,
+    "detected": false,
+    "found_segment": null,
+    "segment_jaccard": null
+  },
+  {
+    "model": "selection",
+    "seed": 1,
+    "width": 50,
+    "true_breakpoint": [
+      55,
+      105
+    ],
+    "seconds": 28.0,
+    "baseline_aicc": 2000.533423784918,
+    "best_aicc": 2000.533423784918,
+    "delta_aicc": 0.0,
+    "n_breakpoints": 0,
+    "detected": false,
+    "found_segment": null,
+    "segment_jaccard": null
+  },
+  {
+    "model": "selection",
+    "seed": 2,
+    "width": 30,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "seconds": 38.1,
+    "baseline_aicc": 2020.498792278061,
+    "best_aicc": 2020.498792278061,
+    "delta_aicc": 0.0,
+    "n_breakpoints": 0,
+    "detected": false,
+    "found_segment": null,
+    "segment_jaccard": null
+  },
+  {
+    "model": "selection",
+    "seed": 2,
+    "width": 50,
+    "true_breakpoint": [
+      55,
+      105
+    ],
+    "seconds": 41.5,
+    "baseline_aicc": 1995.464111916307,
+    "best_aicc": 1995.464111916307,
+    "delta_aicc": 0.0,
+    "n_breakpoints": 0,
+    "detected": false,
+    "found_segment": null,
+    "segment_jaccard": null
+  }
+]

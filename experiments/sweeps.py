@@ -188,16 +188,29 @@ def sweep_segment(scorer, args, out_path: Path | None = None) -> list[dict]:
     return rows
 
 
-def sweep_divergence(scorer, args) -> list[dict]:
+def sweep_divergence(scorer, args, out_path: Path | None = None) -> list[dict]:
     """AUC against between-clade divergence and witness count.
 
     `stem` is the branch separating the two clades, so it sets how many
     diagnostic sites exist at all — the floor the detector cannot go below.
+
+    Checkpointed when `out_path` is given, same as `sweep_segment`: a run long
+    enough to need fresh Gibbs simulation for several (seed, stem) cells should
+    lose minutes to a crash, not the whole run.
     """
-    rows = []
+    rows: list[dict] = []
+    done: set[tuple[int, float, int]] = set()
+    if out_path is not None and out_path.exists():
+        rows = json.loads(out_path.read_text())
+        done = {(r["seed"], r["stem"], r["n_per_clade"]) for r in rows}
+        if done:
+            print(f"  resuming: {len(done)} (seed, stem, n_per_clade) cells already on disk", flush=True)
+
     for seed in range(args.seeds):
         for stem in args.stems:
             for n_per_clade in args.clade_sizes:
+                if (seed, stem, n_per_clade) in done:
+                    continue
                 stored = clean_family(scorer, args.model, seed,
                                       n_per_clade=n_per_clade, stem=stem)
                 fam = _rebuild(stored)
@@ -211,6 +224,9 @@ def sweep_divergence(scorer, args) -> list[dict]:
                                   n_perm=args.n_perm, n_orders=args.n_orders, seed=seed)}
                 row["seconds"] = round(time.time() - t0, 1)
                 rows.append(row)
+                if out_path is not None:
+                    out_path.parent.mkdir(parents=True, exist_ok=True)
+                    out_path.write_text(json.dumps(rows, indent=2, default=str))
                 print(f"  [{args.model} s{seed}] stem={stem} n={n_per_clade} "
                       f"det={row['detected']!s:5} p={row['p_value']:.3f} "
                       f"AUC_seg={row.get('site_auc_segment')} ndiag={row['n_diagnostic']}",
@@ -349,6 +365,8 @@ def main() -> None:
     out.parent.mkdir(parents=True, exist_ok=True)
     if args.sweep == "segment":
         rows = sweep_segment(scorer, args, out_path=out)
+    elif args.sweep == "divergence":
+        rows = sweep_divergence(scorer, args, out_path=out)
     else:
         rows = SWEEPS[args.sweep](scorer, args)
     out.write_text(json.dumps(rows, indent=2, default=str))

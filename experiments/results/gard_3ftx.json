@@ -1,0 +1,7 @@
+{
+  "error": "## ASSERTION FAILED\nThe alignment is too short to permit c-AIC based model comparison. Need at least 235 sites for 56 sequences to fit a two-partiton model.",
+  "seconds": 0.1,
+  "n_sequences": 56,
+  "n_sites": 58,
+  "runnable": false
+}

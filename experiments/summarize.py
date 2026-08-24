@@ -253,6 +253,74 @@ def power_sweep() -> None:
                   f"{f'[{lo:.0%}, {hi:.0%}]':>16}{jac_txt:>14}")
 
 
+def gard_head_to_head() -> None:
+    rule("Head-to-head against a published detector: GARD")
+    ab = load("ablation_selection.json")
+    gard_sel = load("gard_selection.json")
+    gard_f81 = load("gard_f81.json")
+    gard_real_path = RESULTS / "gard_3ftx.json"
+    gard_real = json.loads(gard_real_path.read_text()) if gard_real_path.exists() else None
+    if not gard_sel and not gard_f81 and not gard_real:
+        print("  (not run)")
+        return
+
+    print("  GARD (Kosakovsky Pond et al. 2006), HyPhy 2.5, amino-acid mode (JTT) — the")
+    print("  same six conditions as the ablation table in section 8, no new simulation.\n")
+
+    if gard_sel:
+        ab_by_key = {(r["seed"], r["width"]): r for r in ab}
+        print(f"{'seed':<6}{'width':>6}{'diag in block':>15}{'mpnn':>10}{'identity':>10}{'gard':>10}{'gard n_bp':>11}")
+        for r in sorted(gard_sel, key=lambda r: (r["seed"], r["width"])):
+            key = (r["seed"], r["width"])
+            a = ab_by_key.get(key)
+            ndiag = a["n_diagnostic_in_segment"] if a else "?"
+            mpnn = "fired" if a and a["arms"]["mpnn"]["detected"] else "-"
+            ident = "fired" if a and a["arms"]["identity"]["detected"] else "-"
+            gard = "fired" if r["detected"] else "-"
+            print(f"{r['seed']:<6}{r['width']:>6}{ndiag:>15}{mpnn:>10}{ident:>10}{gard:>10}{r['n_breakpoints']:>11}")
+
+    print()
+    for label, rows in (("selection (epistatic, the test condition)", gard_sel),
+                       ("f81 (no-epistasis control)", gard_f81)):
+        if not rows:
+            continue
+        k = sum(1 for r in rows if r["detected"])
+        bps = sorted(r["n_breakpoints"] for r in rows if r["detected"])
+        print(f"  gard on {label}: {k}/{len(rows)} fired"
+              + (f"; breakpoint counts when fired: {bps} (2 = comparable Jaccard; "
+                 f"none reached 2 here)" if bps else ""))
+
+    if gard_real:
+        print()
+        if gard_real.get("runnable") is False:
+            print(f"  gard on the real 3FTx family: DID NOT RUN — {gard_real['error']}")
+            print(f"  ({gard_real['n_sequences']} sequences, {gard_real['n_sites']} sites; "
+                  f"this pipeline's own detector runs on exactly this alignment, section 11)")
+        else:
+            print(f"  gard on the real 3FTx family: detected={gard_real.get('detected')} "
+                  f"n_breakpoints={gard_real.get('n_breakpoints')}")
+
+
+def divergence_power() -> None:
+    rule("Dose-response: donor distance at real power (6 seeds, was 2)")
+    rows = load("sweep_divergence_selection_power6.json")
+    if not rows:
+        print("  (not run)")
+        return
+    print("  Same 50-residue block, same n=6 witnesses/clade; only `stem` (the branch")
+    print("  separating the two clades — near-sibling donor vs deep-outgroup donor) varies.\n")
+    print(f"{'stem':>7}{'fired':>9}{'rate':>8}{'95% CI':>16}{'mean diagnostic sites':>24}")
+    for stem in sorted({r["stem"] for r in rows}):
+        sub = [r for r in rows if r["stem"] == stem]
+        k, n = sum(r["detected"] for r in sub), len(sub)
+        lo, hi = wilson(k, n)
+        lo, hi = max(lo, 0.0), min(hi, 1.0)
+        print(f"{stem:>7}{f'{k}/{n}':>9}{k / n:>8.0%}{f'[{lo:.0%}, {hi:.0%}]':>16}"
+              f"{np.mean([r['n_diagnostic'] for r in sub]):>24.1f}")
+    print("\n  Confidence intervals this wide (n=6/cell) overlap across all three levels —")
+    print("  this is a real step up at stem=4.0, not yet a statistically separated curve.")
+
+
 def thin_evidence() -> None:
     rule("Starving the sequence evidence: does the structural model ever win?")
     rows = load("thin_evidence_selection.json")
@@ -308,6 +376,54 @@ def spatial() -> None:
     print("  the structural *scan*, not the structural *model*.")
 
 
+def multi_breakpoint() -> None:
+    rule("Multiple breakpoints: does the single-window scan survive fragmentation?")
+    rows = load("multi_breakpoint.json")
+    if not rows:
+        print("  (not run)")
+        return
+    print("  Total contaminated length held exactly at 50 residues; only the number")
+    print("  of separate runs it is split into varies. n_blocks=1 is an ordinary swap.\n")
+    print(f"{'n_blocks':>9}{'score':>10}{'fired':>9}{'mean Jaccard':>14}{'mean n_found':>14}")
+    for n_blocks in sorted(set(r["n_blocks"] for r in rows)):
+        sub = [r for r in rows if r["n_blocks"] == n_blocks]
+        for score in ("mpnn", "identity"):
+            c = [r[score] for r in sub]
+            print(f"{n_blocks:>9}{score:>10}"
+                  f"{sum(x['detected'] for x in c):>5}/{len(c):<3}"
+                  f"{np.mean([x['jaccard'] for x in c]):>14.3f}"
+                  f"{np.mean([x['n_found'] for x in c]):>14.1f}")
+
+
+def bedier_audit() -> None:
+    rule("The Bedier audit: the detector across several published families")
+    real3ftx = RESULTS / "real_3ftx_midpoint.json"
+    rows = []
+    if real3ftx.exists():
+        d = json.loads(real3ftx.read_text())
+        rows.append({"family": "3ftx", "n_witnesses": d["n_witnesses"],
+                     "clade_sizes": d["clade_sizes"], "detected": d["detected"],
+                     "p_value": d["p_value"], "n_diagnostic": d["n_diff_sites"],
+                     "plddt": None})
+    rows.extend(load("bedier_audit.json"))
+    if not rows:
+        print("  (not run)")
+        return
+    print("  Every family below goes through the identical staged pipeline (fetch ->")
+    print("  align -> trim -> per-clade tree+ASR -> fold the mosaic ancestor -> detect).")
+    print("  No ground truth for any of them — this reports where the detector lands on")
+    print("  real, independently published reconstructions, not a contamination claim.\n")
+    print(f"{'family':<14}{'witnesses':>10}{'clades':>10}{'diagnostic':>11}{'detected':>10}{'p_value':>9}{'pLDDT':>8}")
+    for r in rows:
+        plddt = f"{r['plddt']:.1f}" if r.get("plddt") is not None else "n/a"
+        ndiag = r.get("n_diagnostic", r.get("n_diff_sites"))
+        print(f"{r['family']:<14}{r['n_witnesses']:>10}{str(r['clade_sizes']):>10}"
+              f"{ndiag:>11}{str(r['detected']):>10}{r['p_value']:>9.3f}{plddt:>8}")
+    k = sum(1 for r in rows if r["detected"])
+    print(f"\n  {k}/{len(rows)} families detected; p-values: "
+          f"{sorted(round(r['p_value'], 3) for r in rows)}")
+
+
 def real_family() -> None:
     rule("The empirical family (3FTx)")
     for split in ("midpoint", "balanced"):
@@ -332,7 +448,11 @@ if __name__ == "__main__":
     repair()
     ablation()
     power_sweep()
+    gard_head_to_head()
+    divergence_power()
     thin_evidence()
     spatial()
+    multi_breakpoint()
     real_family()
+    bedier_audit()
     print()
