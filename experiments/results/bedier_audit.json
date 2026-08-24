@@ -1,0 +1,29 @@
+{
+  "families": [
+    {
+      "name": "3ftx",
+      "detected": false,
+      "p_value": 0.83582,
+      "n_diff_sites": 38,
+      "n_witnesses": 56,
+      "segment": null,
+      "mosaic_mean_max_posterior": 0.716,
+      "split_rule": "midpoint"
+    }
+  ],
+  "distribution": {
+    "floor": 20,
+    "powered": {
+      "n": 1,
+      "n_detected": 0,
+      "p_median": 0.8358,
+      "p_min": 0.8358,
+      "p_max": 0.8358,
+      "frac_below_0.05": 0.0
+    },
+    "underpowered": {
+      "n": 0
+    },
+    "n_failed": 0
+  }
+}

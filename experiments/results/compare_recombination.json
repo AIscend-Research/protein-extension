@@ -1,0 +1,422 @@
+[
+  {
+    "model": "selection",
+    "seed": 0,
+    "stem": 0.5,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "gard_seconds": 0.1,
+    "mpnn_detected": false,
+    "mpnn_segment_jaccard": 0.0,
+    "mpnn_site_auc": 0.5417,
+    "n_diagnostic": 20,
+    "n_breakpoints": 0,
+    "breakpoints": [],
+    "gard_detected": false,
+    "gard_edge_hit": false,
+    "gard_min_dist": null,
+    "gard_interval_jaccard": 0.0,
+    "gard_error": null
+  },
+  {
+    "model": "selection",
+    "seed": 0,
+    "stem": 1.0,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "gard_seconds": 12.9,
+    "mpnn_detected": false,
+    "mpnn_segment_jaccard": 0.0,
+    "mpnn_site_auc": 0.6719,
+    "n_diagnostic": 34,
+    "n_breakpoints": 0,
+    "breakpoints": [],
+    "gard_detected": false,
+    "gard_edge_hit": false,
+    "gard_min_dist": null,
+    "gard_interval_jaccard": 0.0,
+    "gard_error": null
+  },
+  {
+    "model": "selection",
+    "seed": 0,
+    "stem": 2.0,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "gard_seconds": 14.0,
+    "mpnn_detected": true,
+    "mpnn_segment_jaccard": 0.7143,
+    "mpnn_site_auc": 0.9519,
+    "n_diagnostic": 37,
+    "n_breakpoints": 0,
+    "breakpoints": [],
+    "gard_detected": false,
+    "gard_edge_hit": false,
+    "gard_min_dist": null,
+    "gard_interval_jaccard": 0.0,
+    "gard_error": null
+  },
+  {
+    "model": "selection",
+    "seed": 0,
+    "stem": 4.0,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "gard_seconds": 11.4,
+    "mpnn_detected": true,
+    "mpnn_segment_jaccard": 0.8108,
+    "mpnn_site_auc": 0.9024,
+    "n_diagnostic": 44,
+    "n_breakpoints": 0,
+    "breakpoints": [],
+    "gard_detected": false,
+    "gard_edge_hit": false,
+    "gard_min_dist": null,
+    "gard_interval_jaccard": 0.0,
+    "gard_error": null
+  },
+  {
+    "model": "selection",
+    "seed": 1,
+    "stem": 0.5,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "gard_seconds": 9.4,
+    "mpnn_detected": false,
+    "mpnn_segment_jaccard": 0.0,
+    "mpnn_site_auc": 0.5385,
+    "n_diagnostic": 15,
+    "n_breakpoints": 0,
+    "breakpoints": [],
+    "gard_detected": false,
+    "gard_edge_hit": false,
+    "gard_min_dist": null,
+    "gard_interval_jaccard": 0.0,
+    "gard_error": null
+  },
+  {
+    "model": "selection",
+    "seed": 1,
+    "stem": 1.0,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "gard_seconds": 13.6,
+    "mpnn_detected": true,
+    "mpnn_segment_jaccard": 0.3614,
+    "mpnn_site_auc": 0.7,
+    "n_diagnostic": 23,
+    "n_breakpoints": 0,
+    "breakpoints": [],
+    "gard_detected": false,
+    "gard_edge_hit": false,
+    "gard_min_dist": null,
+    "gard_interval_jaccard": 0.0,
+    "gard_error": null
+  },
+  {
+    "model": "selection",
+    "seed": 1,
+    "stem": 2.0,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "gard_seconds": 13.3,
+    "mpnn_detected": false,
+    "mpnn_segment_jaccard": 0.0,
+    "mpnn_site_auc": NaN,
+    "n_diagnostic": 23,
+    "n_breakpoints": 0,
+    "breakpoints": [],
+    "gard_detected": false,
+    "gard_edge_hit": false,
+    "gard_min_dist": null,
+    "gard_interval_jaccard": 0.0,
+    "gard_error": null
+  },
+  {
+    "model": "selection",
+    "seed": 1,
+    "stem": 4.0,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "gard_seconds": 15.8,
+    "mpnn_detected": false,
+    "mpnn_segment_jaccard": 0.0,
+    "mpnn_site_auc": 1.0,
+    "n_diagnostic": 35,
+    "n_breakpoints": 0,
+    "breakpoints": [],
+    "gard_detected": false,
+    "gard_edge_hit": false,
+    "gard_min_dist": null,
+    "gard_interval_jaccard": 0.0,
+    "gard_error": null
+  },
+  {
+    "model": "selection",
+    "seed": 2,
+    "stem": 0.5,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "gard_seconds": 18.7,
+    "mpnn_detected": false,
+    "mpnn_segment_jaccard": 0.0,
+    "mpnn_site_auc": 0.6364,
+    "n_diagnostic": 12,
+    "n_breakpoints": 0,
+    "breakpoints": [],
+    "gard_detected": false,
+    "gard_edge_hit": false,
+    "gard_min_dist": null,
+    "gard_interval_jaccard": 0.0,
+    "gard_error": null
+  },
+  {
+    "model": "selection",
+    "seed": 2,
+    "stem": 1.0,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "gard_seconds": 16.1,
+    "mpnn_detected": false,
+    "mpnn_segment_jaccard": 0.0,
+    "mpnn_site_auc": 0.55,
+    "n_diagnostic": 27,
+    "n_breakpoints": 0,
+    "breakpoints": [],
+    "gard_detected": false,
+    "gard_edge_hit": false,
+    "gard_min_dist": null,
+    "gard_interval_jaccard": 0.0,
+    "gard_error": null
+  },
+  {
+    "model": "selection",
+    "seed": 2,
+    "stem": 2.0,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "gard_seconds": 17.1,
+    "mpnn_detected": false,
+    "mpnn_segment_jaccard": 0.0,
+    "mpnn_site_auc": 0.2391,
+    "n_diagnostic": 25,
+    "n_breakpoints": 0,
+    "breakpoints": [],
+    "gard_detected": false,
+    "gard_edge_hit": false,
+    "gard_min_dist": null,
+    "gard_interval_jaccard": 0.0,
+    "gard_error": null
+  },
+  {
+    "model": "selection",
+    "seed": 2,
+    "stem": 4.0,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "gard_seconds": 19.9,
+    "mpnn_detected": false,
+    "mpnn_segment_jaccard": 0.0,
+    "mpnn_site_auc": 0.7838,
+    "n_diagnostic": 38,
+    "n_breakpoints": 0,
+    "breakpoints": [],
+    "gard_detected": false,
+    "gard_edge_hit": false,
+    "gard_min_dist": null,
+    "gard_interval_jaccard": 0.0,
+    "gard_error": null
+  },
+  {
+    "model": "selection",
+    "seed": 3,
+    "stem": 0.5,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "gard_seconds": 15.9,
+    "mpnn_detected": false,
+    "mpnn_segment_jaccard": 0.0,
+    "mpnn_site_auc": 0.3077,
+    "n_diagnostic": 14,
+    "n_breakpoints": 0,
+    "breakpoints": [],
+    "gard_detected": false,
+    "gard_edge_hit": false,
+    "gard_min_dist": null,
+    "gard_interval_jaccard": 0.0,
+    "gard_error": null
+  },
+  {
+    "model": "selection",
+    "seed": 3,
+    "stem": 1.0,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "gard_seconds": 16.0,
+    "mpnn_detected": false,
+    "mpnn_segment_jaccard": 0.0,
+    "mpnn_site_auc": 0.5833,
+    "n_diagnostic": 20,
+    "n_breakpoints": 0,
+    "breakpoints": [],
+    "gard_detected": false,
+    "gard_edge_hit": false,
+    "gard_min_dist": null,
+    "gard_interval_jaccard": 0.0,
+    "gard_error": null
+  },
+  {
+    "model": "selection",
+    "seed": 3,
+    "stem": 2.0,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "gard_seconds": 15.1,
+    "mpnn_detected": false,
+    "mpnn_segment_jaccard": 0.0,
+    "mpnn_site_auc": 0.2778,
+    "n_diagnostic": 41,
+    "n_breakpoints": 0,
+    "breakpoints": [],
+    "gard_detected": false,
+    "gard_edge_hit": false,
+    "gard_min_dist": null,
+    "gard_interval_jaccard": 0.0,
+    "gard_error": null
+  },
+  {
+    "model": "selection",
+    "seed": 3,
+    "stem": 4.0,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "gard_seconds": 13.9,
+    "mpnn_detected": false,
+    "mpnn_segment_jaccard": 0.0,
+    "mpnn_site_auc": 0.7273,
+    "n_diagnostic": 36,
+    "n_breakpoints": 0,
+    "breakpoints": [],
+    "gard_detected": false,
+    "gard_edge_hit": false,
+    "gard_min_dist": null,
+    "gard_interval_jaccard": 0.0,
+    "gard_error": null
+  },
+  {
+    "model": "selection",
+    "seed": 4,
+    "stem": 0.5,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "gard_seconds": 16.9,
+    "mpnn_detected": false,
+    "mpnn_segment_jaccard": 0.0,
+    "mpnn_site_auc": 0.7778,
+    "n_diagnostic": 20,
+    "n_breakpoints": 0,
+    "breakpoints": [],
+    "gard_detected": false,
+    "gard_edge_hit": false,
+    "gard_min_dist": null,
+    "gard_interval_jaccard": 0.0,
+    "gard_error": null
+  },
+  {
+    "model": "selection",
+    "seed": 4,
+    "stem": 1.0,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "gard_seconds": 13.4,
+    "mpnn_detected": false,
+    "mpnn_segment_jaccard": 0.0,
+    "mpnn_site_auc": 0.6584,
+    "n_diagnostic": 30,
+    "n_breakpoints": 0,
+    "breakpoints": [],
+    "gard_detected": false,
+    "gard_edge_hit": false,
+    "gard_min_dist": null,
+    "gard_interval_jaccard": 0.0,
+    "gard_error": null
+  },
+  {
+    "model": "selection",
+    "seed": 4,
+    "stem": 2.0,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "gard_seconds": 11.9,
+    "mpnn_detected": false,
+    "mpnn_segment_jaccard": 0.0,
+    "mpnn_site_auc": 0.5204,
+    "n_diagnostic": 35,
+    "n_breakpoints": 0,
+    "breakpoints": [],
+    "gard_detected": false,
+    "gard_edge_hit": false,
+    "gard_min_dist": null,
+    "gard_interval_jaccard": 0.0,
+    "gard_error": null
+  },
+  {
+    "model": "selection",
+    "seed": 4,
+    "stem": 4.0,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "gard_seconds": 15.2,
+    "mpnn_detected": false,
+    "mpnn_segment_jaccard": 0.0,
+    "mpnn_site_auc": 0.52,
+    "n_diagnostic": 35,
+    "n_breakpoints": 0,
+    "breakpoints": [],
+    "gard_detected": false,
+    "gard_edge_hit": false,
+    "gard_min_dist": null,
+    "gard_interval_jaccard": 0.0,
+    "gard_error": null
+  }
+]

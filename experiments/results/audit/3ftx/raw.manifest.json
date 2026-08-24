@@ -1,0 +1,854 @@
+[
+  {
+    "accession": "U3FAE1",
+    "name": "3SXA_MICFL",
+    "organism": "Micrurus fulvius",
+    "length": 84,
+    "pdb_ids": [
+      "4RUD"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "A0A4P1LYC9",
+    "name": "3SX9_DENPO",
+    "organism": "Dendroaspis polylepis polylepis",
+    "length": 57,
+    "pdb_ids": [
+      "6R5M"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "A0S864",
+    "name": "3NBA_BOIIR",
+    "organism": "Boiga irregularis",
+    "length": 109,
+    "pdb_ids": [
+      "2H7Z"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "A0S865",
+    "name": "3NBB_BOIIR",
+    "organism": "Boiga irregularis",
+    "length": 111,
+    "pdb_ids": [
+      "2H7Z"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "Q06ZW0",
+    "name": "3NB_BOIDE",
+    "organism": "Boiga dendrophila",
+    "length": 111,
+    "pdb_ids": [
+      "2H5F"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P28375",
+    "name": "3SPM_DENJA",
+    "organism": "Dendroaspis jamesoni kaimosae",
+    "length": 59,
+    "pdb_ids": [
+      "1DRS",
+      "2LA1"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P0DKR6",
+    "name": "3SX1_DENPO",
+    "organism": "Dendroaspis polylepis polylepis",
+    "length": 78,
+    "pdb_ids": [
+      "2MJY",
+      "5DO6",
+      "5DU1",
+      "5DZ5",
+      "7CFT",
+      "7ULB"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P82935",
+    "name": "3NO2_NAJKA",
+    "organism": "Naja kaouthia",
+    "length": 86,
+    "pdb_ids": [
+      "2MJ0"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P85092",
+    "name": "3SI1A_DENAN",
+    "organism": "Dendroaspis angusticeps",
+    "length": 65,
+    "pdb_ids": [
+      "4IYE",
+      "5MG9",
+      "8HN1"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "Q8QGR0",
+    "name": "3SIM7_DENAN",
+    "organism": "Dendroaspis angusticeps",
+    "length": 86,
+    "pdb_ids": [
+      "2VLW",
+      "3FEV",
+      "3NEQ",
+      "6WJC"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P01398",
+    "name": "3LKB_BUNMU",
+    "organism": "Bungarus multicinctus",
+    "length": 87,
+    "pdb_ids": [
+      "1KBA",
+      "2NBT",
+      "7ULR"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P0C1Z0",
+    "name": "3SE2_DENAN",
+    "organism": "Dendroaspis angusticeps",
+    "length": 61,
+    "pdb_ids": [
+      "1B41",
+      "1F8U",
+      "1FSC",
+      "1FSS",
+      "1KU6",
+      "1MAH",
+      "2X8B",
+      "4BDT",
+      "4EY8"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P01445",
+    "name": "3SA7A_NAJKA",
+    "organism": "Naja kaouthia",
+    "length": 60,
+    "pdb_ids": [
+      "7O2K"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P01446",
+    "name": "3SA3_NAJKA",
+    "organism": "Naja kaouthia",
+    "length": 60,
+    "pdb_ids": [
+      "6RC7"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "Q53B58",
+    "name": "3L255_OPHHA",
+    "organism": "Ophiophagus hannah",
+    "length": 93,
+    "pdb_ids": [
+      "7ULQ"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P22947",
+    "name": "3SLS_DENPO",
+    "organism": "Dendroaspis polylepis polylepis",
+    "length": 60,
+    "pdb_ids": [
+      "8WE7",
+      "8WE8"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P80958",
+    "name": "3S1CC_NAJAT",
+    "organism": "Naja atra",
+    "length": 82,
+    "pdb_ids": [
+      "1ONJ",
+      "1VB0"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P60770",
+    "name": "3S1CB_NAJAT",
+    "organism": "Naja atra",
+    "length": 83,
+    "pdb_ids": [
+      "1COE",
+      "1V6P"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P01391",
+    "name": "3L21_NAJKA",
+    "organism": "Naja kaouthia",
+    "length": 71,
+    "pdb_ids": [
+      "1CTX",
+      "1LXG",
+      "1LXH",
+      "1YI5",
+      "4AEA",
+      "6ZFM",
+      "7PC0",
+      "7ULG",
+      "9BK5",
+      "9FYT",
+      "9GCN",
+      "9HUO",
+      "9HXO"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P60775",
+    "name": "3S1EA_LATSE",
+    "organism": "Laticauda semifasciata",
+    "length": 83,
+    "pdb_ids": [
+      "1QKD",
+      "1QKE",
+      "2ERA",
+      "3ERA",
+      "5EBX",
+      "8YQN"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P60615",
+    "name": "3L21A_BUNMU",
+    "organism": "Bungarus multicinctus",
+    "length": 95,
+    "pdb_ids": [
+      "1ABT",
+      "1BXP",
+      "1HAA",
+      "1HAJ",
+      "1HC9",
+      "1HOY",
+      "1IDG",
+      "1IDH",
+      "1IDI",
+      "1IDL",
+      "1IK8",
+      "1IKC",
+      "1JBD",
+      "1KC4",
+      "1KFH",
+      "1KL8",
+      "1L4W",
+      "1LJZ",
+      "1RGJ",
+      "2ABX",
+      "2BTX",
+      "6UWZ",
+      "8DA1",
+      "9FYS",
+      "9GU0",
+      "9GU1"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "C0HJD7",
+    "name": "3L24_DENPO",
+    "organism": "Dendroaspis polylepis polylepis",
+    "length": 72,
+    "pdb_ids": [
+      "4LFT",
+      "8DA0"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P0DKS3",
+    "name": "3SX2_DENPO",
+    "organism": "Dendroaspis polylepis polylepis",
+    "length": 57,
+    "pdb_ids": [
+      "2MFA"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P0DQP2",
+    "name": "3SIH_DENJJ",
+    "organism": "Dendroaspis jamesoni jamesoni",
+    "length": 84,
+    "pdb_ids": [
+      "7C28"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "Q9YGJ0",
+    "name": "3NO5I_BUNMU",
+    "organism": "Bungarus multicinctus",
+    "length": 89,
+    "pdb_ids": [
+      "1MR6"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P81783",
+    "name": "3NO4_BUNCA",
+    "organism": "Bungarus candidus",
+    "length": 87,
+    "pdb_ids": [
+      "1JGK"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "Q69CK0",
+    "name": "3SDC7_OPHHA",
+    "organism": "Ophiophagus hannah",
+    "length": 84,
+    "pdb_ids": [
+      "3PLC"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P07525",
+    "name": "3SAT_NAJAT",
+    "organism": "Naja atra",
+    "length": 60,
+    "pdb_ids": [
+      "1CHV"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P01467",
+    "name": "3SA1_NAJMO",
+    "organism": "Naja mossambica",
+    "length": 60,
+    "pdb_ids": [
+      "2CCX"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P01443",
+    "name": "3SA4_NAJAT",
+    "organism": "Naja atra",
+    "length": 81,
+    "pdb_ids": [
+      "1KBS",
+      "1KBT",
+      "4OM5"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P01442",
+    "name": "3SA2_NAJAT",
+    "organism": "Naja atra",
+    "length": 81,
+    "pdb_ids": [
+      "1CRE",
+      "1CRF",
+      "4OM4"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P01452",
+    "name": "3SA4_NAJMO",
+    "organism": "Naja mossambica",
+    "length": 60,
+    "pdb_ids": [
+      "1CDT"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P60304",
+    "name": "3SA1_NAJAT",
+    "organism": "Naja atra",
+    "length": 81,
+    "pdb_ids": [
+      "2CDX"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P62375",
+    "name": "3SOF5_NAJAT",
+    "organism": "Naja atra",
+    "length": 83,
+    "pdb_ids": [
+      "1CVO",
+      "1KXI"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P80245",
+    "name": "3SAN_NAJAT",
+    "organism": "Naja atra",
+    "length": 81,
+    "pdb_ids": [
+      "1UG4"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P60301",
+    "name": "3SA3_NAJAT",
+    "organism": "Naja atra",
+    "length": 81,
+    "pdb_ids": [
+      "1H0J",
+      "1I02",
+      "1XT3",
+      "2BHI",
+      "2CRS",
+      "2CRT"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P01379",
+    "name": "3L21_LATSE",
+    "organism": "Laticauda semifasciata",
+    "length": 87,
+    "pdb_ids": [
+      "1LSI"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "Q7T2I5",
+    "name": "3S1EC_LATSE",
+    "organism": "Laticauda semifasciata",
+    "length": 83,
+    "pdb_ids": [
+      "6PNW"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P01382",
+    "name": "3L21_NAJOX",
+    "organism": "Naja oxiana",
+    "length": 73,
+    "pdb_ids": [
+      "1NTN",
+      "1W6B"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P59276",
+    "name": "3S1C_NAJKA",
+    "organism": "Naja kaouthia",
+    "length": 61,
+    "pdb_ids": [
+      "1JE9"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "Q90VW1",
+    "name": "3S1EB_LATSE",
+    "organism": "Laticauda semifasciata",
+    "length": 83,
+    "pdb_ids": [
+      "1ERA",
+      "1FRA",
+      "1NXB",
+      "3EBX",
+      "6EBX"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P60616",
+    "name": "3L21V_BUNMU",
+    "organism": "Bungarus multicinctus",
+    "length": 95,
+    "pdb_ids": [
+      "1HC9",
+      "2QC1",
+      "4HQP",
+      "4UY2",
+      "5HBT",
+      "5HBV",
+      "7KOO",
+      "8VY8"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "B3EWH9",
+    "name": "3SBH_HEMHA",
+    "organism": "Hemachatus haemachatus",
+    "length": 61,
+    "pdb_ids": [
+      "3VTS"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P81782",
+    "name": "3NOJ_BUNCA",
+    "organism": "Bungarus candidus",
+    "length": 63,
+    "pdb_ids": [
+      "1F94",
+      "1IJC"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P80494",
+    "name": "3SIMA_DENPO",
+    "organism": "Dendroaspis polylepis polylepis",
+    "length": 66,
+    "pdb_ids": [
+      "7ULS"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P81030",
+    "name": "3SIM1_DENAN",
+    "organism": "Dendroaspis angusticeps",
+    "length": 66,
+    "pdb_ids": [
+      "3FEV",
+      "3NEQ",
+      "4DO8"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "C0HJT5",
+    "name": "3SO1_HEMHA",
+    "organism": "Hemachatus haemachatus",
+    "length": 65,
+    "pdb_ids": [
+      "4ZQY"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P18328",
+    "name": "3SIM2_DENAN",
+    "organism": "Dendroaspis angusticeps",
+    "length": 86,
+    "pdb_ids": [
+      "1FF4"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P83346",
+    "name": "3SO3_BUNCA",
+    "organism": "Bungarus candidus",
+    "length": 65,
+    "pdb_ids": [
+      "1VYC",
+      "2H8U"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P0C1Y9",
+    "name": "3SE1_DENAN",
+    "organism": "Dendroaspis angusticeps",
+    "length": 61,
+    "pdb_ids": [
+      "1FAS"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P01468",
+    "name": "3SA1_NAJPA",
+    "organism": "Naja pallida",
+    "length": 60,
+    "pdb_ids": [
+      "1CXN",
+      "1CXO",
+      "1TGX",
+      "9BK6",
+      "9RIT"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P01390",
+    "name": "3L21_NAJNI",
+    "organism": "Naja nivea",
+    "length": 71,
+    "pdb_ids": [
+      "8D9Z"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P25671",
+    "name": "3L23_NAJNA",
+    "organism": "Naja naja",
+    "length": 71,
+    "pdb_ids": [
+      "2CTX"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P01441",
+    "name": "3SA2_NAJOX",
+    "organism": "Naja oxiana",
+    "length": 60,
+    "pdb_ids": [
+      "1CB9",
+      "1CCQ",
+      "1FFJ"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P01451",
+    "name": "3SA1_NAJOX",
+    "organism": "Naja oxiana",
+    "length": 60,
+    "pdb_ids": [
+      "1RL5",
+      "1ZAD",
+      "5LUE",
+      "5NPN",
+      "5NQ4",
+      "5T8A"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P82849",
+    "name": "3S1B2_NAJKA",
+    "organism": "Naja kaouthia",
+    "length": 62,
+    "pdb_ids": [
+      "1G6M"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P01414",
+    "name": "3SL2_DENPO",
+    "organism": "Dendroaspis polylepis polylepis",
+    "length": 60,
+    "pdb_ids": [
+      "1TFS"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P01386",
+    "name": "3L22_OPHHA",
+    "organism": "Ophiophagus hannah",
+    "length": 73,
+    "pdb_ids": [
+      "1TXA",
+      "1TXB",
+      "8SXP"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P01426",
+    "name": "3S11_NAJPA",
+    "organism": "Naja pallida",
+    "length": 61,
+    "pdb_ids": [
+      "1IQ9",
+      "1NEA",
+      "3NDS",
+      "8S72",
+      "9RIU"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P01427",
+    "name": "3S11_NAJOX",
+    "organism": "Naja oxiana",
+    "length": 61,
+    "pdb_ids": [
+      "1NOR",
+      "2MJ4"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "A8N286",
+    "name": "3SO8_OPHHA",
+    "organism": "Ophiophagus hannah",
+    "length": 86,
+    "pdb_ids": [
+      "3HH7"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P01416",
+    "name": "3S11_DENPO",
+    "organism": "Dendroaspis polylepis polylepis",
+    "length": 60,
+    "pdb_ids": [
+      "1NTX",
+      "8R4N",
+      "8V13"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "Q9PTT0",
+    "name": "3S1CB_NAJNA",
+    "organism": "Naja naja",
+    "length": 83,
+    "pdb_ids": [
+      "1COD"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "Q69CJ8",
+    "name": "3S11H_OPHHA",
+    "organism": "Ophiophagus hannah",
+    "length": 83,
+    "pdb_ids": [
+      "5XWE"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "Q8AY51",
+    "name": "3NO21_BUNCA",
+    "organism": "Bungarus candidus",
+    "length": 86,
+    "pdb_ids": [
+      "2JQP"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "P81031",
+    "name": "3SIM3_DENAN",
+    "organism": "Dendroaspis angusticeps",
+    "length": 65,
+    "pdb_ids": [
+      "9IQR",
+      "9IQS",
+      "9IQV"
+    ],
+    "identity": null,
+    "coverage": null
+  },
+  {
+    "accession": "A8HDK9",
+    "name": "3L21_OXYSC",
+    "organism": "Oxyuranus scutellatus scutellatus",
+    "length": 92,
+    "pdb_ids": [
+      "8D9Y"
+    ],
+    "identity": null,
+    "coverage": null
+  }
+]

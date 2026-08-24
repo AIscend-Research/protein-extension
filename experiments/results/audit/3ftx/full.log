@@ -1,0 +1,183 @@
+IQ-TREE single-core version 3.1.2 for MacOS ARM 64-bit built May  7 2026
+Developed by Bui Quang Minh, Thomas Wong, Nhan Ly-Trong, Huaiyan Ren
+Contributed by Lam-Tung Nguyen, Dominik Schrempf, Chris Bielow,
+Olga Chernomor, Michael Woodhams, Diep Thi Hoang, Heiko Schmidt
+
+Host:    Mac (SSE4.2, 16 GB RAM)
+Command: /opt/homebrew/bin/iqtree3 -s /Users/ryanjaeminahn/Desktop/ProteinExtension/protein-extension/experiments/results/audit/3ftx/full.fasta -m LG+G4 --ancestral --prefix /Users/ryanjaeminahn/Desktop/ProteinExtension/protein-extension/experiments/results/audit/3ftx/full -T 1 --seed 0 --quiet -redo
+Seed:    0 (Using SPRNG - Scalable Parallel Random Number Generator)
+Time:    Mon Aug 24 16:23:48 2026
+Kernel:  SSE2
+
+NOTE: Consider using the multicore version because your CPU has 10 cores!
+
+Reading alignment file /Users/ryanjaeminahn/Desktop/ProteinExtension/protein-extension/experiments/results/audit/3ftx/full.fasta ... Fasta format detected
+Reading fasta file: done in 5.10216e-05 secs using 70.56% CPU
+Alignment most likely contains protein sequences
+Constructing alignment: done in 4.48227e-05 secs using 60.24% CPU
+Alignment has 56 sequences with 58 columns, 52 distinct patterns
+47 parsimony-informative, 4 singleton sites, 7 constant sites
+            Gap/Ambiguity  Composition  p-value
+Analyzing sequences: done in 1.62125e-05 secs using 24.67% CPU
+   1  P01427        1.72%    passed     88.42%
+   2  P80958        1.72%    passed     79.17%
+   3  P07525        1.72%    passed     21.96%
+   4  P01445        1.72%    passed     58.85%
+   5  P01441        1.72%    passed     28.60%
+   6  P60301        1.72%    passed     44.74%
+   7  P01442        1.72%    passed     41.74%
+   8  P60304        1.72%    passed     65.70%
+   9  P01451        1.72%    passed     72.61%
+  10  P80245        1.72%    passed     52.22%
+  11  P01468        1.72%    passed     29.60%
+  12  P01452        1.72%    passed     56.26%
+  13  P01386        3.45%    passed     51.41%
+  14  C0HJD7        3.45%    passed     99.92%
+  15  P82849        0.00%    passed     48.74%
+  16  P01416        3.45%    passed     81.07%
+  17  B3EWH9        0.00%    passed     15.94%
+  18  Q53B58        3.45%    passed     99.14%
+  19  P01382        1.72%    passed     84.89%
+  20  P60770        0.00%    passed     30.17%
+  21  P01391        5.17%    passed     85.91%
+  22  P62375        0.00%    passed     13.94%
+  23  P60615        0.00%    passed     92.88%
+  24  P01390        5.17%    passed     91.00%
+  25  P25671        5.17%    passed     29.53%
+  26  Q90VW1        0.00%    passed     14.74%
+  27  A8HDK9        3.45%    passed     97.52%
+  28  P01379        5.17%    passed     99.23%
+  29  P81031        0.00%    passed     87.49%
+  30  P80494        0.00%    passed     96.82%
+  31  A0A4P1LYC9   10.34%    passed     77.57%
+  32  P81030        0.00%    passed     96.10%
+  33  Q8QGR0        0.00%    passed     93.28%
+  34  P01414        3.45%    passed     89.43%
+  35  P22947        3.45%    passed     82.03%
+  36  P85092        0.00%    passed     94.14%
+  37  P18328        0.00%    passed     88.09%
+  38  P81783        0.00%    passed     80.20%
+  39  P83346        0.00%    passed     51.65%
+  40  Q69CK0        0.00%    passed     92.73%
+  41  Q69CJ8        0.00%    passed     59.57%
+  42  A8N286        0.00%    passed     65.80%
+  43  C0HJT5        0.00%    passed     82.38%
+  44  Q8AY51        0.00%    passed     95.22%
+  45  P0DQP2        0.00%    passed     69.73%
+  46  P01398        3.45%    passed     15.75%
+  47  P28375        8.62%    passed     87.35%
+  48  Q9YGJ0        0.00%    passed     99.93%
+  49  P82935        0.00%    passed     89.32%
+  50  P0C1Z0        3.45%    passed     95.80%
+  51  P0DKR6       12.07%    passed     86.87%
+  52  U3FAE1       10.34%    passed     49.51%
+  53  A0S865        0.00%    passed     96.04%
+  54  A0S864        3.45%    passed     69.25%
+  55  P81782        3.45%    passed     42.52%
+  56  Q06ZW0        0.00%    passed     93.81%
+****  TOTAL         2.19%  0 sequences failed composition chi2 test (p-value<5%; df=19)
+
+Create initial parsimony tree by phylogenetic likelihood library (PLL)... 0.002 seconds
+
+NOTE: 2 MB RAM (0 GB) is required!
+Estimate model parameters (epsilon = 0.100)
+1. Initial log-likelihood: -4287.861
+2. Current log-likelihood: -4218.008
+3. Current log-likelihood: -4214.922
+4. Current log-likelihood: -4213.839
+5. Current log-likelihood: -4213.686
+Optimal log-likelihood: -4213.651
+Gamma shape alpha: 0.622
+Parameters optimization took 5 rounds (0.302 sec)
+Wrote distance file to... 
+Computing ML distances based on estimated model parameters...
+Calculating distance matrix: done in 0.395771 secs using 98.5% CPU
+Computing ML distances took 0.395834 sec (of wall-clock time) 0.389879 sec (of CPU time)
+WARNING: Some pairwise ML distances are too long (saturated)
+Setting up auxiliary I and S matrices: done in 5.29289e-05 secs using 77.46% CPU
+Constructing RapidNJ tree: done in 9.08375e-05 secs using 91.37% CPU
+Computing RapidNJ tree took 0.000153 sec (of wall-clock time) 0.000129 sec (of CPU time)
+Log-likelihood of RapidNJ tree: -4244.789
+--------------------------------------------------------------------
+|             INITIALIZING CANDIDATE TREE SET                      |
+--------------------------------------------------------------------
+Generating 98 parsimony trees... 0.227 second
+Computing log-likelihood of 98 initial trees ... 0.980 seconds
+Current best score: -4183.999
+
+Do NNI search on 20 best initial trees
+Estimate model parameters (epsilon = 0.100)
+BETTER TREE FOUND at iteration 1: -4159.770
+Estimate model parameters (epsilon = 0.100)
+BETTER TREE FOUND at iteration 2: -4156.980
+Estimate model parameters (epsilon = 0.100)
+BETTER TREE FOUND at iteration 6: -4156.037
+Estimate model parameters (epsilon = 0.100)
+BETTER TREE FOUND at iteration 7: -4155.559
+Iteration 10 / LogL: -4161.612 / Time: 0h:0m:4s
+Iteration 20 / LogL: -4162.766 / Time: 0h:0m:7s
+Finish initializing candidate tree set (20)
+Current best tree score: -4155.559 / CPU time: 6.490
+Number of iterations: 20
+--------------------------------------------------------------------
+|               OPTIMIZING CANDIDATE TREE SET                      |
+--------------------------------------------------------------------
+Estimate model parameters (epsilon = 0.100)
+BETTER TREE FOUND at iteration 24: -4154.784
+Estimate model parameters (epsilon = 0.100)
+BETTER TREE FOUND at iteration 25: -4152.241
+Iteration 30 / LogL: -4155.778 / Time: 0h:0m:9s (0h:0m:31s left)
+Iteration 40 / LogL: -4154.153 / Time: 0h:0m:12s (0h:0m:27s left)
+Estimate model parameters (epsilon = 0.100)
+BETTER TREE FOUND at iteration 50: -4152.067
+Iteration 50 / LogL: -4152.067 / Time: 0h:0m:15s (0h:0m:31s left)
+UPDATE BEST LOG-LIKELIHOOD: -4152.066
+Iteration 60 / LogL: -4158.169 / Time: 0h:0m:17s (0h:0m:27s left)
+Estimate model parameters (epsilon = 0.100)
+BETTER TREE FOUND at iteration 64: -4151.952
+Iteration 70 / LogL: -4152.668 / Time: 0h:0m:20s (0h:0m:28s left)
+Iteration 80 / LogL: -4152.137 / Time: 0h:0m:23s (0h:0m:25s left)
+Iteration 90 / LogL: -4157.499 / Time: 0h:0m:26s (0h:0m:22s left)
+UPDATE BEST LOG-LIKELIHOOD: -4151.952
+Iteration 100 / LogL: -4154.166 / Time: 0h:0m:29s (0h:0m:18s left)
+BETTER TREE FOUND at iteration 101: -4151.952
+Iteration 110 / LogL: -4154.688 / Time: 0h:0m:31s (0h:0m:26s left)
+Iteration 120 / LogL: -4155.742 / Time: 0h:0m:34s (0h:0m:23s left)
+Iteration 130 / LogL: -4158.222 / Time: 0h:0m:36s (0h:0m:20s left)
+Iteration 140 / LogL: -4152.481 / Time: 0h:0m:39s (0h:0m:17s left)
+Iteration 150 / LogL: -4151.952 / Time: 0h:0m:42s (0h:0m:14s left)
+UPDATE BEST LOG-LIKELIHOOD: -4151.952
+Iteration 160 / LogL: -4154.569 / Time: 0h:0m:45s (0h:0m:11s left)
+Iteration 170 / LogL: -4154.636 / Time: 0h:0m:48s (0h:0m:8s left)
+Iteration 180 / LogL: -4152.065 / Time: 0h:0m:50s (0h:0m:5s left)
+Iteration 190 / LogL: -4151.953 / Time: 0h:0m:53s (0h:0m:3s left)
+Iteration 200 / LogL: -4156.768 / Time: 0h:0m:56s (0h:0m:0s left)
+TREE SEARCH COMPLETED AFTER 202 ITERATIONS / Time: 0h:0m:56s
+
+--------------------------------------------------------------------
+|                    FINALIZING TREE SEARCH                        |
+--------------------------------------------------------------------
+Performs final model parameters optimization
+Estimate model parameters (epsilon = 0.010)
+1. Initial log-likelihood: -4151.952
+Optimal log-likelihood: -4151.952
+Gamma shape alpha: 0.639
+Parameters optimization took 1 rounds (0.028 sec)
+BEST SCORE FOUND : -4151.952
+Ancestral state probabilities printed to /Users/ryanjaeminahn/Desktop/ProteinExtension/protein-extension/experiments/results/audit/3ftx/full.state
+Total tree length: 31.718
+
+Total number of iterations: 202
+CPU time used for tree search: 55.413 sec (0h:0m:55s)
+Wall-clock time used for tree search: 56.004 sec (0h:0m:56s)
+Total CPU time used: 56.234 sec (0h:0m:56s)
+Total wall-clock time used: 56.858 sec (0h:0m:56s)
+
+Analysis results written to: 
+  IQ-TREE report:                /Users/ryanjaeminahn/Desktop/ProteinExtension/protein-extension/experiments/results/audit/3ftx/full.iqtree
+  Maximum-likelihood tree:       /Users/ryanjaeminahn/Desktop/ProteinExtension/protein-extension/experiments/results/audit/3ftx/full.treefile
+  Likelihood distances:          /Users/ryanjaeminahn/Desktop/ProteinExtension/protein-extension/experiments/results/audit/3ftx/full.mldist
+  Ancestral state:               /Users/ryanjaeminahn/Desktop/ProteinExtension/protein-extension/experiments/results/audit/3ftx/full.state
+  Screen log file:               /Users/ryanjaeminahn/Desktop/ProteinExtension/protein-extension/experiments/results/audit/3ftx/full.log
+
+Date and Time: Mon Aug 24 16:24:45 2026
