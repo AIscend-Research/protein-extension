@@ -1,0 +1,101 @@
+IQ-TREE single-core version 3.1.2 for MacOS ARM 64-bit built May  7 2026
+Developed by Bui Quang Minh, Thomas Wong, Nhan Ly-Trong, Huaiyan Ren
+Contributed by Lam-Tung Nguyen, Dominik Schrempf, Chris Bielow,
+Olga Chernomor, Michael Woodhams, Diep Thi Hoang, Heiko Schmidt
+
+Host:    Mac (SSE4.2, 16 GB RAM)
+Command: /opt/homebrew/bin/iqtree3 -s /Users/ryanjaeminahn/Desktop/ProteinExtension/protein-extension/experiments/results/audit/3ftx/clade_b.fasta -m LG+G4 --ancestral --prefix /Users/ryanjaeminahn/Desktop/ProteinExtension/protein-extension/experiments/results/audit/3ftx/clade_b -T 1 --seed 0 --quiet -redo
+Seed:    0 (Using SPRNG - Scalable Parallel Random Number Generator)
+Time:    Mon Aug 24 16:25:42 2026
+Kernel:  SSE2
+
+NOTE: Consider using the multicore version because your CPU has 10 cores!
+
+Reading alignment file /Users/ryanjaeminahn/Desktop/ProteinExtension/protein-extension/experiments/results/audit/3ftx/clade_b.fasta ... Fasta format detected
+Reading fasta file: done in 1.00136e-05 secs using 59.92% CPU
+Alignment most likely contains protein sequences
+Constructing alignment: done in 2.7895e-05 secs using 68.11% CPU
+Alignment has 3 sequences with 58 columns, 50 distinct patterns
+0 parsimony-informative, 39 singleton sites, 19 constant sites
+        Gap/Ambiguity  Composition  p-value
+Analyzing sequences: done in 4.05312e-06 secs using 49.34% CPU
+   1  P0DKR6   12.07%    passed     99.13%
+   2  P81782    3.45%    passed     98.68%
+   3  U3FAE1   10.34%    passed     99.90%
+****  TOTAL     8.62%  0 sequences failed composition chi2 test (p-value<5%; df=19)
+
+Create initial parsimony tree by phylogenetic likelihood library (PLL)... 0.000 seconds
+
+NOTE: 0 MB RAM (0 GB) is required!
+Estimate model parameters (epsilon = 0.100)
+1. Initial log-likelihood: -448.009
+2. Current log-likelihood: -431.114
+3. Current log-likelihood: -429.775
+4. Current log-likelihood: -429.194
+5. Current log-likelihood: -428.925
+6. Current log-likelihood: -428.822
+Optimal log-likelihood: -428.702
+Gamma shape alpha: 0.367
+Parameters optimization took 6 rounds (0.007 sec)
+Wrote distance file to... 
+Computing ML distances based on estimated model parameters...
+Calculating distance matrix: done in 0.00130415 secs using 99.91% CPU
+Computing ML distances took 0.001315 sec (of wall-clock time) 0.001309 sec (of CPU time)
+WARNING: Some pairwise ML distances are too long (saturated)
+Setting up auxiliary I and S matrices: done in 4.05312e-06 secs using 74.02% CPU
+Constructing RapidNJ tree: done in 9.53674e-07 secs
+Computing RapidNJ tree took 0.000011 sec (of wall-clock time) 0.000007 sec (of CPU time)
+Log-likelihood of RapidNJ tree: -428.692
+--------------------------------------------------------------------
+|             INITIALIZING CANDIDATE TREE SET                      |
+--------------------------------------------------------------------
+Generating 99 parsimony trees... 0.002 second
+Current best score: -428.692
+
+Do NNI search on 1 best initial trees
+Finish initializing candidate tree set (1)
+Current best tree score: -428.692 / CPU time: 0.002
+Number of iterations: 1
+--------------------------------------------------------------------
+|               OPTIMIZING CANDIDATE TREE SET                      |
+--------------------------------------------------------------------
+Iteration 10 / LogL: -428.692 / Time: 0h:0m:0s
+Iteration 20 / LogL: -428.692 / Time: 0h:0m:0s
+Iteration 30 / LogL: -428.692 / Time: 0h:0m:0s (0h:0m:0s left)
+Iteration 40 / LogL: -428.692 / Time: 0h:0m:0s (0h:0m:0s left)
+Iteration 50 / LogL: -428.692 / Time: 0h:0m:0s (0h:0m:0s left)
+Iteration 60 / LogL: -428.692 / Time: 0h:0m:0s (0h:0m:0s left)
+Iteration 70 / LogL: -428.692 / Time: 0h:0m:0s (0h:0m:0s left)
+Iteration 80 / LogL: -428.692 / Time: 0h:0m:0s (0h:0m:0s left)
+Iteration 90 / LogL: -428.692 / Time: 0h:0m:0s (0h:0m:0s left)
+Iteration 100 / LogL: -428.692 / Time: 0h:0m:0s (0h:0m:0s left)
+TREE SEARCH COMPLETED AFTER 101 ITERATIONS / Time: 0h:0m:0s
+
+--------------------------------------------------------------------
+|                    FINALIZING TREE SEARCH                        |
+--------------------------------------------------------------------
+Performs final model parameters optimization
+Estimate model parameters (epsilon = 0.010)
+1. Initial log-likelihood: -428.692
+2. Current log-likelihood: -428.679
+Optimal log-likelihood: -428.676
+Gamma shape alpha: 0.352
+Parameters optimization took 2 rounds (0.001 sec)
+BEST SCORE FOUND : -428.676
+Ancestral state probabilities printed to /Users/ryanjaeminahn/Desktop/ProteinExtension/protein-extension/experiments/results/audit/3ftx/clade_b.state
+Total tree length: 17.881
+
+Total number of iterations: 101
+CPU time used for tree search: 0.007 sec (0h:0m:0s)
+Wall-clock time used for tree search: 0.007 sec (0h:0m:0s)
+Total CPU time used: 0.020 sec (0h:0m:0s)
+Total wall-clock time used: 0.021 sec (0h:0m:0s)
+
+Analysis results written to: 
+  IQ-TREE report:                /Users/ryanjaeminahn/Desktop/ProteinExtension/protein-extension/experiments/results/audit/3ftx/clade_b.iqtree
+  Maximum-likelihood tree:       /Users/ryanjaeminahn/Desktop/ProteinExtension/protein-extension/experiments/results/audit/3ftx/clade_b.treefile
+  Likelihood distances:          /Users/ryanjaeminahn/Desktop/ProteinExtension/protein-extension/experiments/results/audit/3ftx/clade_b.mldist
+  Ancestral state:               /Users/ryanjaeminahn/Desktop/ProteinExtension/protein-extension/experiments/results/audit/3ftx/clade_b.state
+  Screen log file:               /Users/ryanjaeminahn/Desktop/ProteinExtension/protein-extension/experiments/results/audit/3ftx/clade_b.log
+
+Date and Time: Mon Aug 24 16:25:42 2026

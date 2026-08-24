@@ -1,0 +1,117 @@
+[
+  {
+    "model": "selection",
+    "seed": 0,
+    "donor_depth": 0.25,
+    "stem": 2.0,
+    "seconds": 27.7,
+    "detected": false,
+    "p_value": 0.24378,
+    "segment": null,
+    "best_segment": [
+      50,
+      77
+    ],
+    "n_diagnostic": 36,
+    "n_diagnostic_in_segment": 12,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "segment_jaccard": 0.0,
+    "site_auc_minority": 0.6562,
+    "site_auc_segment": 0.6562
+  },
+  {
+    "model": "selection",
+    "seed": 0,
+    "donor_depth": 0.5,
+    "stem": 2.0,
+    "seconds": 30.0,
+    "detected": false,
+    "p_value": 0.1194,
+    "segment": null,
+    "best_segment": [
+      50,
+      77
+    ],
+    "n_diagnostic": 37,
+    "n_diagnostic_in_segment": 13,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "segment_jaccard": 0.0,
+    "site_auc_minority": 0.7019,
+    "site_auc_segment": 0.7019
+  },
+  {
+    "model": "selection",
+    "seed": 0,
+    "donor_depth": 1.0,
+    "stem": 2.0,
+    "seconds": 44.2,
+    "detected": false,
+    "p_value": 0.46766,
+    "segment": null,
+    "best_segment": [
+      44,
+      79
+    ],
+    "n_diagnostic": 38,
+    "n_diagnostic_in_segment": 14,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "segment_jaccard": 0.0,
+    "site_auc_minority": 0.622,
+    "site_auc_segment": 0.622
+  },
+  {
+    "model": "selection",
+    "seed": 0,
+    "donor_depth": 2.0,
+    "stem": 2.0,
+    "seconds": 44.9,
+    "detected": false,
+    "p_value": 0.0995,
+    "segment": null,
+    "best_segment": [
+      50,
+      90
+    ],
+    "n_diagnostic": 39,
+    "n_diagnostic_in_segment": 15,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "segment_jaccard": 0.0,
+    "site_auc_minority": 0.7222,
+    "site_auc_segment": 0.7222
+  },
+  {
+    "model": "selection",
+    "seed": 0,
+    "donor_depth": 4.0,
+    "stem": 2.0,
+    "seconds": 40.5,
+    "detected": false,
+    "p_value": 0.15423,
+    "segment": null,
+    "best_segment": [
+      50,
+      90
+    ],
+    "n_diagnostic": 39,
+    "n_diagnostic_in_segment": 15,
+    "true_breakpoint": [
+      55,
+      85
+    ],
+    "segment_jaccard": 0.0,
+    "site_auc_minority": 0.7556,
+    "site_auc_segment": 0.7556
+  }
+]

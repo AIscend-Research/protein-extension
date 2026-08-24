@@ -1,0 +1,9 @@
+[
+  {
+    "name": "3ftx",
+    "query": "\"three-finger toxin\" AND reviewed:true AND database:pdb",
+    "backbone": "data/interim/3ftx/fold/out2/3ftx_mosaic_ancestor.pdb",
+    "split": "midpoint",
+    "limit": 200
+  }
+]

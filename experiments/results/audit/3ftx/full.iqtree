@@ -1,0 +1,232 @@
+IQ-TREE 3.1.2 built May  7 2026
+
+Input file name: /Users/ryanjaeminahn/Desktop/ProteinExtension/protein-extension/experiments/results/audit/3ftx/full.fasta
+Type of analysis: tree reconstruction
+Random seed number: 0
+
+REFERENCES
+----------
+
+To cite IQ-TREE 3 please use:
+
+Thomas K.F. Wong, Nhan Ly-Trong, Huaiyan Ren, Hector Banos, Andrew J. Roger,
+Edward Susko, Chris Bielow, Nicola De Maio, Nick Goldman, Matthew W. Hahn,
+Gavin Huttley, Robert Lanfear, Bui Quang Minh (2025)
+IQ-TREE 3: Phylogenomic Inference Software using Complex Evolutionary Models.
+Submitted.
+
+SEQUENCE ALIGNMENT
+------------------
+
+NOTE: Alignment sequence type is auto-detected. If in doubt, specify it via -st option.
+Input data: 56 sequences with 58 amino-acid sites
+Number of constant sites: 7 (= 12.069% of all sites)
+Number of invariant (constant or ambiguous constant) sites: 7 (= 12.069% of all sites)
+Number of parsimony informative sites: 47
+Number of distinct site patterns: 52
+
+SUBSTITUTION PROCESS
+--------------------
+
+Model of substitution: LG+G4
+
+State frequencies: (model)
+
+Model of rate heterogeneity: Gamma with 4 categories
+Gamma shape alpha: 0.6395
+
+ Category  Relative_rate  Proportion
+  1         0.0613         0.2500
+  2         0.3335         0.2500
+  3         0.9002         0.2500
+  4         2.7050         0.2500
+Relative rates are computed as MEAN of the portion of the Gamma distribution falling in the category.
+
+MAXIMUM LIKELIHOOD TREE
+-----------------------
+
+Log-likelihood of the tree: -4151.9524 (s.e. 276.6911)
+Unconstrained log-likelihood (without tree): -221.8843
+Number of free parameters (#branches + #model parameters): 110
+Akaike information criterion (AIC) score: 8523.9047
+Corrected Akaike information criterion (AICc) score: 32943.9047
+Bayesian information criterion (BIC) score: 8750.5534
+
+**************************** WARNING ****************************
+Number of parameters (K, model parameters and branch lengths): 110
+Sample size (n, alignment length): 58
+
+Given that K>=n, the parameter estimates might be inaccurate.
+Thus, phylogenetic estimates should be interpreted with caution.
+
+Ideally, it is desirable that n >> K. When selecting optimal models,
+1. use AIC or BIC if n > 40K;
+2. use AICc or BIC if 40K >= n > K;
+3. be extremely cautious if n <= K
+
+To improve the situation (3), consider the following options:
+  1. Increase the sample size (n)
+  2. Decrease the number of parameters (K) to be estimated. If
+     possible:
+     a. Remove the least important sequences from the alignment
+     b. Specify some of the parameter values for the substitution
+        model (e.g., the nucleotide or amino acid frequencies)
+     c. Specify some of the parameter values for the rates-across-
+        sites model (e.g., the shape parameter for the discrete
+        Gamma distribution, the proportion of invariable sites, or
+        the rates of change for different rate categories under
+        the FreeRate model)
+
+Reference:
+Burnham KR, Anderson DR (2002). Model Selection and Multimodel
+Inference: A Practical Information-Theoretic Approach. Springer,
+New York.
+************************ END OF WARNING ***********************
+
+Total tree length (sum of branch lengths): 31.7182
+Sum of internal branch lengths: 12.5999 (39.7245% of tree length)
+
+WARNING: 5 near-zero internal branches (<0.0172) should be treated with caution
+         Such branches are denoted by '**' in the figure below
+
+NOTE: Tree is UNROOTED although outgroup taxon 'P01427' is drawn at root
+
++**P01427
+| (Node1)
+|  +**P80958
++--| (Node2)
+|  |   +--P82849
+|  +---| (Node3)
+|      +**P60770
+|
+|                                                                +**P07525
+|                                                             +--| (Node21)
+|                                                             |  |     +**P01445
+|                                                             |  |  +--| (Node23)
+|                                                             |  |  |  |     +--P60304
+|                                                             |  |  |  |  +--| (Node25)
+|                                                             |  |  |  |  |  +--P01451
+|                                                             |  |  |  +**| (Node24)
+|                                                             |  |  |     +--P01452
+|                                                             |  +--| (Node22)
+|                                                             |     +--P01442
+|                                                          +**| (Node20)
+|                                                          |  +**P60301
+|                                                       +--| (Node19)
+|                                                       |  +--P01441
+|                                                    +--| (Node18)
+|                                                    |  +--P80245
+|                                                 +--| (Node17)
+|                                                 |  +--P01468
+|                                              +--| (Node16)
+|                                              |  +---P62375
+|                                           +--| (Node15)
+|                                           |  +----------Q69CK0
+|                               +-----------| (Node14)
+|                               |           +--B3EWH9
+|                          +----| (Node13)
+|                          |    +--------Q9YGJ0
+|                       +--| (Node12)
+|                       |  +------------P81783
+|                    +--| (Node11)
+|                    |  |                  +------------P0DKR6
+|                    |  |            +-----| (Node27)
+|                    |  |            |     +-----------------------P81782
+|                    |  +------------| (Node26)
+|                    |               +-----------------------------U3FAE1
+|                 +--| (Node10)
+|                 |  |             +--Q8AY51
+|                 |  |  +----------| (Node29)
+|                 |  |  |          +-------P82935
+|                 |  +**| (Node28)
+|                 |     |                        +**A0S865
+|                 |     +------------------------| (Node30)
+|                 |                              |  +--A0S864
+|                 |                              +--| (Node31)
+|                 |                                 +--Q06ZW0
+|              +**| (Node9)
+|              |  |               +--P01386
+|              |  |            +--| (Node36)
+|              |  |            |  |     +**P01391
+|              |  |            |  |  +--| (Node38)
+|              |  |            |  |  |  +--P25671
+|              |  |            |  +--| (Node37)
+|              |  |            |     +--P01390
+|              |  |         +--| (Node35)
+|              |  |         |  +--Q53B58
+|              |  |      +--| (Node34)
+|              |  |      |  +-----A8HDK9
+|              |  |   +--| (Node33)
+|              |  |   |  |     +--P01382
+|              |  |   |  |  +--| (Node40)
+|              |  |   |  |  |  +----P60615
+|              |  |   |  +--| (Node39)
+|              |  |   |     |  +-----P01379
+|              |  |   |     +**| (Node41)
+|              |  |   |        +---------P01398
+|              |  +---| (Node32)
+|              |      +--C0HJD7
+|           +--| (Node8)
+|           |  |                     +--P81031
+|           |  |                  +--| (Node44)
+|           |  |                  |  |     +---Q8QGR0
+|           |  |                  |  |  +--| (Node46)
+|           |  |                  |  |  |  |  +--P18328
+|           |  |                  |  |  |  +--| (Node47)
+|           |  |                  |  |  |     +-------P0DQP2
+|           |  |                  |  +--| (Node45)
+|           |  |                  |     +--P85092
+|           |  |         +--------| (Node43)
+|           |  |         |        |  +--P80494
+|           |  |         |        +--| (Node48)
+|           |  |         |           +--P81030
+|           |  +---------| (Node42)
+|           |            |  +------------P83346
+|           |            +--| (Node49)
+|           |               +----------C0HJT5
+|        +--| (Node7)
+|        |  +-------------A8N286
+|     +--| (Node6)
+|     |  +----------Q69CJ8
+|  +--| (Node5)
+|  |  |  +--P01416
+|  |  +--| (Node50)
+|  |     |            +--A0A4P1LYC9
+|  |     |     +------| (Node53)
+|  |     |     |      +----------P0C1Z0
+|  |     |  +--| (Node52)
+|  |     |  |  |         +**P01414
+|  |     |  |  +---------| (Node54)
+|  |     |  |            +--P22947
+|  |     +--| (Node51)
+|  |        +---------P28375
++--| (Node4)
+   +---Q90VW1
+
+Tree in newick format:
+
+(P01427:0.0000021069,(P80958:0.0000010000,(P82849:0.1006247026,P60770:0.0000010000)Node3:0.3211449428)Node2:0.0372450082,((((((((((((((((((P07525:0.0000025915,((P01445:0.0000022035,((P60304:0.0174094019,P01451:0.0288636805)Node25:0.0723213605,P01452:0.1548058885)Node24:0.0131094600)Node23:0.0305506545,P01442:0.0338741462)Node22:0.0320957393)Node21:0.0670514729,P60301:0.0000022932)Node20:0.0168681249,P01441:0.0707875922)Node19:0.0292141212,P80245:0.0205409410)Node18:0.0870177391,P01468:0.0858097515)Node17:0.1585603135,P62375:0.3043259387)Node16:0.0289804025,Q69CK0:0.8539443157)Node15:0.0720140071,B3EWH9:0.0536602076)Node14:0.9110867528,Q9YGJ0:0.6441871259)Node13:0.4029939664,P81783:0.9585575357)Node12:0.1405585625,((P0DKR6:0.9510867976,P81782:1.7515494681)Node27:0.4424726939,U3FAE1:2.1635919547)Node26:0.9450217530)Node11:0.1966866430,((Q8AY51:0.1679598277,P82935:0.5855350936)Node29:0.7906158018,(A0S865:0.0000020981,(A0S864:0.2381630689,Q06ZW0:0.2440929304)Node31:0.2437689952)Node30:1.7837599268)Node28:0.0000027062)Node10:0.2779672954,(((((P01386:0.0479831429,((P01391:0.0000010000,P25671:0.0347046944)Node38:0.1524096457,P01390:0.0998643583)Node37:0.1320569749)Node36:0.0311978738,Q53B58:0.1403069141)Node35:0.0686319181,A8HDK9:0.4327969390)Node34:0.0554870011,((P01382:0.1245496468,P60615:0.4122684318)Node40:0.1787793841,(P01379:0.4399285785,P01398:0.7795666190)Node41:0.0084846352)Node39:0.0582321523)Node33:0.0785155533,C0HJD7:0.1487362149)Node32:0.2908767635)Node9:0.0000024686,(((P81031:0.0756070984,((Q8QGR0:0.3228043286,(P18328:0.1252422798,P0DQP2:0.5980476735)Node47:0.1274198348)Node46:0.1439653329,P85092:0.0610286502)Node45:0.0743693775)Node44:0.0900262455,(P80494:0.0361906413,P81030:0.0192241483)Node48:0.1221346666)Node43:0.6610326581,(P83346:0.9549480111,C0HJT5:0.8157409913)Node49:0.1535722364)Node42:0.7548228432)Node8:0.1330698945,A8N286:1.0115180937)Node7:0.1533929420,Q69CJ8:0.8316592748)Node6:0.0731469600,(P01416:0.0697237435,(((A0A4P1LYC9:0.1856861932,P0C1Z0:0.8079396336)Node53:0.5009014897,(P01414:0.0000029123,P22947:0.0355446995)Node54:0.7341895368)Node52:0.1643840775,P28375:0.7795917157)Node51:0.1676703144)Node50:0.0884890031)Node5:0.1132846062,Q90VW1:0.2977226970)Node4:0.1882555842)Node1;
+
+ALISIM COMMAND
+--------------
+To simulate an alignment of the same length as the original alignment, using the tree and model parameters estimated from this analysis, you can use the following command:
+
+--alisim simulated_MSA -t /Users/ryanjaeminahn/Desktop/ProteinExtension/protein-extension/experiments/results/audit/3ftx/full.treefile -m "LG+G4{0.639457}" --length 58
+
+To mimic the alignment used to produce this analysis, i.e. simulate an alignment of the same length as the original alignment, using the tree and model parameters estimated from this analysis *and* copying the same gap positions as the original alignment, you can use the following command:
+
+iqtree -s /Users/ryanjaeminahn/Desktop/ProteinExtension/protein-extension/experiments/results/audit/3ftx/full.fasta --alisim mimicked_MSA
+
+To simulate any number of alignments in either of the two commandlines above, use the --num-alignments options, for example mimic 100 alignments you would use the command line:
+
+iqtree -s /Users/ryanjaeminahn/Desktop/ProteinExtension/protein-extension/experiments/results/audit/3ftx/full.fasta --alisim mimicked_MSA --num-alignments 100
+
+For more information on using AliSim, please visit: www.iqtree.org/doc/AliSim
+
+TIME STAMP
+----------
+
+Date and time: Mon Aug 24 16:24:45 2026
+Total CPU time used: 56.2336 seconds (0h:0m:56s)
+Total wall-clock time used: 56.8587 seconds (0h:0m:56s)
+
