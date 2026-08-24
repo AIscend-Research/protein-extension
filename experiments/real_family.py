@@ -115,8 +115,28 @@ def stage_trim(
 
 
 def _run_iqtree(seqs: dict[str, str], prefix: Path, *, seed: int, threads: str) -> None:
-    """ML tree + marginal ASR. `-asr` writes the `.state` file the parser reads."""
+    """ML tree + marginal ASR. `-asr` writes the `.state` file the parser reads.
+
+    Skipped if `.treefile` and `.state` already exist *and* were built with
+    this same `--seed`: [real_family] is called twice per family in the
+    two-phase workflow ([bedier_audit] automates it) — once to get the mosaic
+    ancestor for folding, again with `--backbone` to detect. Without this
+    guard the second call redid all three ML tree searches from scratch for
+    no reason, since nothing between the two calls changes the alignment.
+    `-T 1` (this project's iqtree3 build is single-threaded) plus a fixed
+    `--seed` is what makes reusing the first run's output safe rather than a
+    second, possibly different, search — checked here via a `.seed` marker
+    rather than assumed, so a deliberately different `--seed` against the
+    same `--work` still triggers a fresh search instead of silently reusing
+    the stale tree.
+    """
     prefix.parent.mkdir(parents=True, exist_ok=True)
+    seed_marker = prefix.with_suffix(".seed")
+    cached_seed = seed_marker.read_text().strip() if seed_marker.exists() else None
+    if (prefix.with_suffix(".treefile").exists() and prefix.with_suffix(".state").exists()
+            and cached_seed == str(seed)):
+        print(f"  tree: reusing {prefix.name}.treefile / .state (seed {seed})")
+        return
     fasta = prefix.with_suffix(".fasta")
     with fasta.open("w") as handle:
         for name, seq in seqs.items():
@@ -126,6 +146,7 @@ def _run_iqtree(seqs: dict[str, str], prefix: Path, *, seed: int, threads: str) 
         "--prefix", str(prefix), "-T", threads, "--seed", str(seed), "--quiet", "-redo",
     ]
     subprocess.run(cmd, check=True)
+    seed_marker.write_text(str(seed))
 
 
 def balanced_split(rooted) -> tuple[list[str], list[str]]:
@@ -355,7 +376,8 @@ def main() -> None:
             n_orders=args.n_orders, seed=args.seed, device=args.device,
         )
         detected["split_rule"] = args.split
-        out = RESULTS / f"real_3ftx_{tag}.json"
+        family_name = Path(args.work).name
+        out = RESULTS / f"real_{family_name}_{tag}.json"
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(json.dumps(detected, indent=2, default=str))
         print(f"wrote {out}")

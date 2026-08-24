@@ -406,8 +406,12 @@ answer, and that dependence belongs in the open.
   samples from ProteinMPNN's own joint distribution, so it builds in the epistasis
   the probe then reports. The `f81` control is what keeps this honest, and the
   empirical family is the real test — which returned nothing.
-- **The divergence grid is underpowered.** 2 / 12 with both detections in one
-  seed. It establishes a floor, not a dose-response curve. Section 5.
+- **The divergence grid is underpowered, even after tripling it.** §5's
+  original 2-seed grid found a floor, not a dose-response curve. §14 reruns
+  it at 6 seeds and finds a real-looking step at stem = 4.0 (67% vs 33%) —
+  but the 95% CIs still overlap, and detection does not track divergence
+  monotonically (stem 0.5 and 2.0 are tied). Separating this with confidence
+  would need the same 20-seed investment §12 used elsewhere.
 - **Underpowered.** Pooling the main experiment and the segment sweep and removing
   the three conditions they share: **2 detections across 15 distinct contaminated
   conditions — and the `f81` control also fires 2 times in its matching 15.**
@@ -416,16 +420,32 @@ answer, and that dependence belongs in the open.
   4/6 against MPNN's 2/6, mean Jaccard 0.62 against 0.27. Scrambling the backbone
   takes MPNN to 0/6, so the signal is structural — but structural is not the same
   as useful, and the ablation is the result that most constrains the thesis.
-- **No head-to-head against GARD or RDP.** The orthogonality claim in the
-  introduction is still asserted rather than measured. The identity arm is a
-  control on this pipeline's own instrument, not a published detector.
+- **The GARD head-to-head (§15) is measured, not run at full strength.** On
+  `selection` data GARD fires 0/6 against `mpnn`'s 2/6 and `identity`'s
+  4/6 — real evidence for orthogonality — but GARD was run in amino-acid
+  mode with no codon layer to feed it, a weaker deployment than its normal
+  use, and `selection` is independently the hardest case by diagnostic-site
+  count (§4). GARD cannot run at all on the real 3FTx family (needs 235
+  sites for 56 taxa, has 58) — the sharpest single data point for the
+  README's "where sequence methods run out" claim, but still one family.
+  RDP remains untested.
 - **The oriented AUC has an inflated null.** See section 6. Read it against the
   `f81` series, never against 0.5.
-- **The empirical test was inconclusive, not negative.** The 3FTx family sits near
-  the diagnostic-site floor, so its non-detection carries little information
-  either way.
+- **The empirical test was inconclusive, not negative — and §16 extends it to
+  three more families, same conclusion.** 0/4 real families detected (3FTx,
+  ribonuclease A, lysozyme C, cytochrome c), p-values 0.36-0.89 with no
+  clustering near significance. Consistent, but still four families chosen
+  for tractability, not sampled from the literature, and none has a known
+  contaminated block to test power against.
 - **The clade split is a free parameter.** On real data, midpoint and most-even
   rooting give different sub-histories and different answers.
+- **The method only covers a single breakpoint.** Section 13. Splitting the
+  same 50-residue contaminated budget into 2+ separate runs (multiple
+  crossovers, multi-tract gene conversion) collapses detection to near zero
+  — `mpnn` 1/9 and `identity` 0/9 once fragmented, against 2/3 and 3/3 at a
+  single contiguous block. `scan_segment` was built to find one window; every
+  other detection rate in this document is a single-breakpoint number and
+  does not generalize past it.
 - **Locality.** MPNN conditions on a local structural neighbourhood, so a
   contiguous sequence swap is strained mainly near its structural junctions. The
   whole-sequence penalty for a mosaic is small; the signal lives in *where* the
@@ -487,3 +507,294 @@ significance rather than a real localization." It does not change the headline
 of this section: `identity` still detects far more often overall (90% vs 28%,
 non-overlapping CIs), which is the metric that determines whether a real
 contamination event gets flagged at all.
+
+## 13. Multiple breakpoints: the single-window scan does not survive fragmentation
+
+Every condition above — main experiment, segment sweep, divergence grid,
+ablation, spatial patches — copies exactly one contiguous run from one donor.
+`conflict.scan_segment` looks for exactly one contiguous window, so this has
+never been a fair test of what happens when it isn't given one. Real
+recombination is rarely a single crossover: multiple breakpoints between the
+same two parents, or multi-tract gene conversion, split the contaminated
+sequence into several separate runs rather than one.
+
+The total contaminated length is held at *exactly* 50 residues — the width
+already established in §12 as sitting above the diagnostic-site floor for a
+single block — and only the number of separate runs it is split into varies
+(1, 2, 3, 4), evenly spaced across the backbone. No new detection code: this
+reuses `evolve.contaminate_positions` (already generalized to an arbitrary
+position *set*, not just an interval — built for §10) and scores the
+shipped 1D scan against the true position *set* with `spatial.patch_jaccard`,
+exactly as §10 does for a spatially- rather than sequence-discontiguous
+target. 3 seeds, both `mpnn` and `identity` scores, both through the same
+scan.
+
+| n_blocks | score | fired | mean Jaccard | mean sites found |
+|---|---|---|---|---|
+| 1 | mpnn | 2/3 | 0.251 | 15.0 |
+| 1 | identity | 3/3 | 0.378 | 20.7 |
+| 2 | mpnn | 0/3 | 0.164 | 13.0 |
+| 2 | identity | 0/3 | 0.060 | 12.0 |
+| 3 | mpnn | 1/3 | 0.057 | 8.3 |
+| 3 | identity | 0/3 | 0.066 | 4.7 |
+| 4 | mpnn | 0/3 | 0.056 | 7.0 |
+| 4 | identity | 0/3 | 0.019 | 4.7 |
+
+One clean, one confounded, and both point the same way.
+
+**The clean comparison is within seed 0.** Its four conditions carry 22, 15,
+15 and 18 diagnostic sites *inside the true positions* — all above the
+13-site floor §4 established for reliable detection, so site count is not
+the variable changing. `mpnn` still goes from p = 0.010 (n_blocks=1) to
+p = 0.139 / 0.413 / 0.856 (n_blocks=2/3/4): fragmenting the same budget of
+diagnostic sites into separate runs kills detection even when there are
+enough of them.
+
+**Seeds 1 and 2 confound it.** Diagnostic sites inside the true positions
+drop with n_blocks in both (15→16→4→5 and 21→18→3→2) — an artifact of
+where this experiment's fixed, evenly-spaced block layout happens to land
+relative to each family's own diagnostic sites, not a property of
+fragmentation itself. For those two seeds, the collapse in detection is at
+least partly the already-known floor effect from §4 wearing a new hat, not
+new evidence about fragmentation specifically. This was not deconfounded by
+re-running with placement held fixed and only spacing varied — the seed-0
+result already answers the qualitative question without it, and a cleaner
+dose-response design is future work rather than new compute spent here.
+
+**Both scores collapse together, and pooled detection is symmetric:**
+`mpnn` fires 3/12 overall (2 at n_blocks=1, 1 at n_blocks=3), `identity`
+fires 3/12 (all at n_blocks=1). The one fragmented firing — `mpnn`,
+n_blocks=3, seed 2, p = 0.040 — lands at Jaccard 0.03, ten sites found
+against three true ones. That is the same pattern §2-3 established for the
+`f81` control: a permutation test can clear α on a window that has nothing
+to do with the true positions, so a bare "detected" count is not evidence of
+localization. Reading Jaccard rather than the fired count, both scores are
+indistinguishable from noise once split past one run — mean Jaccard
+0.02–0.16 against the ~0.08 chance level §10 estimated for a random
+found-set of comparable size.
+
+This is a negative result for the method as shipped, not a new failure mode
+invented to be negative: `scan_segment` was built to find one window, and a
+target that is not one window is not found. It also means every detection
+rate reported elsewhere in this document — the main experiment, the power
+rerun, the ablation — describes the single-breakpoint case specifically, and
+does not extend to gene conversion or multi-crossover recombination without
+a scan that can represent a discontiguous target, which is exactly what §10
+already built for the spatial case and this section did not need to
+duplicate.
+
+Produced by `experiments/multi_breakpoint.py --seeds 3`; raw output in
+`multi_breakpoint.json`, recomputed by `summarize.py`. `multi_block_positions`
+originally floor-divided the residue budget (`total_size // n_blocks`) and
+dropped the remainder, so n_blocks=3/4 actually swapped 48 residues against
+50 for n_blocks=1/2 — a real, if small, confound on the "same total budget"
+claim this section depends on, caught in a later review pass and fixed to
+distribute the remainder across the first few blocks instead. The numbers
+above are from the corrected code; the conclusion did not change.
+
+## 14. Dose-response: donor distance at real power
+
+Section 5's divergence grid was 2 seeds per cell and the honest conclusion
+was "the floor is established; the dose-response is not." This reruns it at
+3x the seeds (6, not 2), holding everything else fixed at the settings §12
+already validated as informative: n = 6 witnesses/clade (§5 found n = 3
+never detects at any divergence), a 50-residue contaminated block (above the
+diagnostic-site floor), 3 stem levels spanning near-sibling donor (0.5) to
+deep outgroup (4.0). `sweep_divergence` gained the same per-cell
+checkpointing `sweep_segment` already had — a run this long (several fresh
+Gibbs simulations at ~12–28 minutes each, scaling with `stem` itself, since
+more branch length means more Gibbs sweeps) needed it.
+
+| stem | fired | rate | 95% CI | mean diagnostic sites |
+|---|---|---|---|---|
+| 0.5 (near sibling) | 2/6 | 33% | [10%, 70%] | 21.5 |
+| 2.0 | 2/6 | 33% | [10%, 70%] | 36.2 |
+| 4.0 (deep outgroup) | 4/6 | 67% | [30%, 90%] | 44.7 |
+
+**Not a clean monotonic curve.** If detection tracked divergence smoothly,
+stem = 0.5 should trail stem = 2.0. It does not — they are tied at 2/6.
+Only stem = 4.0 shows a step up. Diagnostic-site count does climb
+monotonically and saturates (21.5 → 36.2 → 44.7), the same qualitative
+shape §5 found (16.8 → 30.5 → 36.2, different seeds) — divergence still
+buys diagnostic sites reliably. What does not follow smoothly is detection
+built on top of that count, which is the thing that actually matters.
+
+**The gap at stem = 4.0 is suggestive, not established.** The 95% Wilson
+intervals — [10%, 70%] at stem = 0.5/2.0 against [30%, 90%] at stem = 4.0
+— overlap substantially. Six seeds per cell triples §5's sample but is
+still short of separating a 33% rate from a 67% one with confidence; the
+same 20-seed-per-cell investment that separated `selection` from `f81` in
+§12 would be needed to make this a real dose-response curve rather than a
+step that six seeds happened to land on.
+
+Produced by `experiments/sweeps.py --sweep divergence --model selection
+--seeds 6 --stems 0.5 2.0 4.0 --clade-sizes 6 --width 50 --tag power6`; raw
+output in `sweep_divergence_selection_power6.json`, recomputed by
+`summarize.py`.
+
+## 15. Head-to-head against a published detector: GARD
+
+`identity` (§8) is not GARD or RDP — it consumes the two sub-ancestors this
+pipeline reconstructs, so it is a control on this project's own instrument,
+not the orthogonality test the README's thesis actually asks for: *"a
+structural detector would be orthogonal signal in the regime where the
+sequence methods run out."* That claim has been asserted since the README
+was first written and never measured. This measures it, against GARD
+(Kosakovsky Pond et al. 2006) — a genetic algorithm over alignment
+partitions that fits a substitution model to each candidate partition and
+picks the partition count by c-AIC. HyPhy 2.5 ships GARD for amino-acid
+alignments directly (`hyphy gard --type amino-acid --model JTT`), so it runs
+on exactly the protein data this project already has — no nucleotide or
+codon layer exists here to hand it, which is a weaker use of GARD than its
+usual deployment on coding sequence, where synonymous substitution adds
+power a pure amino-acid fit does not have. That asymmetry is real and is not
+hidden below.
+
+Run on the same six conditions already reported for `mpnn` / `identity` /
+`scrambled` in §8 — no new simulation, the new column drops straight into
+that table:
+
+| seed | width | diagnostic sites in block | mpnn | identity | gard |
+|---|---|---|---|---|---|
+| 0 | 30 | 13 | fired | fired | — |
+| 0 | 50 | 22 | — | fired | — |
+| 1 | 30 | 0 | — | — | — |
+| 1 | 50 | 22 | fired | fired | — |
+| 2 | 30 | 2 | — | — | — |
+| 2 | 50 | 16 | — | fired | — |
+
+**GARD fires 0/6 on the `selection` families — the regime this project is
+actually about.** Both `mpnn` (2/6) and `identity` (4/6) find something GARD
+finds nothing on, on identical data. This is the cleanest evidence so far for
+the orthogonality claim, with the caveat that it is evidence for a narrower
+version of it: GARD is being run at a disadvantage (amino-acid only, 12
+witnesses, 106 sites) relative to its normal use, and §4 already established
+that `selection` families are the *hardest* case by diagnostic-site count
+(23-41 sites, against `f81`'s 67-78) — so part of what GARD is failing on
+here is the same site-count floor that constrains this project's own
+detector, not necessarily something GARD would still miss with codon data
+and more taxa.
+
+**On the `f81` control — more diagnostic sites, the easier case — GARD does
+fire, 3/6, but only ever finds *one* breakpoint, never the two that would
+bound the true block.** `n_breakpoints` was 1 in all three firings. A single
+breakpoint splits the alignment into two partitions with no bounded interval
+to score, so no Jaccard comparison is possible for these — GARD is flagging
+that the alignment is not tree-like without recovering where the
+non-tree-like region actually is. That is a real capability gap from this
+project's own detector, which supplies a segment and a Jaccard score even
+when it is wrong (§3); it is also a real capability GARD has and `mpnn`
+does not on this same control — 3/6 beats `mpnn`'s and `identity`'s
+combined presence in the `f81` main experiment (§2: 0/6 for both at the
+default 30-residue width). Different widths, so not an apples-to-apples
+number, but the qualitative point holds: GARD is not blind to `f81`-style
+composition-only contamination, it is blind to `selection`-style
+structurally-coherent contamination, and localizing it is a separate
+capability it does not have here regardless of which regime it is run on.
+
+**GARD cannot run on the real 3FTx family at all.** 56 sequences, 58
+aligned sites. HyPhy's own assertion: *"The alignment is too short to
+permit c-AIC based model comparison. Need at least 235 sites for 56
+sequences to fit a two-partition model."* This project's own detector runs
+on exactly this alignment (§11) and returns an answer — an inconclusive
+one, but a computable one. This is the sharpest evidence in this document
+for the README's specific claim about *where* a structural detector would
+be orthogonal signal: not generically better, but applicable in a regime —
+short genes, deep divergence pushed onto few informative sites — where a
+partition-fitting sequence method's own parameter-count requirements rule
+it out before comparison is even possible.
+
+Produced by `experiments/gard_baseline.py --model selection --seeds 3` and
+`--model f81 --seeds 3` (both `--widths 30 50`, matching §8), plus a
+one-off run of `run_gard` against `data/interim/3ftx/core.fasta`; raw output
+in `gard_selection.json`, `gard_f81.json`, `gard_3ftx.json`, recomputed by
+`summarize.py`. `hyphy` via `brew install hyphy` (2.5.101); not vendored,
+not a project dependency for anything else here.
+
+## 16. The Bedier audit: the detector across several published families
+
+Section 11 runs the detector on one real family and is explicit that a
+single non-detection near the diagnostic-site floor is inconclusive, not
+evidence either way. The obvious next question is what the conflict-score
+distribution looks like across more than one — not a claim that any of
+these families is actually contaminated (there is no ground truth for any
+of them, 3FTx included), but a report of where the method lands on real,
+independently published reconstructions rather than one hand-picked case.
+
+Three more families, chosen only for being small enough to fold on CPU in
+minutes and having enough structure-backed reviewed UniProt entries to form
+a family at all — not for any expected outcome: ribonuclease A, lysozyme C,
+cytochrome c, all classic ASR/phylogenetics subjects with deep structural
+literature. Each goes through [real_family]'s identical staged pipeline
+(fetch, MAFFT, trim, IQ-TREE tree + per-clade marginal ASR — independently
+per clade, same as §11), with one addition automated by
+`experiments/bedier_audit.py`: the mosaic ancestor is folded with ColabFold
+so the detector has a backbone that corresponds to it residue-for-residue,
+the same two-phase workflow §11 used for 3FTx, just run across a family
+list instead of by hand.
+
+| family | witnesses | clades | diagnostic sites | detected | p | mean pLDDT |
+|---|---|---|---|---|---|---|
+| 3ftx (§11) | 56 | 53 \| 3 | 38 | no | 0.418 | n/a* |
+| rnase_a | 22 | 10 \| 12 | 75 | no | 0.891 | 89.2 |
+| lysozyme_c | 22 | 15 \| 7 | 73 | no | 0.657 | 97.0 |
+| cytochrome_c | 29 | 21 \| 8 | 24 | no | 0.363 | 86.6 |
+
+\* 3FTx's fold check (§11) reports pLDDT 87.4 by a different route — folded
+before this audit existed, using two ColabFold recycles rather than three —
+so it is not re-quoted here as if produced by the same run.
+
+**0/4 detected.** This is not evidence that any of these four families is
+recombination-free — §4 and §5 already established that detection needs
+roughly 13+ diagnostic sites *inside* whatever block is being searched for,
+and none of these families has a known block to search for in the first
+place, so a non-detection here carries exactly the same limited weight §11
+gives the 3FTx result on its own. What the audit adds is that the pattern is
+consistent rather than a one-off: four different real families, four
+non-detections, p-values spread from 0.36 to 0.89 with no sign of
+clustering near significance the way the `f81` control's spurious firings
+did in §2 (p = 0.015, close to α). If this pipeline were prone to firing on
+ordinary real proteins for reasons unrelated to contamination, four
+independent families would be a reasonable chance to see it, and none did.
+
+**cytochrome c's alignment is a real audit finding on its own.** The query
+pulled 79 structure-backed reviewed entries — evolutionarily broader than
+intended — and after gap-filtering only 35 of 326 aligned columns survived
+at ≤20% gaps, the shortest core alignment of any family tried, real or
+simulated. 24 diagnostic sites is close to the ~20-site floor §5 found
+below which nothing fires regardless of truth. This is exactly the failure
+mode the README's thesis names — a short, divergence-saturated alignment —
+occurring by accident from an ordinary UniProt query, not constructed to
+demonstrate the point.
+
+**Fold confidence does not track detection.** pLDDT ranges from 86.6 to
+97.0, all comfortably in a range that would be called "confident" for an
+AlphaFold2 model, and detection is uniformly absent regardless. This rules
+out one confound worth naming: it is not that some ancestors are folding
+badly and are undetectable for that reason.
+
+**Scope, stated plainly.** Three families, chosen for tractability rather
+than sampled from the literature at random, plus 3FTx — four is a real
+number but not a large one, and "audited many published reconstructions"
+would overstate what four data points support. The family-specific
+disulfide-topology check §11 used for 3FTx (validated against a crystal
+structure) is not repeated here; only mean pLDDT gates fold quality, since
+building a per-family reference topology check for each new family is out
+of scope for this audit. Every clade split here is midpoint rooting only —
+§11's own finding that midpoint and most-even rooting can disagree is not
+re-tested across these three.
+
+Produced by `experiments/bedier_audit.py --families rnase_a lysozyme_c
+cytochrome_c` (`colabfold_batch` via `.venv/bin/pip install colabfold`; no
+GPU, ColabFold's public MSA server for the alignment step); raw output in
+`bedier_audit.json`, recomputed by `summarize.py` together with the
+existing `real_3ftx_midpoint.json`. Building this surfaced a real,
+independent bug in `real_family.py`: its results filename hardcoded
+`real_3ftx_{tag}.json` regardless of which family `--work` pointed at, so
+the first run against `rnase_a` silently overwrote `real_3ftx_midpoint.json`
+with the ribonuclease result. Caught immediately because the printed clade
+sizes didn't match section 11's; the original file was restored from git
+and the filename now derives from `--work`'s directory name. No results in
+this document were affected — the overwrite and its correction both
+happened after §11 was written and were resolved before anything was
+computed from the corrupted file.
